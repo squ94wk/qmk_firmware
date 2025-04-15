@@ -25,8 +25,7 @@
 #    define SPI_MISO_PIN A6
 #    define SPI_MOSI_PIN A7
 
-#    define DRIVER_CS_PINS \
-        { B8, B9 }
+#    define DRIVER_CS_PINS {B8, B9}
 #    define SNLED23751_SPI_DIVISOR 16
 #    define SPI_DRIVER SPID1
 
@@ -34,8 +33,7 @@
 #    define SNLED27351_PHASE_CHANNEL MSKPHASE_12CHANNEL
 
 /* Set LED driver current */
-#    define SNLED27351_CURRENT_TUNE \
-        { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 }
+#    define SNLED27351_CURRENT_TUNE {0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20}
 
 /* Set to infinit, which is use in USB mode by default */
 #    define RGB_MATRIX_TIMEOUT RGB_MATRIX_TIMEOUT_INFINITE
@@ -48,10 +46,21 @@
 /* Indications */
 #    define DIM_CAPS_LOCK
 #    define CAPS_LOCK_INDEX 29
-#    define LOW_BAT_IND_INDEX \
-        { 60, 63 }
+#    define LOW_BAT_IND_INDEX {60, 63}
 
 #    define RGB_MATRIX_KEYPRESSES
 #    define RGB_MATRIX_FRAMEBUFFER_EFFECTS
 
 #endif
+
+// Allow combos as modifiers
+#define COMBO_MUST_HOLD_MODS
+// max time allowed between pressed
+#define COMBO_TERM 40
+// how long at least one of the combo keys must be held to trigger
+#define COMBO_HOLD_TERM 175
+
+#define TAPPING_TERM 200
+#define MICROLAYER_ACTIVATION_TERM 80
+
+#define COMBO_ONLY_FROM_LAYER 0

@@ -1,1 +1,7 @@
-# This file intentionally left blank
+COMBO_ENABLE = yes
+CONSOLE_ENABLE = yes
+MIDI_ENABLE = no
+NKRO_ENABLE = no
+STENO_ENABLE = no
+EXTRAKEY_ENABLE = no
+MOUSEKEY_ENABLE = no
