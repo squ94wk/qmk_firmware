@@ -89,6 +89,10 @@ void tap_action(smart_key_t *key) {
         layer_activations[key->tap.layer_oneshot] = 1;
         return;
     }
+    if (key->tap.mask_oneshot) {
+        set_oneshot_mods(key->tap.mask_oneshot);
+        return;
+    }
     virtual_send(key->pos, key->keycode, key->tap.keycode, key->tap.mask);
 }
 
@@ -458,7 +462,7 @@ static enum smart_key_type get_key_type(smart_key_t *key) {
         return DUMB;
     }
 
-    bool is_tap = key->tap.action || key->tap.keycode || key->tap.layer_toggle || key->tap.layer_oneshot;
+    bool is_tap = key->tap.action || key->tap.keycode || key->tap.layer_toggle || key->tap.layer_oneshot || key->tap.mask_oneshot;
     bool is_hold = key->hold.action || key->hold.keycode || key->hold.layer;
 
     if (key->max_tap > 1) {

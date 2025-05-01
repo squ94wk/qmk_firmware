@@ -65,6 +65,7 @@ struct smart_key_t {
     struct {
         uint16_t keycode;
         uint8_t mask;
+        uint8_t mask_oneshot;
         int layer_toggle;
         int layer_oneshot;
         void (*action)(smart_key_t *key);

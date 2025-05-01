@@ -147,8 +147,19 @@ enum smart_keys {
     SMART_KEY_COUNT,
 };
 
+void smart_shift_n_tap(smart_key_t *key) {
+    switch (key->state.tap_count) {
+    case 1:
+        set_oneshot_mods(key->tap.mask_oneshot);
+    case 2:
+        // FIXME: CAPS word doesn't work with smart keys yet
+        caps_word_on();
+    }
+    return;
+}
+
 smart_key_t smart_keys[] = {
-    [SMART_KEY_SMART_SHIFT] = { .keycode = CKC_SMART_SHIFT, .tap.keycode = KC_LEFT_SHIFT, .hold.keycode = KC_LEFT_SHIFT, },
+    [SMART_KEY_SMART_SHIFT] = { .keycode = CKC_SMART_SHIFT, .max_tap = 2, .tap.action = &smart_shift_n_tap, .tap.mask_oneshot = MOD_BIT(KC_LEFT_SHIFT), .hold.keycode = KC_LEFT_SHIFT, },
 };
 
 smart_key_t *lookup_key(uint16_t keycode, keypos_t pos) {
