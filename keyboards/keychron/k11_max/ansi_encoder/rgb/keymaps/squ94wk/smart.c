@@ -179,7 +179,7 @@ static bool handle_deferred_event_continuation(smart_key_t *key, keyevent_t cont
         // pressed yet another key
         // or
         // tap (down, up) of single key
-        if (cont.pressed || is_same_pos(key->pos, cont.key)) {
+        if (cont.pressed || is_same_pos(deferred_event.key, cont.key)) {
             key->state.hold_fired = true;
             hold_action(key);
             return true;
