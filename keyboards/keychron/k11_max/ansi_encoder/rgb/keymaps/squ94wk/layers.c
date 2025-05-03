@@ -61,7 +61,7 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
 //    [SMART_DOT] = { .tap.keycode = KC_DOT, },
 
     [LAYER_BRACKETS] = {
-        [2][6] = &(smart_key_t){ .tap.keycode = KC_COMMA, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
+        [2][6] = &(smart_key_t){ .tap.keycode = KC_COMMA, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
         [2][7] = &(smart_key_t){ .tap.keycode = KC_9, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
         [2][8] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
         [2][9] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
@@ -87,16 +87,16 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Closing brackets
     [LAYER_H_HOLD] = {
-        [2][2] = &(smart_key_t){ .tap.keycode = KC_DOT, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
+        [2][2] = &(smart_key_t){ .tap.keycode = KC_DOT, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
     },
     [LAYER_J_HOLD] = {
-        [2][2] = &(smart_key_t){ .tap.keycode = KC_0, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
+        [2][2] = &(smart_key_t){ .tap.keycode = KC_0, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
     },
     [LAYER_K_HOLD] = {
-        [2][2] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
+        [2][2] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
     },
     [LAYER_L_HOLD] = {
-        [2][2] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
+        [2][2] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .max_tap = 2, },
     },
 
     [LAYER_SEARCH] = {
@@ -150,10 +150,14 @@ enum smart_keys {
 void smart_shift_n_tap(smart_key_t *key) {
     switch (key->state.tap_count) {
     case 1:
-        set_oneshot_mods(key->tap.mask_oneshot);
+        uprintf("DEBUG: oneshot shift\n");
+        set_oneshot_mods(get_oneshot_mods() | key->tap.mask_oneshot);
+        break;
     case 2:
         // FIXME: CAPS word doesn't work with smart keys yet
+        uprintf("DEBUG: caps word\n");
         caps_word_on();
+        break;
     }
     return;
 }

@@ -16,10 +16,34 @@ void     virtual_send(keypos_t pos, uint16_t trigger, uint16_t keycode, uint16_t
 void     virtual_release(keypos_t pos, uint16_t trigger);
 
 void register_with_mods(uint16_t keycode, uint16_t mask) {
-    uint16_t current_mask = get_mods();
-    set_mods(mask);
-    register_code(keycode);
-    set_mods(current_mask);
+    switch (keycode) {
+    case KC_A ... KC_Z:
+    case KC_MINUS:
+        break;
+    default:
+        caps_word_off();
+    }
+
+    // check if we clear caps word
+    // apply & reset oneshot mods
+    uint16_t current_mods = get_mods();
+    uint16_t current_oneshot_mods = get_oneshot_mods();
+    uprintf("DEBUG: current masks: mods: %d oneshot: %d\n", current_mods, current_oneshot_mods);
+    if (current_mods != mask) {
+        set_mods(mask);
+        if (is_caps_word_on()) {
+            uprintf("DEBUG: add weak shift\n");
+            add_weak_mods(MOD_BIT(KC_LSFT));
+        }
+        register_code(keycode);
+        set_mods(current_mods);
+    } else {
+        register_code(keycode);
+    }
+    if (current_oneshot_mods) {
+        uprintf("DEBUG: clear oneshot mods\n");
+        clear_oneshot_mods();
+    }
     add_key_to_history(keycode, mask);
 }
 

@@ -12,7 +12,7 @@ smart_key_t *lookup_key(uint16_t keycode, keypos_t key);
 
 static bool handle_deferred_event_continuation(smart_key_t *key, keyevent_t cont);
 static bool process_event(uint16_t keycode, keyevent_t event);
-static bool process_event_with_key(smart_key_t *key, keyevent_t event);
+static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_t event);
 
 void tap_action(smart_key_t *key);
 void hold_action(smart_key_t *key);
@@ -200,34 +200,33 @@ bool process_event(uint16_t keycode, keyevent_t event) {
     // give pending keys a chance to see and process the event first
     for (int i = 0; i < PENDING_QUEUE_MAX && pending_keys[i]; ++i) {
         smart_key_t *key = pending_keys[i];
-        if (process_event_with_key(key, event)) {
+        if (process_event_with_key(key, keycode, event)) {
             return true;
         }
     }
 
     // then on key of the event
     smart_key_t *key = lookup_key(keycode, event.key);
-    return process_event_with_key(key, event);
+    return process_event_with_key(key, keycode, event);
 }
 
-static bool process_event_with_key(smart_key_t *key, keyevent_t event) {
+static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_t event) {
     enum event_type event_type = get_event_type(key, event);
     enum smart_key_type key_type = get_key_type(key);
     uprintf("DEBUG: handle %s event for %s key\n", event_to_string(event_type), key_type_to_string(key_type));
 
     switch (key_type) {
     case DUMB: {
-//        switch (event_type) {
-//        case PRESS_SAME:
-//            virtual_send(key->pos, keymaps[WIN_BASE][event.key.row][event.key.col], 0);
-//            return true;
-//        case RELEASE_SAME:
-//            virtual_release(key->pos);
-//            return true;
-//        default:
-//            break;
-//        }
-        return false;
+        switch (event_type) {
+        case PRESS_SAME:
+            virtual_send(key->pos, keycode, keycode, 0);
+            return true;
+        case RELEASE_SAME:
+            virtual_release(key->pos, keycode);
+            return true;
+        default:
+            return false;
+        }
     }
 
     case TAP_ONLY:
@@ -341,6 +340,8 @@ static bool process_event_with_key(smart_key_t *key, keyevent_t event) {
         case PRESS_SAME:
             press_key(key, event);
             key->state.tap_count++;
+            uprintf("DEBUG: increase tap count to %d\n", key->state.tap_count);
+            // todo: unnecessary
             key->state.tap_timeout = event.time + TAPPING_TERM;
             return true;
         case RELEASE_SAME:
@@ -351,6 +352,8 @@ static bool process_event_with_key(smart_key_t *key, keyevent_t event) {
             }
             if (key->state.tap_count == key->max_tap) {
                 tap_action(key);
+                release_action(key);
+                reset_smart_key(key);
             }
             key->state.pressed_time = 0;
             return true;
@@ -411,7 +414,7 @@ void matrix_scan_user() {
         smart_key_t *key = pending_keys[i];
 
         // check if deferred key has been held for TAPPING_TERM
-        if (!key->state.hold_fired && key->state.pressed_time && timer_elapsed(key->state.pressed_time) > TAPPING_TERM) {
+        if (!key->state.hold_fired && !key->state.tap_fired && key->state.pressed_time && timer_elapsed(key->state.pressed_time) > TAPPING_TERM) {
             run_housekeeping = true;
             key->state.hold_fired = true;
             uprintf("DEBUG: time: %d, process key HOLD expiry\n", timer_read());
@@ -430,7 +433,7 @@ void matrix_scan_user() {
         }
 
         // check if deferred key is multi tap and hasn't been tapped again recently
-        if (!key->state.tap_fired && key->state.tap_timeout && timer_read() > key->state.tap_timeout) {
+        if (!key->state.tap_fired && !key->state.hold_fired && key->state.tap_timeout && timer_read() > key->state.tap_timeout) {
             uprintf("DEBUG: time: %d, process key multi tap expiry\n", timer_read());
             run_housekeeping = true;
             key->state.tap_fired = true;
@@ -505,6 +508,7 @@ static enum event_type get_event_type(smart_key_t *key, keyevent_t event) {
 }
 
 static void reset_smart_key(smart_key_t *key) {
+    uprintf("DEBUG: reset smart key\n");
     key->state.tap_count = 0;
     key->state.tap_timeout = 0;
     key->state.tap_fired = false;
