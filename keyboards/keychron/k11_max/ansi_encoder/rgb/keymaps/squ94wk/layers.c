@@ -153,15 +153,16 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
 
 enum smart_keys {
     SMART_KEY_SMART_SHIFT,
+    SMART_KEY_SMART_CTRL,
     // end
     SMART_KEY_COUNT,
 };
 
-void smart_shift_n_tap(smart_key_t *key) {
+void smart_mod_n_tap(smart_key_t *key) {
     switch (key->state.tap_count) {
     case 1:
         uprintf("DEBUG: oneshot shift\n");
-        set_oneshot_mods(get_oneshot_mods() | key->tap.mask_oneshot);
+        set_oneshot_mods(get_oneshot_mods() | key->tap.mask_oneshot | MOD_BIT(key->hold.keycode));
         break;
     case 2:
         // FIXME: CAPS word doesn't work with smart keys yet
@@ -173,7 +174,8 @@ void smart_shift_n_tap(smart_key_t *key) {
 }
 
 smart_key_t smart_keys[] = {
-    [SMART_KEY_SMART_SHIFT] = { .keycode = CKC_SMART_SHIFT, .max_tap = 2, .tap.action = &smart_shift_n_tap, .tap.mask_oneshot = MOD_BIT(KC_LEFT_SHIFT), .hold.keycode = KC_LEFT_SHIFT, },
+    [SMART_KEY_SMART_SHIFT] = { .keycode = CKC_SMART_SHIFT, .max_tap = 2, .tap.action = &smart_mod_n_tap, .hold.keycode = KC_LEFT_SHIFT, },
+    [SMART_KEY_SMART_CTRL] = { .keycode = CKC_SMART_CTRL, .max_tap = 1, .tap.action = &smart_mod_n_tap, .hold.keycode = KC_LEFT_CTRL, },
 };
 
 smart_key_t *lookup_key(uint16_t keycode, keypos_t pos) {

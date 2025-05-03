@@ -25,9 +25,9 @@ const uint16_t PROGMEM combo_left_alt[]         = {KC_A, CKC_ALPHA_LAYER_SWITCH,
 
 combo_t key_combos[] = {
     [COMBO_LEFT_SHIFT] = COMBO(combo_left_shift, CKC_SMART_SHIFT),
-    [COMBO_RIGHT_SHIFT] = COMBO(combo_right_shift, KC_RIGHT_SHIFT),
-    [COMBO_LEFT_CTRL] = COMBO(combo_left_ctrl, KC_LEFT_CTRL),
-    [COMBO_RIGHT_CTRL] = COMBO(combo_right_ctrl, KC_RIGHT_CTRL),
+    [COMBO_RIGHT_SHIFT] = COMBO(combo_right_shift, CKC_SMART_SHIFT),
+    [COMBO_LEFT_CTRL] = COMBO(combo_left_ctrl, CKC_SMART_CTRL),
+    [COMBO_RIGHT_CTRL] = COMBO(combo_right_ctrl, CKC_SMART_CTRL),
     [COMBO_LEFT_ALT] = COMBO(combo_left_alt, KC_LEFT_ALT),
 //    [COMBO_RIGHT_ALT] = COMBO(combo_right_alt, KC_LEFT_ALT),
 //    [COMBO_Y] = COMBO(combo_y, KC_Y),
