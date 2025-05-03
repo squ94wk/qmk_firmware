@@ -39,7 +39,7 @@ enum smart_layer {
     LAYER_SEARCH_2,
     LAYER_O_HOLD,
     LAYER_I_HOLD,
-    LAYER_NAV,
+    LAYER_SYS,
     LAYER_NUM,
     // end
     SMART_LAYER_COUNT,

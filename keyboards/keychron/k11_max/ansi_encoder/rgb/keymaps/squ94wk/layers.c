@@ -22,31 +22,36 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
         [2][8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_K_HOLD, .fire_on_key_press = &fire_for_all, },
         [2][9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_L_HOLD, .fire_on_key_press = &fire_for_all, },
         [2][10] = &(smart_key_t){ .tap.action = &magic_action, },
-        [2][6] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_H_HOLD, .fire_on_key_press = &fire_for_all, },
         [2][3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_STRINGS, .fire_on_key_press = &fire_for_all, },
-        [2][2] = &(smart_key_t){ .tap.layer_oneshot = LAYER_ALPHA_2, .hold.layer = LAYER_BRACKETS, .fire_on_key_press = &fire_for_all, },
+        [2][2] = &(smart_key_t){ .tap.layer_oneshot = LAYER_ALPHA_2, .hold.layer = LAYER_ALPHA_2, .fire_on_key_press = &fire_for_all, },
+        [3][5] = &(smart_key_t){ .tap.keycode = KC_D, .hold.layer = LAYER_BRACKETS, .fire_on_key_press = &fire_for_all, },
         [1][3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SEARCH, .fire_on_key_press = &fire_for_all, },
         [1][2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SEARCH_2, .fire_on_key_press = &fire_for_all, },
         [1][8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_I_HOLD, .fire_on_key_press = &fire_for_all, },
         [1][9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_O_HOLD, .fire_on_key_press = &fire_for_all, },
-        [4][6] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_NAV, .fire_on_key_press = &fire_for_all, },
+        [3][9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_H_HOLD, .fire_on_key_press = &fire_for_all, },
+        [4][6] = &(smart_key_t){ .tap.layer_oneshot = LAYER_SYS, .hold.layer = LAYER_SYS, .fire_on_key_press = &fire_for_all, },
         [4][7] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_NUM, .fire_on_key_press = &fire_for_all, },
         [4][5] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.keycode = KC_LEFT_SHIFT, .fire_on_key_press = &fire_for_all, },
     },
 
     [LAYER_ALPHA_2] = {
+        [1][2] = &(smart_key_t){ .tap.keycode = KC_2, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+        [1][3] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+        [1][4] = &(smart_key_t){ .tap.keycode = KC_SLASH, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+        [2][3] = &(smart_key_t){ .tap.keycode = KC_COMMA, },
+        [2][4] = &(smart_key_t){ .tap.keycode = KC_DOT, },
+        [3][4] = &(smart_key_t){ .tap.keycode = KC_X, },
+        [3][5] = &(smart_key_t){ .tap.keycode = KC_V, },
+
         [1][7] = &(smart_key_t){ .tap.keycode = KC_Z, },
         [1][8] = &(smart_key_t){ .tap.keycode = KC_K, },
         [1][9] = &(smart_key_t){ .tap.keycode = KC_P, },
         [2][7] = &(smart_key_t){ .tap.keycode = KC_Y, },
         [2][8] = &(smart_key_t){ .tap.keycode = KC_J, },
-        [2][9] = &(smart_key_t){ .tap.keycode = KC_V, },
-        [2][10] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, },
-        [3][9] = &(smart_key_t){ .tap.keycode = KC_X, },
+        [2][9] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
         [3][10] = &(smart_key_t){ .tap.keycode = KC_Q, },
-        [3][11] = &(smart_key_t){ .tap.keycode = KC_SLASH, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-        [4][5] = &(smart_key_t){ .tap.keycode = KC_COMMA, },
-        [4][9] = &(smart_key_t){ .tap.keycode = KC_DOT, },
+        [3][11] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, },
     },
 
     [LAYER_STRINGS] = {
@@ -61,7 +66,7 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
 //    [SMART_DOT] = { .tap.keycode = KC_DOT, },
 
     [LAYER_BRACKETS] = {
-        [2][6] = &(smart_key_t){ .tap.keycode = KC_COMMA, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
+        [3][9] = &(smart_key_t){ .tap.keycode = KC_COMMA, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
         [2][7] = &(smart_key_t){ .tap.keycode = KC_9, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
         [2][8] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
         [2][9] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
@@ -75,7 +80,6 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
         [1][7] = &(smart_key_t){ .tap.keycode = KC_7, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
         [1][8] = &(smart_key_t){ .tap.keycode = KC_SLASH, },
         [1][9] = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, },
-        [2][6] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
         [2][7] = &(smart_key_t){ .tap.keycode = KC_EQUAL, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
         [2][8] = &(smart_key_t){ .tap.keycode = KC_MINUS, },
         [2][9] = &(smart_key_t){ .tap.keycode = KC_EQUAL, },
@@ -87,16 +91,16 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Closing brackets
     [LAYER_H_HOLD] = {
-        [2][2] = &(smart_key_t){ .tap.keycode = KC_DOT, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
+        [3][5] = &(smart_key_t){ .tap.keycode = KC_DOT, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
     },
     [LAYER_J_HOLD] = {
-        [2][2] = &(smart_key_t){ .tap.keycode = KC_0, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
+        [3][5] = &(smart_key_t){ .tap.keycode = KC_0, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
     },
     [LAYER_K_HOLD] = {
-        [2][2] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
+        [3][5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
     },
     [LAYER_L_HOLD] = {
-        [2][2] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .max_tap = 2, },
+        [3][5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .max_tap = 2, },
     },
 
     [LAYER_SEARCH] = {
@@ -118,12 +122,17 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
         [1][2] = &(smart_key_t){ .tap.keycode = KC_6, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
     },
 
-    [LAYER_NAV] = {
-        [2][6] = &(smart_key_t){ .tap.keycode = KC_LEFT, },
-        [2][7] = &(smart_key_t){ .tap.keycode = KC_DOWN, },
-        [2][8] = &(smart_key_t){ .tap.keycode = KC_UP, },
-        [2][9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, },
+    [LAYER_SYS] = {
+        [2][2] = &(smart_key_t){ .tap.keycode = KC_ESC, },
+        [2][3] = &(smart_key_t){ .tap.keycode = KC_ENT, },
         [2][4] = &(smart_key_t){ .tap.keycode = KC_TAB, },
+
+        [1][9] = &(smart_key_t){ .tap.keycode = KC_BSPC, },
+        [1][8] = &(smart_key_t){ .tap.keycode = KC_UP, },
+
+        [2][7] = &(smart_key_t){ .tap.keycode = KC_LEFT, },
+        [2][8] = &(smart_key_t){ .tap.keycode = KC_DOWN, },
+        [2][9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, },
     },
 
     [LAYER_NUM] = {
@@ -132,6 +141,7 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
         [2][8] = &(smart_key_t){ .tap.keycode = KC_2, },
         [2][9] = &(smart_key_t){ .tap.keycode = KC_3, },
         [2][10] = &(smart_key_t){ .tap.keycode = KC_4, },
+        [2][3] = &(smart_key_t){ .tap.keycode = KC_COMMA, },
         [2][4] = &(smart_key_t){ .tap.keycode = KC_5, },
         [2][3] = &(smart_key_t){ .tap.keycode = KC_6, },
         [2][2] = &(smart_key_t){ .tap.keycode = KC_7, },
