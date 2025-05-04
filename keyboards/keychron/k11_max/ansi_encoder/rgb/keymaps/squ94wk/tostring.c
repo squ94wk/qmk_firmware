@@ -221,7 +221,11 @@ const char* keycode_to_string(uint16_t keycode) {
     case KC_RIGHT_ALT:           return "KC_RIGHT_ALT";
     case KC_RIGHT_GUI:           return "KC_RIGHT_GUI";
     case CKC_ALPHA_LAYER_SWITCH: return "CKC_ALPHA_LAYER_SWITCH";
+    case CKC_MAGIC: return "CKC_MAGIC";
     case CKC_SMART_SHIFT:       return "CKC_SMART_SHIFT";
+    case CKC_SMART_CTRL:       return "CKC_SMART_CTRL";
+    case CKC_SMART_ALT:       return "CKC_SMART_ALT";
+    case CKC_SMART_CTRL_SHIFT:       return "CKC_SMART_CTRL_SHIFT";
     }
     return "UNDEFINED";
 };

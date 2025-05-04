@@ -5,6 +5,7 @@ enum layers {
 
 enum custom_keycodes {
     CKC_ALPHA_LAYER_SWITCH = SAFE_RANGE,
+    CKC_MAGIC,
     CKC_SMART_SHIFT,
     CKC_SMART_CTRL,
     CKC_SMART_ALT,

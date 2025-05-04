@@ -164,10 +164,12 @@ enum smart_keys {
 
 void smart_mod_n_tap(smart_key_t *key) {
     switch (key->state.tap_count) {
-    case 1:
-        uprintf("DEBUG: oneshot\n");
-        set_oneshot_mods(get_oneshot_mods() | key->tap.mask_oneshot | MOD_BIT(key->hold.keycode));
+    case 1: {
+        uint16_t mask = get_oneshot_mods() | key->tap.mask_oneshot | MOD_BIT(key->hold.keycode) | key->hold.mask;
+        uprintf("DEBUG: oneshot with mask %d\n", mask);
+        set_oneshot_mods(mask);
         break;
+    }
     case 2:
         // FIXME: CAPS word doesn't work with smart keys yet
         uprintf("DEBUG: caps word\n");

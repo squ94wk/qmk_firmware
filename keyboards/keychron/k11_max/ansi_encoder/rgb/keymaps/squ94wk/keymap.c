@@ -27,7 +27,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [WIN_BASE] = LAYOUT_69_ansi(
         QK_BOOT,  KC_1,	   KC_2,	 KC_3,	  KC_4,    KC_5,	KC_6,	  KC_7,    KC_8,	KC_9,	 KC_0,	   KC_MINS,  KC_EQL,   KC_BSPC,          KC_MUTE,
         KC_TAB,  _______,	   KC_B,	 KC_F,	  KC_W,    _______,	_______,	  KC_L,    KC_I,	KC_G,	 _______,	   _______,  _______,  _______,          KC_DEL,
-        KC_CAPS, KC_A,	   CKC_ALPHA_LAYER_SWITCH,	 KC_S,	  KC_T,    _______,              _______,    KC_N,	KC_E,	 KC_O,	   _______,  _______,  KC_ENT,           KC_HOME,
+        KC_CAPS, KC_A,	   CKC_ALPHA_LAYER_SWITCH,	 KC_S,	  KC_T,    _______,              _______,    KC_N,	KC_E,	 KC_O,	   CKC_MAGIC,  _______,  KC_ENT,           KC_HOME,
         KC_LSFT,           _______,	 KC_R,	  KC_C,    KC_D,	_______,	  _______,    _______,	 KC_H,	 KC_U,  KC_M,	_______,  KC_RSFT, KC_UP,
         KC_LCTL, KC_LWIN,  KC_LALT,           KC_SPC,           KC_ESC, KC_BSPC,       KC_ENT,            KC_RALT,            KC_LEFT, KC_DOWN, KC_RGHT),
 };
