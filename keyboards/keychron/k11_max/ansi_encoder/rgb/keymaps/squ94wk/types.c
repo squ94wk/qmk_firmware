@@ -85,3 +85,12 @@ struct smart_key_t {
     void (*release_action)(smart_key_t *key);
     bool (*fire_on_key_press)(smart_key_t *key, keypos_t pos);
 };
+
+// allows self referencing
+typedef struct smart_layer_t smart_layer_t;
+
+struct smart_layer_t {
+    smart_key_t *map[MATRIX_ROWS][MATRIX_COLS];
+    bool (*on_layer_activate)(smart_layer_t *layer, int layer_index);
+    bool (*oneshot_on_key_press)(smart_layer_t *layer, uint16_t keycode, uint16_t modmask);
+};

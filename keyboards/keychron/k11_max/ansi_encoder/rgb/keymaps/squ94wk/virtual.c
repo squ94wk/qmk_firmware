@@ -1,3 +1,7 @@
+int layer_activations[SMART_LAYER_COUNT];
+smart_layer_t *smart_layers[SMART_LAYER_COUNT];
+int active_layers[SMART_LAYER_COUNT];
+
 struct virtual_press_t {
     struct {
         keypos_t pos;
@@ -75,6 +79,16 @@ void virtual_send(keypos_t pos, uint16_t trigger, uint16_t keycode, uint16_t mas
             .mask = mask,
         };
         break;
+    }
+
+    // use up oneshot layer activations
+    for (int i=0; i < SMART_LAYER_COUNT && active_layers[i]; ++i) {
+        smart_layer_t *l = smart_layers[active_layers[i]];
+        if (l->oneshot_on_key_press(l, keycode, mask)) {
+            if (layer_activations[active_layers[i]] > 0) {
+                layer_activations[active_layers[i]]--;
+            }
+        }
     }
 }
 

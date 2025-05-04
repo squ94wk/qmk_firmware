@@ -6,7 +6,7 @@ static uint16_t deferred_keycode;
 
 int layer_activations[SMART_LAYER_COUNT];
 
-smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS];
+smart_layer_t *smart_layers[SMART_LAYER_COUNT];
 smart_key_t smart_keys[];
 int active_layers[SMART_LAYER_COUNT];
 smart_key_t *lookup_key(uint16_t keycode, keypos_t key);
@@ -34,18 +34,9 @@ bool is_layer_active(int layer) {
     return false;
 }
 
-void activate_layer(int layer) {
-    if (is_layer_active(layer)) {
-        return;
-    }
-    memmove(&active_layers[1], &active_layers[0], SMART_LAYER_COUNT-1);
-    active_layers[0] = layer;
-    uprintf("DEBUG: layer %d activated\n", layer);
-}
-
-void deactivate_layer(int layer) {
+bool deactivate_layer(int layer) {
     if (!is_layer_active(layer)) {
-        return;
+        return false;
     }
     for (int i=0; i < SMART_LAYER_COUNT && active_layers[i]; ++i) {
         if (active_layers[i] != layer) {
@@ -54,8 +45,27 @@ void deactivate_layer(int layer) {
         active_layers[i] = 0;
         memmove(&active_layers[i], &active_layers[i+1], SMART_LAYER_COUNT-i-1);
         uprintf("DEBUG: layer %d deactivated\n", layer);
-        return;
+        return true;
     }
+    return false;
+}
+
+bool activate_layer(int layer) {
+    if (is_layer_active(layer)) {
+        return false;
+    }
+    memmove(&active_layers[1], &active_layers[0], SMART_LAYER_COUNT-1);
+    active_layers[0] = layer;
+    uprintf("DEBUG: layer %d activated\n", layer);
+    for (int i=1; i < SMART_LAYER_COUNT && active_layers[i]; i++) {
+        smart_layer_t *l = smart_layers[active_layers[i]];
+        if (l->on_layer_activate && !l->on_layer_activate(l, layer)) {
+            if (deactivate_layer(active_layers[i])) {
+                i--;
+            }
+        }
+    }
+    return true;
 }
 
 void toggle_layer(int layer) {
@@ -136,12 +146,6 @@ void release_action(smart_key_t *key) {
 
 static bool process_smart_key(uint16_t keycode, keyrecord_t *record) {
     run_housekeeping = true;
-    // use up one shot layer activations
-    for (int i=0; i < SMART_LAYER_COUNT; ++i) {
-        if (layer_activations[i] > 0) {
-            layer_activations[i]--;
-        }
-    }
 
     // handle deferred event
     if (deferred_keycode) {
