@@ -230,12 +230,12 @@ smart_key_t smart_keys[] = {
 
 smart_key_t *lookup_key(uint16_t keycode, keypos_t pos) {
     if (!pos.row && !pos.col) {
-        for (int i=0; i < SMART_KEY_COUNT; i++) {
+        for (int i=0; i < SMART_KEY_COUNT; ++i) {
             if (keycode == smart_keys[i].keycode) {
                 return &smart_keys[i];
             }
-            return smart_layers[LAYER_ALPHA_1]->map[pos.row][pos.col];
         }
+        return smart_layers[LAYER_ALPHA_1]->map[pos.row][pos.col];
     }
     for (int i=0; i < SMART_LAYER_COUNT && active_layers[i]; ++i) {
         smart_key_t *key = smart_layers[active_layers[i]]->map[pos.row][pos.col];
