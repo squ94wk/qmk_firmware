@@ -2,6 +2,7 @@
 #include "virtual.c"
 
 static keyevent_t deferred_event;
+static uint16_t deferred_keycode;
 
 int layer_activations[SMART_LAYER_COUNT];
 
@@ -143,19 +144,16 @@ static bool process_smart_key(uint16_t keycode, keyrecord_t *record) {
     }
 
     // handle deferred event
-    if (deferred_event.time) {
+    if (deferred_keycode) {
         for (int i = 0; i < PENDING_QUEUE_MAX && pending_keys[i]; ++i) {
             smart_key_t *key = pending_keys[i];
             if (handle_deferred_event_continuation(key, record->event)) {
                 break;
             }
         }
-    }
 
-    // still not handled, process as normal event
-    if (deferred_event.time) {
-        process_event(keycode, deferred_event);
-        deferred_event = (keyevent_t){};
+        process_event(deferred_keycode, deferred_event);
+        deferred_keycode = KC_NO;
     }
 
     return process_event(keycode, record->event);
@@ -266,8 +264,10 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
             if (key->state.tap_fired || key->state.hold_fired) {
                 return false; // ignore
             }
-            if (key->fire_on_key_press && key->fire_on_key_press(key, event.key)) {
-                deferred_event = event; // maybe it's a roll, maybe a fast combination
+            if (!key->fire_on_key_press || key->fire_on_key_press(key, event.key)) {
+                // maybe it's a roll, maybe a fast combination
+                deferred_event = event;
+                deferred_keycode = keycode;
                 return true;
             }
             return false;
@@ -326,7 +326,7 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
             key->state.pressed_time = 0;
             return true;
         case PRESS_OTHER:
-            if (key->fire_on_key_press && key->fire_on_key_press(key, event.key)) {
+            if (!key->fire_on_key_press || key->fire_on_key_press(key, event.key)) {
                 key->state.hold_fired = true;
                 hold_action(key);
             }
@@ -362,7 +362,7 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
                 return false;
             }
             if (key->state.pressed_time) { // pressed
-                if (key->fire_on_key_press && key->fire_on_key_press(key, event.key)) {
+                if (!key->fire_on_key_press || key->fire_on_key_press(key, event.key)) {
                     key->state.hold_fired = true;
                     hold_action(key);
                 }
@@ -468,7 +468,7 @@ static enum smart_key_type get_key_type(smart_key_t *key) {
     bool is_tap = key->tap.action || key->tap.keycode || key->tap.layer_toggle || key->tap.layer_oneshot || key->tap.mask_oneshot;
     bool is_hold = key->hold.action || key->hold.keycode || key->hold.layer;
 
-    if (key->max_tap > 1) {
+    if (key->max_tap) {
         if (!is_tap) {
             return N_HOLD;
         }

@@ -31,7 +31,8 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
         [1][9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_O_HOLD, .fire_on_key_press = &fire_for_all, },
         [3][9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_H_HOLD, .fire_on_key_press = &fire_for_all, },
         [4][6] = &(smart_key_t){ .tap.layer_oneshot = LAYER_SYS, .hold.layer = LAYER_SYS, .fire_on_key_press = &fire_for_all, },
-        [4][7] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_NUM, .fire_on_key_press = &fire_for_all, },
+        [4][7] = &(smart_key_t){ .tap.layer_toggle = LAYER_NUM, .hold.layer = LAYER_NUM, .fire_on_key_press = &fire_for_all, },
+        [2][2] = &(smart_key_t){ .tap.layer_oneshot = LAYER_ALPHA_2, .hold.layer = LAYER_ALPHA_2, .fire_on_key_press = &fire_for_all, },
         [4][5] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.keycode = KC_LEFT_SHIFT, .fire_on_key_press = &fire_for_all, },
     },
 
@@ -40,6 +41,7 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
         [1][3] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
         [1][4] = &(smart_key_t){ .tap.keycode = KC_SLASH, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
         [2][3] = &(smart_key_t){ .tap.keycode = KC_COMMA, },
+
         [2][4] = &(smart_key_t){ .tap.keycode = KC_DOT, },
         [3][4] = &(smart_key_t){ .tap.keycode = KC_X, },
         [3][5] = &(smart_key_t){ .tap.keycode = KC_V, },
@@ -67,9 +69,9 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
 
     [LAYER_BRACKETS] = {
         [3][9] = &(smart_key_t){ .tap.keycode = KC_COMMA, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-        [2][7] = &(smart_key_t){ .tap.keycode = KC_9, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
-        [2][8] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
-        [2][9] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
+        [2][7] = &(smart_key_t){ .tap.keycode = KC_9, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
+        [2][8] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
+        [2][9] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .max_tap = 2, },
 //        [KC_U] = &smart_keys[SMART_EXCLAIM],
 //        [KC_I] = &smart_keys[SMART_QUESTION],
 //        [KC_N] = &smart_keys[SMART_COMMA],
@@ -154,6 +156,8 @@ smart_key_t *smart_layers[SMART_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
 enum smart_keys {
     SMART_KEY_SMART_SHIFT,
     SMART_KEY_SMART_CTRL,
+    SMART_KEY_SMART_ALT,
+    SMART_KEY_SMART_CTRL_SHIFT,
     // end
     SMART_KEY_COUNT,
 };
@@ -161,7 +165,7 @@ enum smart_keys {
 void smart_mod_n_tap(smart_key_t *key) {
     switch (key->state.tap_count) {
     case 1:
-        uprintf("DEBUG: oneshot shift\n");
+        uprintf("DEBUG: oneshot\n");
         set_oneshot_mods(get_oneshot_mods() | key->tap.mask_oneshot | MOD_BIT(key->hold.keycode));
         break;
     case 2:
@@ -176,6 +180,8 @@ void smart_mod_n_tap(smart_key_t *key) {
 smart_key_t smart_keys[] = {
     [SMART_KEY_SMART_SHIFT] = { .keycode = CKC_SMART_SHIFT, .max_tap = 2, .tap.action = &smart_mod_n_tap, .hold.keycode = KC_LEFT_SHIFT, },
     [SMART_KEY_SMART_CTRL] = { .keycode = CKC_SMART_CTRL, .max_tap = 1, .tap.action = &smart_mod_n_tap, .hold.keycode = KC_LEFT_CTRL, },
+    [SMART_KEY_SMART_ALT] = { .keycode = CKC_SMART_ALT, .max_tap = 1, .tap.action = &smart_mod_n_tap, .hold.keycode = KC_LEFT_ALT, },
+    [SMART_KEY_SMART_CTRL_SHIFT] = { .keycode = CKC_SMART_CTRL_SHIFT, .max_tap = 1, .tap.action = &smart_mod_n_tap, .hold.keycode = KC_LEFT_CTRL, .hold.mask = MOD_BIT(KC_LEFT_SHIFT)},
 };
 
 smart_key_t *lookup_key(uint16_t keycode, keypos_t pos) {
