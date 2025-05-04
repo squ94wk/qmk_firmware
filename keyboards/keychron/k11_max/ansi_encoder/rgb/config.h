@@ -56,7 +56,7 @@
 // Allow combos as modifiers
 #define COMBO_MUST_HOLD_MODS
 // max time allowed between pressed
-#define COMBO_TERM 40
+#define COMBO_TERM 35
 // how long at least one of the combo keys must be held to trigger
 #define COMBO_HOLD_TERM 175
 
