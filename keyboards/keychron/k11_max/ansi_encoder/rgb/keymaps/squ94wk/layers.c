@@ -72,21 +72,13 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
             [2][9] = &(smart_key_t){ .tap.keycode = KC_GRV, },
         },
     },
-//    [SMART_EXCLAIM] = { .tap.keycode = KC_1, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-//    [SMART_QUESTION] = { .tap.keycode = KC_SLASH, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-//    [SMART_COMMA] = { .tap.keycode = KC_COMMA, },
-//    [SMART_DOT] = { .tap.keycode = KC_DOT, },
 
     [LAYER_BRACKETS] = &(smart_layer_t){
         .map = {
             [3][9] = &(smart_key_t){ .tap.keycode = KC_COMMA, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
             [2][7] = &(smart_key_t){ .tap.keycode = KC_9, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
-            [2][8] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
+            [2][8] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
             [2][9] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .max_tap = 2, },
-    //        [KC_U] = &smart_keys[SMART_EXCLAIM],
-    //        [KC_I] = &smart_keys[SMART_QUESTION],
-    //        [KC_N] = &smart_keys[SMART_COMMA],
-    //        [KC_M] = &smart_keys[SMART_DOT],
         },
     },
 
@@ -119,7 +111,7 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
     },
     [LAYER_K_HOLD] = &(smart_layer_t){
         .map = {
-            [3][5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
+            [3][5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
         },
     },
     [LAYER_L_HOLD] = &(smart_layer_t){
