@@ -45,6 +45,7 @@ enum smart_layer {
     LAYER_I_HOLD,
     LAYER_SYS,
     LAYER_NUM,
+    LAYER_TMUX,
     // end
     SMART_LAYER_COUNT,
 };

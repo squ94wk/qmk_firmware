@@ -19,6 +19,13 @@ bool deactivate_on_other_layer(smart_layer_t *layer, int index) {
     return false;
 }
 
+void activate_tmux(smart_key_t *key) {
+    register_with_mods(KC_B, MOD_BIT(KC_LEFT_CTRL));
+    unregister_code(KC_B);
+    activate_layer(LAYER_TMUX);
+    layer_activations[LAYER_TMUX] = 1;
+}
+
 smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
     [LAYER_ALPHA_1] = &(smart_layer_t){
         .map = {
@@ -160,6 +167,8 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
             [2][7] = &(smart_key_t){ .tap.keycode = KC_LEFT, },
             [2][8] = &(smart_key_t){ .tap.keycode = KC_DOWN, },
             [2][9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, },
+
+            [3][5] = &(smart_key_t){ .tap.action = &activate_tmux, },
         },
     },
 
@@ -187,6 +196,26 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
             [1][2] = &(smart_key_t){ .tap.keycode = KC_6, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
             [1][3] = &(smart_key_t){ .tap.keycode = KC_5, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
             [1][4] = &(smart_key_t){ .tap.keycode = KC_4, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+        },
+    },
+
+    [LAYER_TMUX] = &(smart_layer_t){
+        .map = {
+            [1] = {
+                [2] = &(smart_key_t){ .tap.keycode = KC_P, },
+                [3] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, },
+                [4] = &(smart_key_t){ .tap.keycode = KC_N, },
+            },
+            [2] = {
+                [2] = &(smart_key_t){ .tap.layer_toggle = LAYER_TMUX, },
+                [3] = &(smart_key_t){ .tap.keycode = KC_5, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                [4] = &(smart_key_t){ .tap.keycode = KC_QUOTE, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+            },
+            [3] = {
+                [3] = &(smart_key_t){ .tap.keycode = KC_Z, },
+                [4] = &(smart_key_t){ .tap.keycode = KC_C, },
+                [5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, },
+            },
         },
     },
 };
