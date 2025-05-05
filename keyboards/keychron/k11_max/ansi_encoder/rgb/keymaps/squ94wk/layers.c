@@ -6,11 +6,11 @@ void tap_multi_matching_brace(smart_key_t *key) {
     uint8_t mask = key->tap.mask;
     switch (key->state.tap_count) {
     case 1:
-        virtual_send(key->pos, key->keycode, key->tap.keycode, mask);
+        virtual_send(key, key->tap.keycode, mask);
         break;
     case 2:
-        virtual_send(key->pos, key->keycode, key->tap.keycode, mask);
-        virtual_send(key->pos, key->keycode, key->tap.keycode + 1, mask);
+        virtual_send(key, key->tap.keycode, mask);
+        virtual_send(key, key->tap.keycode + 1, mask);
         break;
     }
 }
@@ -35,7 +35,7 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
             [2][9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_L_HOLD, },
             [2][10] = &(smart_key_t){ .tap.action = &magic_action, },
             [2][3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_STRINGS, },
-            [2][2] = &(smart_key_t){ .tap.layer_oneshot = LAYER_ALPHA_2, .hold.layer = LAYER_ALPHA_2, },
+            [2][2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_ALPHA_2, },
             [3][5] = &(smart_key_t){ .tap.keycode = KC_D, .hold.layer = LAYER_BRACKETS, },
             [1][3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SEARCH, },
             [1][2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SEARCH_2, },
@@ -44,7 +44,6 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
             [3][9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_H_HOLD, },
             [4][5] = &(smart_key_t){ .tap.keycode = KC_SPC, .hold.layer = LAYER_SYS, },
             [4][6] = &(smart_key_t){ .tap.layer_oneshot = LAYER_NUM, .hold.layer = LAYER_NUM, },
-            [2][2] = &(smart_key_t){ .tap.layer_oneshot = LAYER_ALPHA_2, .hold.layer = LAYER_ALPHA_2, },
         },
     },
 
@@ -157,7 +156,7 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
             [1][3] = &(smart_key_t){ .tap.keycode = KC_C, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_V, .hold.tap_keycode = true, .hold.mask = MOD_BIT(KC_RIGHT_CTRL), },
             [1][4] = &(smart_key_t){ .tap.keycode = KC_GRV, },
 
-            [2][2] = &(smart_key_t){ .tap.keycode = KC_ESC, },
+            [2][2] = &(smart_key_t){ .tap.keycode = KC_ESC, .hold.keycode = KC_LEFT_ALT, },
             [2][3] = &(smart_key_t){ .tap.keycode = KC_ENT, },
             [2][4] = &(smart_key_t){ .tap.keycode = KC_TAB, },
 
@@ -262,6 +261,13 @@ smart_key_t *lookup_key(uint16_t keycode, keypos_t pos) {
         }
         return smart_layers[LAYER_ALPHA_1]->map[pos.row][pos.col];
     }
+
+    for (int i=0; i < VIRTUAL_PRESS_MAX_COUNT; i++) {
+        if (is_same_pos(pos, virtual_pressed[i].trigger->pos)) {
+            return virtual_pressed[i].trigger;
+        }
+    }
+
     for (int i=0; i < SMART_LAYER_COUNT && active_layers[i]; ++i) {
         smart_key_t *key = smart_layers[active_layers[i]]->map[pos.row][pos.col];
         if (key) {
@@ -295,6 +301,10 @@ void matrix_init_user(void) {
                         .row = i,
                         .col = j,
                     };
+                    // copy keycode from base layer
+                    if (!key->keycode) {
+                        key->keycode = keymaps[WIN_BASE][i][j];
+                    }
                     // copy keycode from base layer
                     if (key->tap.keycode == KC_TRANSPARENT) {
                         key->tap.keycode = keymaps[WIN_BASE][i][j];

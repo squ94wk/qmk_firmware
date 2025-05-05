@@ -104,7 +104,7 @@ void tap_action(smart_key_t *key) {
         set_oneshot_mods(key->tap.mask_oneshot);
         return;
     }
-    virtual_send(key->pos, key->keycode, key->tap.keycode, key->tap.mask);
+    virtual_send(key, key->tap.keycode, key->tap.mask);
 }
 
 void hold_action(smart_key_t *key) {
@@ -118,9 +118,9 @@ void hold_action(smart_key_t *key) {
         layer_activations[key->hold.layer] = -1;
         return;
     }
-    virtual_send(key->pos, key->keycode, key->hold.keycode, key->hold.mask);
+    virtual_send(key, key->hold.keycode, key->hold.mask);
     if (key->hold.tap_keycode) {
-        virtual_release(key->pos, key->keycode);
+        virtual_release(key);
     }
 }
 
@@ -131,7 +131,7 @@ void release_action(smart_key_t *key) {
     }
     if (key->state.tap_fired) {
         if (key->tap.keycode) {
-            virtual_release(key->pos, key->keycode);
+            virtual_release(key);
         }
         return;
     }
@@ -141,7 +141,7 @@ void release_action(smart_key_t *key) {
             return;
         }
         if (key->hold.keycode) {
-            virtual_release(key->pos, key->keycode);
+            virtual_release(key);
         }
         return;
     }
@@ -155,12 +155,14 @@ static bool process_smart_key(uint16_t keycode, keyrecord_t *record) {
         for (int i = 0; i < PENDING_QUEUE_MAX && pending_keys[i]; ++i) {
             smart_key_t *key = pending_keys[i];
             if (handle_deferred_event_continuation(key, record->event)) {
+                remove_pending_key(key);
                 break;
             }
         }
 
-        process_event(deferred_keycode, deferred_event);
+        uint16_t code = deferred_keycode;
         deferred_keycode = KC_NO;
+        process_event(code, deferred_event);
     }
 
     return process_event(keycode, record->event);
@@ -168,7 +170,7 @@ static bool process_smart_key(uint16_t keycode, keyrecord_t *record) {
 
 static bool handle_deferred_event_continuation(smart_key_t *key, keyevent_t cont) {
     enum smart_key_type key_type = get_key_type(key);
-    uprintf("DEBUG: handle deferred event for %s key\n", key_type_to_string(key_type));
+    uprintf("DEBUG: handle deferred event for %s key with continuation [%d, %d]\n", key_type_to_string(key_type), cont.key.row, cont.key.col);
 
     switch (key_type) {
     case TAP_HOLD:
@@ -218,16 +220,16 @@ bool process_event(uint16_t keycode, keyevent_t event) {
 static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_t event) {
     enum event_type event_type = get_event_type(key, event);
     enum smart_key_type key_type = get_key_type(key);
-    uprintf("DEBUG: handle %s event for %s key\n", event_to_string(event_type), key_type_to_string(key_type));
+    uprintf("DEBUG: handle %s event for %s key (%s)\n", event_to_string(event_type), key ? keycode_to_string(key->keycode) : "DUMB", key_type_to_string(key_type));
 
     switch (key_type) {
     case DUMB: {
         switch (event_type) {
         case PRESS_SAME:
-            virtual_send(key->pos, keycode, keycode, 0);
+            register_with_mods(keycode, get_mods());
             return true;
         case RELEASE_SAME:
-            virtual_release(key->pos, keycode);
+            unregister_code(keycode);
             return true;
         default:
             return false;
@@ -273,6 +275,7 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
             }
             if (!key->fire_on_key_press || key->fire_on_key_press(key, event.key)) {
                 // maybe it's a roll, maybe a fast combination
+                uprintf("DEBUG: defer press of key %s\n", keycode_to_string(keycode));
                 deferred_event = event;
                 deferred_keycode = keycode;
                 return true;
