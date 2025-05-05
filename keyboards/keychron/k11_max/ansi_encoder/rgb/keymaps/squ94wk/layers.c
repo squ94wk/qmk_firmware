@@ -51,7 +51,7 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
             [3][4] = &(smart_key_t){ .tap.keycode = KC_X, },
             [3][5] = &(smart_key_t){ .tap.keycode = KC_V, },
 
-            [1][7] = &(smart_key_t){ .tap.keycode = KC_TILDE, },
+            [1][7] = &(smart_key_t){ .tap.keycode = KC_GRV, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
             [1][8] = &(smart_key_t){ .tap.keycode = KC_K, },
             [1][9] = &(smart_key_t){ .tap.keycode = KC_P, },
             [2][7] = &(smart_key_t){ .tap.keycode = KC_Y, },
@@ -154,6 +154,10 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
 
     [LAYER_SYS] = &(smart_layer_t){
         .map = {
+            [1][2] = &(smart_key_t){ .tap.keycode = KC_DELETE, },
+            [1][3] = &(smart_key_t){ .tap.keycode = KC_C, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_V, .hold.tap_keycode = true, .hold.mask = MOD_BIT(KC_RIGHT_CTRL), },
+            [1][4] = &(smart_key_t){ .tap.keycode = KC_GRV, },
+
             [2][2] = &(smart_key_t){ .tap.keycode = KC_ESC, },
             [2][3] = &(smart_key_t){ .tap.keycode = KC_ENT, },
             [2][4] = &(smart_key_t){ .tap.keycode = KC_TAB, },

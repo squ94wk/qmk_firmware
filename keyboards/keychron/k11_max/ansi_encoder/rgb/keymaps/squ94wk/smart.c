@@ -119,6 +119,9 @@ void hold_action(smart_key_t *key) {
         return;
     }
     virtual_send(key->pos, key->keycode, key->hold.keycode, key->hold.mask);
+    if (key->hold.tap_keycode) {
+        virtual_release(key->pos, key->keycode);
+    }
 }
 
 void release_action(smart_key_t *key) {

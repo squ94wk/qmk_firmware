@@ -77,6 +77,7 @@ struct smart_key_t {
 
     struct {
         uint16_t keycode;
+        bool tap_keycode;
         uint8_t mask;
         int layer;
         void (*action)(smart_key_t *key);
