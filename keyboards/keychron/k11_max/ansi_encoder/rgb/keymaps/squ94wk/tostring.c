@@ -232,34 +232,45 @@ const char* keycode_to_string(uint16_t keycode) {
 
 char* key_type_to_string(enum smart_key_type type) {
     switch (type) {
-    case DUMB:
-        return "DUMB";
-    case TAP_ONLY:
-        return "TAP_ONLY";
-    case TAP_HOLD:
-        return "TAP_HOLD";
-    case N_TAP:
-        return "N_TAP";
-    case N_TAP_HOLD:
-        return "N_TAP_HOLD";
-    case HOLD_ONLY:
-        return "HOLD_ONLY";
-    case N_HOLD:
-        return "N_HOLD";
+    case DUMB: return "DUMB";
+    case TAP_ONLY: return "TAP_ONLY";
+    case TAP_HOLD: return "TAP_HOLD";
+    case N_TAP: return "N_TAP";
+    case N_TAP_HOLD: return "N_TAP_HOLD";
+    case HOLD_ONLY: return "HOLD_ONLY";
+    case N_HOLD: return "N_HOLD";
     }
     return "UNKNOWN";
 }
 
 char* event_to_string(enum event_type event) {
     switch (event) {
-    case PRESS_SAME:
-        return "PRESS_SAME";
-    case RELEASE_SAME:
-        return "RELEASE_SAME";
-    case RELEASE_OTHER:
-        return "RELEASE_OTHER";
-    case PRESS_OTHER:
-        return "PRESS_OTHER";
+    case PRESS_SAME: return "PRESS_SAME";
+    case RELEASE_SAME: return "RELEASE_SAME";
+    case RELEASE_OTHER: return "RELEASE_OTHER";
+    case PRESS_OTHER: return "PRESS_OTHER";
     }
     return "UNKNOWN";
+}
+
+char* layer_to_string(enum smart_layer layer) {
+    switch (layer) {
+    case LAYER_ALPHA_1: return "LAYER_ALPHA_1";
+    case LAYER_ALPHA_2: return "LAYER_ALPHA_2";
+    case LAYER_SYMBOLS: return "LAYER_SYMBOLS";
+    case LAYER_STRINGS: return "LAYER_STRINGS";
+    case LAYER_BRACKETS: return "LAYER_BRACKETS";
+    case LAYER_J_HOLD: return "LAYER_J_HOLD";
+    case LAYER_K_HOLD: return "LAYER_K_HOLD";
+    case LAYER_L_HOLD: return "LAYER_L_HOLD";
+    case LAYER_H_HOLD: return "LAYER_H_HOLD";
+    case LAYER_SEARCH: return "LAYER_SEARCH";
+    case LAYER_SEARCH_2: return "LAYER_SEARCH_2";
+    case LAYER_O_HOLD: return "LAYER_O_HOLD";
+    case LAYER_I_HOLD: return "LAYER_I_HOLD";
+    case LAYER_SYS: return "LAYER_SYS";
+    case LAYER_NUM: return "LAYER_NUM";
+    case LAYER_TMUX: return "LAYER_TMUX";
+    default: return "UNKNOWN";
+    }
 }

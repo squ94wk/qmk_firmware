@@ -256,14 +256,17 @@ smart_key_t *lookup_key(uint16_t keycode, keypos_t pos) {
     if (!pos.row && !pos.col) {
         for (int i=0; i < SMART_KEY_COUNT; ++i) {
             if (keycode == smart_keys[i].keycode) {
+                uprintf("DEBUG: found smart key by keycode %s\n", keycode_to_string(keycode));
                 return &smart_keys[i];
             }
         }
+        uprintf("DEBUG: found smart key by falling back to ALPHA1 %s\n", keycode_to_string(keycode));
         return smart_layers[LAYER_ALPHA_1]->map[pos.row][pos.col];
     }
 
     for (int i=0; i < VIRTUAL_PRESS_MAX_COUNT; i++) {
         if (is_same_pos(pos, virtual_pressed[i].trigger->pos)) {
+            uprintf("DEBUG: found smart key in pressed keys %s\n", keycode_to_string(keycode));
             return virtual_pressed[i].trigger;
         }
     }
@@ -271,6 +274,7 @@ smart_key_t *lookup_key(uint16_t keycode, keypos_t pos) {
     for (int i=0; i < SMART_LAYER_COUNT && active_layers[i]; ++i) {
         smart_key_t *key = smart_layers[active_layers[i]]->map[pos.row][pos.col];
         if (key) {
+            uprintf("DEBUG: found smart in layer %s\n", layer_to_string(active_layers[i]));
             return key;
         }
     }
