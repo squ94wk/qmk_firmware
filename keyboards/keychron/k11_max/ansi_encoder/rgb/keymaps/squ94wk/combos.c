@@ -12,12 +12,12 @@ enum combos {
 // const uint16_t PROGMEM combo_space_space_enter[] = {KC_SPC, KC_BSPC, COMBO_END};
 const uint16_t PROGMEM combo_left_shift[]       = {KC_S, KC_T, COMBO_END};
 const uint16_t PROGMEM combo_right_shift[]       = {KC_N, KC_E, COMBO_END};
-const uint16_t PROGMEM combo_left_ctrl[]        = {CKC_ALPHA_LAYER_SWITCH, KC_S, COMBO_END};
+const uint16_t PROGMEM combo_left_ctrl[]        = {KC_ESC, KC_S, COMBO_END};
 const uint16_t PROGMEM combo_right_ctrl[]        = {KC_E, KC_O, COMBO_END};
-const uint16_t PROGMEM combo_left_alt[]         = {KC_A, CKC_ALPHA_LAYER_SWITCH, COMBO_END};
+const uint16_t PROGMEM combo_left_alt[]         = {KC_A, KC_ESC, COMBO_END};
 const uint16_t PROGMEM combo_right_alt[] = {KC_O, CKC_MAGIC, COMBO_END};
 const uint16_t PROGMEM combo_right_ctrl_shift[]        = {KC_N, KC_E, KC_O, COMBO_END};
-const uint16_t PROGMEM combo_left_ctrl_shift[]         = {CKC_ALPHA_LAYER_SWITCH, KC_S, KC_T, COMBO_END};
+const uint16_t PROGMEM combo_left_ctrl_shift[]         = {KC_ESC, KC_S, KC_T, COMBO_END};
 
 combo_t key_combos[] = {
     [COMBO_LEFT_SHIFT] = COMBO(combo_left_shift, CKC_SMART_SHIFT),
