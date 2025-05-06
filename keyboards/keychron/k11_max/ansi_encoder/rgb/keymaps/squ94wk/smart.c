@@ -174,6 +174,7 @@ static bool handle_deferred_event_continuation(smart_key_t *key, keyevent_t cont
 
     switch (key_type) {
     case TAP_HOLD:
+    case N_TAP_HOLD:
         if (!deferred_event.pressed) {
             break; // this key type only defers presses
         }
@@ -273,14 +274,20 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
             if (key->state.tap_fired || key->state.hold_fired) {
                 return false; // ignore
             }
-            if (!key->fire_on_key_press || key->fire_on_key_press(key, event.key)) {
-                // maybe it's a roll, maybe a fast combination
-                uprintf("DEBUG: defer press of key %s\n", keycode_to_string(keycode));
-                deferred_event = event;
-                deferred_keycode = keycode;
-                return true;
+            if (key->tap_on_key_press && key->tap_on_key_press(key, event.key)) {
+                uprintf("DEBUG: immediately tap key %s\n", keycode_to_string(key->keycode));
+                tap_action(key);
+                return false;
             }
-            return false;
+            if (key->hold_on_key_press && key->hold_on_key_press(key, event.key)) {
+                uprintf("DEBUG: immediately hold key %s\n", keycode_to_string(key->keycode));
+                hold_action(key);
+                return false;
+            }
+            uprintf("DEBUG: defer press of key %s\n", keycode_to_string(keycode));
+            deferred_event = event;
+            deferred_keycode = keycode;
+            return true;
         case RELEASE_OTHER:
             // ignore
             return false;
@@ -336,11 +343,8 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
             key->state.pressed_time = 0;
             return true;
         case PRESS_OTHER:
-            if (!key->fire_on_key_press || key->fire_on_key_press(key, event.key)) {
-                key->state.hold_fired = true;
-                hold_action(key);
-            }
-            return false; // process event as usual
+            hold_action(key);
+            return false;
         default:
             break;
         }
@@ -372,10 +376,20 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
                 return false;
             }
             if (key->state.pressed_time) { // pressed
-                if (!key->fire_on_key_press || key->fire_on_key_press(key, event.key)) {
-                    key->state.hold_fired = true;
-                    hold_action(key);
+                if (key->tap_on_key_press && key->tap_on_key_press(key, event.key)) {
+                    uprintf("DEBUG: immediately tap key %s\n", keycode_to_string(key->keycode));
+                    tap_action(key);
+                    return false;
                 }
+                if (key->hold_on_key_press && key->hold_on_key_press(key, event.key)) {
+                    uprintf("DEBUG: immediately hold key %s\n", keycode_to_string(key->keycode));
+                    hold_action(key);
+                    return false;
+                }
+                uprintf("DEBUG: defer press of key %s\n", keycode_to_string(keycode));
+                deferred_event = event;
+                deferred_keycode = keycode;
+                return true;
             } else { // released
                 key->state.tap_fired = true;
                 tap_action(key);

@@ -26,24 +26,36 @@ void activate_tmux(smart_key_t *key) {
     layer_activations[LAYER_TMUX] = 1;
 }
 
+bool always_on_other_press(smart_key_t *key, keypos_t pos) {
+    return true;
+}
+
 smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
     [LAYER_ALPHA_1] = &(smart_layer_t){
         .map = {
-            [2][4] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SYMBOLS, },
-            [2][7] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_J_HOLD, },
-            [2][8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_K_HOLD, },
-            [2][9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_L_HOLD, },
-            [2][10] = &(smart_key_t){ .tap.action = &magic_action, },
-            [2][3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_STRINGS, },
-            [2][2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_ALPHA_2, },
-            [3][5] = &(smart_key_t){ .tap.keycode = KC_D, .hold.layer = LAYER_BRACKETS, },
-            [1][3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SEARCH, },
-            [1][2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SEARCH_2, },
-            [1][8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_I_HOLD, },
-            [1][9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_O_HOLD, },
-            [3][9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_H_HOLD, },
-            [4][5] = &(smart_key_t){ .tap.keycode = KC_SPC, .hold.layer = LAYER_SYS, },
-            [4][6] = &(smart_key_t){ .tap.layer_oneshot = LAYER_NUM, .hold.layer = LAYER_NUM, },
+            [2] = {
+                [2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_ALPHA_2, },
+                [3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_STRINGS, },
+                [4] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SYMBOLS, },
+                [7] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_J_HOLD, },
+                [8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_K_HOLD, },
+                [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_L_HOLD, },
+                [10] = &(smart_key_t){ .tap.action = &magic_action, },
+            },
+            [3] = {
+                [5] = &(smart_key_t){ .tap.keycode = KC_D, .hold.layer = LAYER_BRACKETS, },
+                [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_H_HOLD, },
+            },
+            [1] = {
+                [3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SEARCH, },
+                [2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SEARCH_2, },
+                [8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_I_HOLD, },
+                [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_O_HOLD, },
+            },
+            [4] = {
+                [5] = &(smart_key_t){ .tap.keycode = KC_SPC, .hold.layer = LAYER_SYS, .hold_on_key_press = &always_on_other_press, },
+                [6] = &(smart_key_t){ .tap.layer_oneshot = LAYER_NUM, .hold.layer = LAYER_NUM, .hold_on_key_press = &always_on_other_press, },
+            },
         },
     },
 
@@ -265,9 +277,13 @@ smart_key_t *lookup_key(uint16_t keycode, keypos_t pos) {
     }
 
     for (int i=0; i < VIRTUAL_PRESS_MAX_COUNT; i++) {
-        if (is_same_pos(pos, virtual_pressed[i].trigger->pos)) {
+        smart_key_t *key = virtual_pressed[i].trigger;
+        if (!key) {
+            break;
+        }
+        if (is_same_pos(pos, key->pos)) {
             uprintf("DEBUG: found smart key in pressed keys %s\n", keycode_to_string(keycode));
-            return virtual_pressed[i].trigger;
+            return key;
         }
     }
 

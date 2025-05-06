@@ -85,7 +85,8 @@ struct smart_key_t {
     } hold;
 
     void (*release_action)(smart_key_t *key);
-    bool (*fire_on_key_press)(smart_key_t *key, keypos_t pos);
+    bool (*tap_on_key_press)(smart_key_t *key, keypos_t pos);
+    bool (*hold_on_key_press)(smart_key_t *key, keypos_t pos);
 };
 
 // allows self referencing

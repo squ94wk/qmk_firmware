@@ -64,8 +64,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
     }
 
+    uprintf("DEBUG: Event\n");
     uprintf(
-        "DEBUG: time: %d, %s key %s [%d, %d]\n",
+        "DEBUG: [%d] %s %s [%d, %d]\n",
         record->event.time,
         record->event.pressed ? "pressed" : "released",
         keycode_to_string(keycode),
