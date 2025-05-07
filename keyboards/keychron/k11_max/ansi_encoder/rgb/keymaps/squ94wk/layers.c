@@ -3,14 +3,21 @@ bool fire_for_all(smart_key_t *key, keypos_t pos) {
 }
 
 void tap_multi_matching_brace(smart_key_t *key) {
+    uprintf("DEBUG: tap matching braces, tap count: %d\n", key->state.tap_count);
     uint8_t mask = key->tap.mask;
     switch (key->state.tap_count) {
     case 1:
-        virtual_send(key, key->tap.keycode, mask);
+        uprintf("DEBUG: send only opening bracket\n");
+        register_with_mods(key->tap.keycode, mask);
+        key->state.release.keycode = key->tap.keycode;
         break;
     case 2:
-        virtual_send(key, key->tap.keycode, mask);
-        virtual_send(key, key->tap.keycode + 1, mask);
+        uprintf("DEBUG: send opening bracket\n");
+        register_with_mods(key->tap.keycode, mask);
+        unregister_code(key->tap.keycode);
+        uprintf("DEBUG: send closing bracket\n");
+        register_with_mods(key->tap.keycode + 1, mask);
+        key->state.release.keycode = key->tap.keycode + 1;
         break;
     }
 }
@@ -34,7 +41,7 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
     [LAYER_ALPHA_1] = &(smart_layer_t){
         .map = {
             [2] = {
-                [2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_ALPHA_2, },
+                [2] = &(smart_key_t){ .defer_release = false, .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_ALPHA_2, },
                 [3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_STRINGS, },
                 [4] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SYMBOLS, },
                 [7] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_J_HOLD, },
@@ -94,9 +101,9 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
     [LAYER_BRACKETS] = &(smart_layer_t){
         .map = {
             [3][9] = &(smart_key_t){ .tap.keycode = KC_COMMA, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-            [2][7] = &(smart_key_t){ .tap.keycode = KC_9, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
+            [2][7] = &(smart_key_t){ .tap.keycode = KC_9, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
             [2][8] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-            [2][9] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .max_tap = 2, },
+            [2][9] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, },
         },
     },
 
@@ -124,7 +131,7 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
     },
     [LAYER_J_HOLD] = &(smart_layer_t){
         .map = {
-            [3][5] = &(smart_key_t){ .tap.keycode = KC_0, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, },
+            [3][5] = &(smart_key_t){ .tap.keycode = KC_0, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
         },
     },
     [LAYER_K_HOLD] = &(smart_layer_t){
@@ -134,7 +141,7 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
     },
     [LAYER_L_HOLD] = &(smart_layer_t){
         .map = {
-            [3][5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .max_tap = 2, },
+            [3][5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, },
         },
     },
 
@@ -276,8 +283,8 @@ smart_key_t *lookup_key(uint16_t keycode, keypos_t pos) {
         return smart_layers[LAYER_ALPHA_1]->map[pos.row][pos.col];
     }
 
-    for (int i=0; i < VIRTUAL_PRESS_MAX_COUNT; i++) {
-        smart_key_t *key = virtual_pressed[i].trigger;
+    for (int i=0; i < PENDING_QUEUE_MAX; i++) {
+        smart_key_t *key = pending_keys[i].key;
         if (!key) {
             break;
         }

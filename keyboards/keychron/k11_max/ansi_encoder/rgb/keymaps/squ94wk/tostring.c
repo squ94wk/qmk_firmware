@@ -253,6 +253,19 @@ char* event_to_string(enum event_type event) {
     return "UNKNOWN";
 }
 
+char* continuation_to_string(enum continuation_type event) {
+    switch (event) {
+    case RELEASE_THIRD: return "RELEASE_THIRD";
+    case PRESS_THIRD: return "PRESS_THIRD";
+    case TAP_ORIGINAL: return "TAP_ORIGINAL";
+    case TAP: return "TAP";
+    case ROLL: return "ROLL";
+    case HOLD: return "HOLD";
+    case IDLE: return "IDLE";
+    }
+    return "UNKNOWN";
+}
+
 char* layer_to_string(enum smart_layer layer) {
     switch (layer) {
     case LAYER_ALPHA_1: return "LAYER_ALPHA_1";

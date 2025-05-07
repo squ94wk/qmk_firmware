@@ -23,10 +23,20 @@ enum smart_key_type {
 };
 
 enum event_type {
-    RELEASE_SAME,
     PRESS_SAME,
+    RELEASE_SAME,
     PRESS_OTHER,
     RELEASE_OTHER,
+};
+
+enum continuation_type {
+    TAP_ORIGINAL,
+    TAP,
+    ROLL,
+    HOLD,
+    PRESS_THIRD,
+    RELEASE_THIRD,
+    IDLE, // defer release
 };
 
 enum smart_layer {
@@ -58,13 +68,18 @@ struct smart_key_t {
     uint16_t keycode;
 
     int max_tap;
+    bool defer_release;
 
     struct {
         uint16_t pressed_time;
         uint16_t tap_count;
         uint16_t tap_timeout;
-        bool tap_fired;
-        bool hold_fired;
+        bool fired;
+
+        struct {
+            uint16_t keycode;
+            int layer;
+        } release;
     } state;
 
     struct {
@@ -96,4 +111,9 @@ struct smart_layer_t {
     smart_key_t *map[MATRIX_ROWS][MATRIX_COLS];
     bool (*on_layer_activate)(smart_layer_t *layer, int layer_index);
     bool (*oneshot_on_key_press)(smart_layer_t *layer, uint16_t keycode, uint16_t modmask);
+};
+
+typedef struct pending_key_t pending_key_t;
+struct pending_key_t {
+    smart_key_t *key;
 };

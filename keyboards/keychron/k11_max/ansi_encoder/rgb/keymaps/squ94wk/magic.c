@@ -4,7 +4,7 @@ uint16_t history_modmask[KEY_HISTORY_MAX] = {};
 int history_ptr;
 
 void add_key_to_history(uint16_t keycode, uint16_t mask) {
-    uprintf("DEBUG: add keycode %s to history with mask %d \n", keycode_to_string(keycode), mask);
+//    uprintf("DEBUG: add keycode %s to history with mask %d \n", keycode_to_string(keycode), mask);
     history_ptr = (history_ptr + 1) % KEY_HISTORY_MAX;
     history_keycode[history_ptr] = keycode;
     history_modmask[history_ptr] = mask;
