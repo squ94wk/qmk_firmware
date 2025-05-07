@@ -284,6 +284,9 @@ char* layer_to_string(enum smart_layer layer) {
     case LAYER_SYS: return "LAYER_SYS";
     case LAYER_NUM: return "LAYER_NUM";
     case LAYER_TMUX: return "LAYER_TMUX";
+#ifdef MOUSEKEY_ENABLE
+    case LAYER_MOUSE: return "LAYER_MOUSE";
+#endif
     default: return "UNKNOWN";
     }
 }

@@ -56,6 +56,9 @@ enum smart_layer {
     LAYER_SYS,
     LAYER_NUM,
     LAYER_TMUX,
+#ifdef MOUSEKEY_ENABLE
+    LAYER_MOUSE,
+#endif
     // end
     SMART_LAYER_COUNT,
 };

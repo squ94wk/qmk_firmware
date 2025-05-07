@@ -60,6 +60,13 @@
 // how long at least one of the combo keys must be held to trigger
 #define COMBO_HOLD_TERM 175
 
+#ifdef MOUSEKEY_ENABLE
+#define MK_KINETIC_SPEED
+#define MOUSEKEY_INITIAL_SPEED 150
+#define MOUSEKEY_BASE_SPEED 1500
+#define MOUSEKEY_MOVE_DELTA 40
+#endif
+
 #define TAPPING_TERM 200
 #define MICROLAYER_ACTIVATION_TERM 80
 
