@@ -388,12 +388,11 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
             press_key(key, event);
             key->state.tap_count++;
             uprintf("DEBUG: increased tap count to %d\n", key->state.tap_count);
-            if (key->state.tap_count == key->max_tap) {
-                uprintf("DEBUG: max tap count reached: tap\n");
+            if (key->state.tap_count > key->max_tap) {
+                uprintf("DEBUG: max tap count exceeded: tap\n");
                 tap_action(key);
                 return true;
             }
-            // todo: unnecessary
             key->state.tap_timeout = event.time + TAPPING_TERM;
             return true;
         case RELEASE_SAME:
@@ -564,6 +563,9 @@ static enum continuation_type get_continuation_type(smart_key_t *key, keyevent_t
             return TAP;
         }
         if (original_key) {
+            if (key->hold_on_key_press && key->hold_on_key_press(key, cont.key)) {
+                return TAP; // TODO: add extra keycode
+            }
             return ROLL;
         }
         return RELEASE_OTHER;
