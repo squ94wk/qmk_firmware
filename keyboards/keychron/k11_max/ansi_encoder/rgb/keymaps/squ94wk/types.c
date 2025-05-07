@@ -81,6 +81,7 @@ struct smart_key_t {
 
         struct {
             uint16_t keycode;
+            uint16_t mask;
             int layer;
         } release;
     } state;

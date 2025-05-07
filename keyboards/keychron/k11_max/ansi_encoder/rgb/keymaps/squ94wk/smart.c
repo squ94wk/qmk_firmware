@@ -107,8 +107,9 @@ void tap_action(smart_key_t *key) {
         set_oneshot_mods(key->tap.mask_oneshot);
         return;
     }
-    register_with_mods(key->tap.keycode, get_mods() | key->tap.mask);
     key->state.release.keycode = key->tap.keycode;
+    key->state.release.mask = key->tap.mask & ~get_mods(); // only reset the mods that aren't currently set
+    register_with_mods(key->tap.keycode, get_mods() | key->tap.mask);
 }
 
 void hold_action(smart_key_t *key) {
@@ -125,8 +126,9 @@ void hold_action(smart_key_t *key) {
         return;
     }
 
-    register_with_mods(key->hold.keycode, get_mods() | key->hold.mask);
+    key->state.release.mask = key->hold.mask & ~get_mods(); // only reset the mods that aren't currently set
     key->state.release.keycode = key->hold.keycode;
+    register_with_mods(key->hold.keycode, get_mods() | key->hold.mask);
     if (key->hold.tap_keycode) {
         key->state.pressed_time = 0; // mark as released
     }
@@ -145,6 +147,7 @@ void release_action(smart_key_t *key) {
 
     if (key->state.release.keycode) {
         unregister_code(key->state.release.keycode);
+        set_mods(get_mods() & ~key->state.release.mask);
     }
     if (key->state.release.layer) {
         deactivate_layer(key->state.release.layer);

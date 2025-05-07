@@ -19,6 +19,7 @@ void register_with_mods(uint16_t keycode, uint16_t mask) {
     switch (keycode) {
     case KC_LEFT_CTRL ... KC_RIGHT_GUI:
         register_code(keycode);
+        set_mods(get_mods() | mask);
         break;
     default: {
         // check if we clear caps word
