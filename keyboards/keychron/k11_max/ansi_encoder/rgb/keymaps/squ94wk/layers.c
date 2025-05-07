@@ -41,7 +41,7 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
     [LAYER_ALPHA_1] = &(smart_layer_t){
         .map = {
             [2] = {
-                [2] = &(smart_key_t){ .defer_release = false, .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_ALPHA_2, },
+                [2] = &(smart_key_t){ .defer_release = true, .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_ALPHA_2, },
                 [3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_STRINGS, },
                 [4] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SYMBOLS, },
                 [7] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_J_HOLD, },

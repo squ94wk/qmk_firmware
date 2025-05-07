@@ -211,7 +211,6 @@ static bool process_continuation(smart_key_t *key, enum continuation_type cont) 
             return true;
 
         case IDLE:
-            uprintf("DEBUG: deferred release happened before TAPPING_TERM expired, assume tap\n");
             tap_action(key);
             return true;
 
@@ -314,6 +313,12 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
             return false;
         case RELEASE_SAME:
             if (key->state.fired) {
+                release_key(key);
+                return true;
+            }
+
+            if (deferred_event.time == event.time) { // we're handling the deferred event itself
+                tap_action(key);
                 release_key(key);
                 return true;
             }
