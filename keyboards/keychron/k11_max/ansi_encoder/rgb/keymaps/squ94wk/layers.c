@@ -4,19 +4,19 @@ bool fire_for_all(smart_key_t *key, keypos_t pos) {
 
 void tap_multi_matching_brace(smart_key_t *key) {
     uprintf("DEBUG: tap matching braces, tap count: %d\n", key->state.tap_count);
-    uint8_t mask = key->tap.mask;
+    uint16_t mask = key->tap.mask;
     switch (key->state.tap_count) {
     case 1:
         uprintf("DEBUG: send only opening bracket\n");
-        register_with_mods(key->tap.keycode, mask);
+        register_with_mods(key->tap.keycode, mask, NULL);
         key->state.release.keycode = key->tap.keycode;
         break;
     case 2:
         uprintf("DEBUG: send opening bracket\n");
-        register_with_mods(key->tap.keycode, mask);
+        register_with_mods(key->tap.keycode, mask, NULL);
         unregister_code(key->tap.keycode);
         uprintf("DEBUG: send closing bracket\n");
-        register_with_mods(key->tap.keycode + 1, mask);
+        register_with_mods(key->tap.keycode + 1, mask, NULL);
         key->state.release.keycode = key->tap.keycode + 1;
         break;
     }
@@ -27,7 +27,7 @@ bool deactivate_on_other_layer(smart_layer_t *layer, int index) {
 }
 
 void activate_tmux(smart_key_t *key) {
-    register_with_mods(KC_B, MOD_BIT(KC_LEFT_CTRL));
+    register_with_mods(KC_B, MOD_BIT(KC_LEFT_CTRL), NULL);
     unregister_code(KC_B);
     activate_layer(LAYER_TMUX);
     layer_activations[LAYER_TMUX] = 1;
@@ -190,6 +190,7 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
             [2][9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, },
 
             [3][5] = &(smart_key_t){ .tap.action = &activate_tmux, },
+            [3][3] = &(smart_key_t){ .tap.mask_oneshot = MOD_MASK_CSAG, },
         },
     },
 
@@ -242,7 +243,7 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT] = {
             [3] = {
                 [3] = &(smart_key_t){ .tap.keycode = KC_Z, },
                 [4] = &(smart_key_t){ .tap.keycode = KC_C, },
-                [5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, },
+                [5] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, },
             },
         },
     },

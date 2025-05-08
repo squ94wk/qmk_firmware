@@ -34,7 +34,7 @@ void magic_action(smart_key_t *key) {
             break;
         }
         if (keycode == KC_QUOTE) {
-            register_with_mods(keycode, mask);
+            register_with_mods(keycode, mask, NULL);
             unregister_code(keycode);
 
             history_keycode[index] = KC_TRANSPARENT;
@@ -42,7 +42,7 @@ void magic_action(smart_key_t *key) {
             return;
         }
         if (keycode == KC_LEFT_BRACKET || ((keycode == KC_9 || keycode == KC_COMMA) && mask & MOD_MASK_SHIFT)) {
-            register_with_mods(keycode+1, mask);
+            register_with_mods(keycode+1, mask, NULL);
             unregister_code(keycode+1);
 
             history_keycode[index] = KC_TRANSPARENT;
@@ -69,7 +69,8 @@ bool magic_umlaut(uint16_t previous, uint16_t shift_mask) {
     }
 
     SEND_STRING("\b\b");
-    register_with_mods(send_keycode, shift_mask | MOD_BIT(KC_RIGHT_ALT));
+    uint16_t mask = shift_mask | MOD_MASK_SHIFT;
+    register_with_mods(send_keycode, mask, NULL);
     unregister_code(send_keycode);
     return true;
 }
