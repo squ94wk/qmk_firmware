@@ -1,292 +1,556 @@
 const char* keycode_to_string(uint16_t keycode) {
     switch (keycode) {
-    case KC_NO:                  return "KC_NO";
-    case KC_TRANSPARENT:         return "KC_TRANSPARENT";
-    case KC_A:                   return "KC_A";
-    case KC_B:                   return "KC_B";
-    case KC_C:                   return "KC_C";
-    case KC_D:                   return "KC_D";
-    case KC_E:                   return "KC_E";
-    case KC_F:                   return "KC_F";
-    case KC_G:                   return "KC_G";
-    case KC_H:                   return "KC_H";
-    case KC_I:                   return "KC_I";
-    case KC_J:                   return "KC_J";
-    case KC_K:                   return "KC_K";
-    case KC_L:                   return "KC_L";
-    case KC_M:                   return "KC_M";
-    case KC_N:                   return "KC_N";
-    case KC_O:                   return "KC_O";
-    case KC_P:                   return "KC_P";
-    case KC_Q:                   return "KC_Q";
-    case KC_R:                   return "KC_R";
-    case KC_S:                   return "KC_S";
-    case KC_T:                   return "KC_T";
-    case KC_U:                   return "KC_U";
-    case KC_V:                   return "KC_V";
-    case KC_W:                   return "KC_W";
-    case KC_X:                   return "KC_X";
-    case KC_Y:                   return "KC_Y";
-    case KC_Z:                   return "KC_Z";
-    case KC_1:                   return "KC_1";
-    case KC_2:                   return "KC_2";
-    case KC_3:                   return "KC_3";
-    case KC_4:                   return "KC_4";
-    case KC_5:                   return "KC_5";
-    case KC_6:                   return "KC_6";
-    case KC_7:                   return "KC_7";
-    case KC_8:                   return "KC_8";
-    case KC_9:                   return "KC_9";
-    case KC_0:                   return "KC_0";
-    case KC_ENTER:               return "KC_ENTER";
-    case KC_ESCAPE:              return "KC_ESCAPE";
-    case KC_BACKSPACE:           return "KC_BACKSPACE";
-    case KC_TAB:                 return "KC_TAB";
-    case KC_SPACE:               return "KC_SPACE";
-    case KC_MINUS:               return "KC_MINUS";
-    case KC_EQUAL:               return "KC_EQUAL";
-    case KC_LEFT_BRACKET:        return "KC_LEFT_BRACKET";
-    case KC_RIGHT_BRACKET:       return "KC_RIGHT_BRACKET";
-    case KC_BACKSLASH:           return "KC_BACKSLASH";
-    case KC_NONUS_HASH:          return "KC_NONUS_HASH";
-    case KC_SEMICOLON:           return "KC_SEMICOLON";
-    case KC_QUOTE:               return "KC_QUOTE";
-    case KC_GRAVE:               return "KC_GRAVE";
-    case KC_COMMA:               return "KC_COMMA";
-    case KC_DOT:                 return "KC_DOT";
-    case KC_SLASH:               return "KC_SLASH";
-    case KC_CAPS_LOCK:           return "KC_CAPS_LOCK";
-    case KC_F1:                  return "KC_F1";
-    case KC_F2:                  return "KC_F2";
-    case KC_F3:                  return "KC_F3";
-    case KC_F4:                  return "KC_F4";
-    case KC_F5:                  return "KC_F5";
-    case KC_F6:                  return "KC_F6";
-    case KC_F7:                  return "KC_F7";
-    case KC_F8:                  return "KC_F8";
-    case KC_F9:                  return "KC_F9";
-    case KC_F10:                 return "KC_F10";
-    case KC_F11:                 return "KC_F11";
-    case KC_F12:                 return "KC_F12";
-    case KC_PRINT_SCREEN:        return "KC_PRINT_SCREEN";
-    case KC_SCROLL_LOCK:         return "KC_SCROLL_LOCK";
-    case KC_PAUSE:               return "KC_PAUSE";
-    case KC_INSERT:              return "KC_INSERT";
-    case KC_HOME:                return "KC_HOME";
-    case KC_PAGE_UP:             return "KC_PAGE_UP";
-    case KC_DELETE:              return "KC_DELETE";
-    case KC_END:                 return "KC_END";
-    case KC_PAGE_DOWN:           return "KC_PAGE_DOWN";
-    case KC_RIGHT:               return "KC_RIGHT";
-    case KC_LEFT:                return "KC_LEFT";
-    case KC_DOWN:                return "KC_DOWN";
-    case KC_UP:                  return "KC_UP";
-    case KC_NUM_LOCK:            return "KC_NUM_LOCK";
-    case KC_KP_SLASH:            return "KC_KP_SLASH";
-    case KC_KP_ASTERISK:         return "KC_KP_ASTERISK";
-    case KC_KP_MINUS:            return "KC_KP_MINUS";
-    case KC_KP_PLUS:             return "KC_KP_PLUS";
-    case KC_KP_ENTER:            return "KC_KP_ENTER";
-    case KC_KP_1:                return "KC_KP_1";
-    case KC_KP_2:                return "KC_KP_2";
-    case KC_KP_3:                return "KC_KP_3";
-    case KC_KP_4:                return "KC_KP_4";
-    case KC_KP_5:                return "KC_KP_5";
-    case KC_KP_6:                return "KC_KP_6";
-    case KC_KP_7:                return "KC_KP_7";
-    case KC_KP_8:                return "KC_KP_8";
-    case KC_KP_9:                return "KC_KP_9";
-    case KC_KP_0:                return "KC_KP_0";
-    case KC_KP_DOT:              return "KC_KP_DOT";
-    case KC_NONUS_BACKSLASH:     return "KC_NONUS_BACKSLASH";
-    case KC_APPLICATION:         return "KC_APPLICATION";
-    case KC_KB_POWER:            return "KC_KB_POWER";
-    case KC_KP_EQUAL:            return "KC_KP_EQUAL";
-    case KC_F13:                 return "KC_F13";
-    case KC_F14:                 return "KC_F14";
-    case KC_F15:                 return "KC_F15";
-    case KC_F16:                 return "KC_F16";
-    case KC_F17:                 return "KC_F17";
-    case KC_F18:                 return "KC_F18";
-    case KC_F19:                 return "KC_F19";
-    case KC_F20:                 return "KC_F20";
-    case KC_F21:                 return "KC_F21";
-    case KC_F22:                 return "KC_F22";
-    case KC_F23:                 return "KC_F23";
-    case KC_F24:                 return "KC_F24";
-    case KC_EXECUTE:             return "KC_EXECUTE";
-    case KC_HELP:                return "KC_HELP";
-    case KC_MENU:                return "KC_MENU";
-    case KC_SELECT:              return "KC_SELECT";
-    case KC_STOP:                return "KC_STOP";
-    case KC_AGAIN:               return "KC_AGAIN";
-    case KC_UNDO:                return "KC_UNDO";
-    case KC_CUT:                 return "KC_CUT";
-    case KC_COPY:                return "KC_COPY";
-    case KC_PASTE:               return "KC_PASTE";
-    case KC_FIND:                return "KC_FIND";
-    case KC_KB_MUTE:             return "KC_KB_MUTE";
-    case KC_KB_VOLUME_UP:        return "KC_KB_VOLUME_UP";
-    case KC_KB_VOLUME_DOWN:      return "KC_KB_VOLUME_DOWN";
-    case KC_LOCKING_CAPS_LOCK:   return "KC_LOCKING_CAPS_LOCK";
-    case KC_LOCKING_NUM_LOCK:    return "KC_LOCKING_NUM_LOCK";
-    case KC_LOCKING_SCROLL_LOCK: return "KC_LOCKING_SCROLL_LOCK";
-    case KC_KP_COMMA:            return "KC_KP_COMMA";
-    case KC_KP_EQUAL_AS400:      return "KC_KP_EQUAL_AS400";
-    case KC_INTERNATIONAL_1:     return "KC_INTERNATIONAL_1";
-    case KC_INTERNATIONAL_2:     return "KC_INTERNATIONAL_2";
-    case KC_INTERNATIONAL_3:     return "KC_INTERNATIONAL_3";
-    case KC_INTERNATIONAL_4:     return "KC_INTERNATIONAL_4";
-    case KC_INTERNATIONAL_5:     return "KC_INTERNATIONAL_5";
-    case KC_INTERNATIONAL_6:     return "KC_INTERNATIONAL_6";
-    case KC_INTERNATIONAL_7:     return "KC_INTERNATIONAL_7";
-    case KC_INTERNATIONAL_8:     return "KC_INTERNATIONAL_8";
-    case KC_INTERNATIONAL_9:     return "KC_INTERNATIONAL_9";
-    case KC_LANGUAGE_1:          return "KC_LANGUAGE_1";
-    case KC_LANGUAGE_2:          return "KC_LANGUAGE_2";
-    case KC_LANGUAGE_3:          return "KC_LANGUAGE_3";
-    case KC_LANGUAGE_4:          return "KC_LANGUAGE_4";
-    case KC_LANGUAGE_5:          return "KC_LANGUAGE_5";
-    case KC_LANGUAGE_6:          return "KC_LANGUAGE_6";
-    case KC_LANGUAGE_7:          return "KC_LANGUAGE_7";
-    case KC_LANGUAGE_8:          return "KC_LANGUAGE_8";
-    case KC_LANGUAGE_9:          return "KC_LANGUAGE_9";
-    case KC_ALTERNATE_ERASE:     return "KC_ALTERNATE_ERASE";
-    case KC_SYSTEM_REQUEST:      return "KC_SYSTEM_REQUEST";
-    case KC_CANCEL:              return "KC_CANCEL";
-    case KC_CLEAR:               return "KC_CLEAR";
-    case KC_PRIOR:               return "KC_PRIOR";
-    case KC_RETURN:              return "KC_RETURN";
-    case KC_SEPARATOR:           return "KC_SEPARATOR";
-    case KC_OUT:                 return "KC_OUT";
-    case KC_OPER:                return "KC_OPER";
-    case KC_CLEAR_AGAIN:         return "KC_CLEAR_AGAIN";
-    case KC_CRSEL:               return "KC_CRSEL";
-    case KC_EXSEL:               return "KC_EXSEL";
-    case KC_SYSTEM_POWER:        return "KC_SYSTEM_POWER";
-    case KC_SYSTEM_SLEEP:        return "KC_SYSTEM_SLEEP";
-    case KC_SYSTEM_WAKE:         return "KC_SYSTEM_WAKE";
-    case KC_AUDIO_MUTE:          return "KC_AUDIO_MUTE";
-    case KC_AUDIO_VOL_UP:        return "KC_AUDIO_VOL_UP";
-    case KC_AUDIO_VOL_DOWN:      return "KC_AUDIO_VOL_DOWN";
-    case KC_MEDIA_NEXT_TRACK:    return "KC_MEDIA_NEXT_TRACK";
-    case KC_MEDIA_PREV_TRACK:    return "KC_MEDIA_PREV_TRACK";
-    case KC_MEDIA_STOP:          return "KC_MEDIA_STOP";
-    case KC_MEDIA_PLAY_PAUSE:    return "KC_MEDIA_PLAY_PAUSE";
-    case KC_MEDIA_SELECT:        return "KC_MEDIA_SELECT";
-    case KC_MEDIA_EJECT:         return "KC_MEDIA_EJECT";
-    case KC_MAIL:                return "KC_MAIL";
-    case KC_CALCULATOR:          return "KC_CALCULATOR";
-    case KC_MY_COMPUTER:         return "KC_MY_COMPUTER";
-    case KC_WWW_SEARCH:          return "KC_WWW_SEARCH";
-    case KC_WWW_HOME:            return "KC_WWW_HOME";
-    case KC_WWW_BACK:            return "KC_WWW_BACK";
-    case KC_WWW_FORWARD:         return "KC_WWW_FORWARD";
-    case KC_WWW_STOP:            return "KC_WWW_STOP";
-    case KC_WWW_REFRESH:         return "KC_WWW_REFRESH";
-    case KC_WWW_FAVORITES:       return "KC_WWW_FAVORITES";
-    case KC_MEDIA_FAST_FORWARD:  return "KC_MEDIA_FAST_FORWARD";
-    case KC_MEDIA_REWIND:        return "KC_MEDIA_REWIND";
-    case KC_BRIGHTNESS_UP:       return "KC_BRIGHTNESS_UP";
-    case KC_BRIGHTNESS_DOWN:     return "KC_BRIGHTNESS_DOWN";
-    case KC_CONTROL_PANEL:       return "KC_CONTROL_PANEL";
-    case KC_ASSISTANT:           return "KC_ASSISTANT";
-    case KC_MISSION_CONTROL:     return "KC_MISSION_CONTROL";
-    case KC_LAUNCHPAD:           return "KC_LAUNCHPAD";
-    case KC_MS_UP:               return "KC_MS_UP";
-    case KC_MS_DOWN:             return "KC_MS_DOWN";
-    case KC_MS_LEFT:             return "KC_MS_LEFT";
-    case KC_MS_RIGHT:            return "KC_MS_RIGHT";
-    case KC_MS_BTN1:             return "KC_MS_BTN1";
-    case KC_MS_BTN2:             return "KC_MS_BTN2";
-    case KC_MS_BTN3:             return "KC_MS_BTN3";
-    case KC_MS_BTN4:             return "KC_MS_BTN4";
-    case KC_MS_BTN5:             return "KC_MS_BTN5";
-    case KC_MS_BTN6:             return "KC_MS_BTN6";
-    case KC_MS_BTN7:             return "KC_MS_BTN7";
-    case KC_MS_BTN8:             return "KC_MS_BTN8";
-    case KC_MS_WH_UP:            return "KC_MS_WH_UP";
-    case KC_MS_WH_DOWN:          return "KC_MS_WH_DOWN";
-    case KC_MS_WH_LEFT:          return "KC_MS_WH_LEFT";
-    case KC_MS_WH_RIGHT:         return "KC_MS_WH_RIGHT";
-    case KC_MS_ACCEL0:           return "KC_MS_ACCEL0";
-    case KC_MS_ACCEL1:           return "KC_MS_ACCEL1";
-    case KC_MS_ACCEL2:           return "KC_MS_ACCEL2";
-    case KC_LEFT_CTRL:           return "KC_LEFT_CTRL";
-    case KC_LEFT_SHIFT:          return "KC_LEFT_SHIFT";
-    case KC_LEFT_ALT:            return "KC_LEFT_ALT";
-    case KC_LEFT_GUI:            return "KC_LEFT_GUI";
-    case KC_RIGHT_CTRL:          return "KC_RIGHT_CTRL";
-    case KC_RIGHT_SHIFT:         return "KC_RIGHT_SHIFT";
-    case KC_RIGHT_ALT:           return "KC_RIGHT_ALT";
-    case KC_RIGHT_GUI:           return "KC_RIGHT_GUI";
-    case CKC_ALPHA_LAYER_SWITCH: return "CKC_ALPHA_LAYER_SWITCH";
-    case CKC_MAGIC: return "CKC_MAGIC";
-    case CKC_SMART_SHIFT:       return "CKC_SMART_SHIFT";
-    case CKC_SMART_CTRL:       return "CKC_SMART_CTRL";
-    case CKC_SMART_ALT:       return "CKC_SMART_ALT";
-    case CKC_SMART_CTRL_SHIFT:       return "CKC_SMART_CTRL_SHIFT";
+        case KC_NO:
+            return "KC_NO";
+        case KC_TRANSPARENT:
+            return "KC_TRANSPARENT";
+        case KC_A:
+            return "KC_A";
+        case KC_B:
+            return "KC_B";
+        case KC_C:
+            return "KC_C";
+        case KC_D:
+            return "KC_D";
+        case KC_E:
+            return "KC_E";
+        case KC_F:
+            return "KC_F";
+        case KC_G:
+            return "KC_G";
+        case KC_H:
+            return "KC_H";
+        case KC_I:
+            return "KC_I";
+        case KC_J:
+            return "KC_J";
+        case KC_K:
+            return "KC_K";
+        case KC_L:
+            return "KC_L";
+        case KC_M:
+            return "KC_M";
+        case KC_N:
+            return "KC_N";
+        case KC_O:
+            return "KC_O";
+        case KC_P:
+            return "KC_P";
+        case KC_Q:
+            return "KC_Q";
+        case KC_R:
+            return "KC_R";
+        case KC_S:
+            return "KC_S";
+        case KC_T:
+            return "KC_T";
+        case KC_U:
+            return "KC_U";
+        case KC_V:
+            return "KC_V";
+        case KC_W:
+            return "KC_W";
+        case KC_X:
+            return "KC_X";
+        case KC_Y:
+            return "KC_Y";
+        case KC_Z:
+            return "KC_Z";
+        case KC_1:
+            return "KC_1";
+        case KC_2:
+            return "KC_2";
+        case KC_3:
+            return "KC_3";
+        case KC_4:
+            return "KC_4";
+        case KC_5:
+            return "KC_5";
+        case KC_6:
+            return "KC_6";
+        case KC_7:
+            return "KC_7";
+        case KC_8:
+            return "KC_8";
+        case KC_9:
+            return "KC_9";
+        case KC_0:
+            return "KC_0";
+        case KC_ENTER:
+            return "KC_ENTER";
+        case KC_ESCAPE:
+            return "KC_ESCAPE";
+        case KC_BACKSPACE:
+            return "KC_BACKSPACE";
+        case KC_TAB:
+            return "KC_TAB";
+        case KC_SPACE:
+            return "KC_SPACE";
+        case KC_MINUS:
+            return "KC_MINUS";
+        case KC_EQUAL:
+            return "KC_EQUAL";
+        case KC_LEFT_BRACKET:
+            return "KC_LEFT_BRACKET";
+        case KC_RIGHT_BRACKET:
+            return "KC_RIGHT_BRACKET";
+        case KC_BACKSLASH:
+            return "KC_BACKSLASH";
+        case KC_NONUS_HASH:
+            return "KC_NONUS_HASH";
+        case KC_SEMICOLON:
+            return "KC_SEMICOLON";
+        case KC_QUOTE:
+            return "KC_QUOTE";
+        case KC_GRAVE:
+            return "KC_GRAVE";
+        case KC_COMMA:
+            return "KC_COMMA";
+        case KC_DOT:
+            return "KC_DOT";
+        case KC_SLASH:
+            return "KC_SLASH";
+        case KC_CAPS_LOCK:
+            return "KC_CAPS_LOCK";
+        case KC_F1:
+            return "KC_F1";
+        case KC_F2:
+            return "KC_F2";
+        case KC_F3:
+            return "KC_F3";
+        case KC_F4:
+            return "KC_F4";
+        case KC_F5:
+            return "KC_F5";
+        case KC_F6:
+            return "KC_F6";
+        case KC_F7:
+            return "KC_F7";
+        case KC_F8:
+            return "KC_F8";
+        case KC_F9:
+            return "KC_F9";
+        case KC_F10:
+            return "KC_F10";
+        case KC_F11:
+            return "KC_F11";
+        case KC_F12:
+            return "KC_F12";
+        case KC_PRINT_SCREEN:
+            return "KC_PRINT_SCREEN";
+        case KC_SCROLL_LOCK:
+            return "KC_SCROLL_LOCK";
+        case KC_PAUSE:
+            return "KC_PAUSE";
+        case KC_INSERT:
+            return "KC_INSERT";
+        case KC_HOME:
+            return "KC_HOME";
+        case KC_PAGE_UP:
+            return "KC_PAGE_UP";
+        case KC_DELETE:
+            return "KC_DELETE";
+        case KC_END:
+            return "KC_END";
+        case KC_PAGE_DOWN:
+            return "KC_PAGE_DOWN";
+        case KC_RIGHT:
+            return "KC_RIGHT";
+        case KC_LEFT:
+            return "KC_LEFT";
+        case KC_DOWN:
+            return "KC_DOWN";
+        case KC_UP:
+            return "KC_UP";
+        case KC_NUM_LOCK:
+            return "KC_NUM_LOCK";
+        case KC_KP_SLASH:
+            return "KC_KP_SLASH";
+        case KC_KP_ASTERISK:
+            return "KC_KP_ASTERISK";
+        case KC_KP_MINUS:
+            return "KC_KP_MINUS";
+        case KC_KP_PLUS:
+            return "KC_KP_PLUS";
+        case KC_KP_ENTER:
+            return "KC_KP_ENTER";
+        case KC_KP_1:
+            return "KC_KP_1";
+        case KC_KP_2:
+            return "KC_KP_2";
+        case KC_KP_3:
+            return "KC_KP_3";
+        case KC_KP_4:
+            return "KC_KP_4";
+        case KC_KP_5:
+            return "KC_KP_5";
+        case KC_KP_6:
+            return "KC_KP_6";
+        case KC_KP_7:
+            return "KC_KP_7";
+        case KC_KP_8:
+            return "KC_KP_8";
+        case KC_KP_9:
+            return "KC_KP_9";
+        case KC_KP_0:
+            return "KC_KP_0";
+        case KC_KP_DOT:
+            return "KC_KP_DOT";
+        case KC_NONUS_BACKSLASH:
+            return "KC_NONUS_BACKSLASH";
+        case KC_APPLICATION:
+            return "KC_APPLICATION";
+        case KC_KB_POWER:
+            return "KC_KB_POWER";
+        case KC_KP_EQUAL:
+            return "KC_KP_EQUAL";
+        case KC_F13:
+            return "KC_F13";
+        case KC_F14:
+            return "KC_F14";
+        case KC_F15:
+            return "KC_F15";
+        case KC_F16:
+            return "KC_F16";
+        case KC_F17:
+            return "KC_F17";
+        case KC_F18:
+            return "KC_F18";
+        case KC_F19:
+            return "KC_F19";
+        case KC_F20:
+            return "KC_F20";
+        case KC_F21:
+            return "KC_F21";
+        case KC_F22:
+            return "KC_F22";
+        case KC_F23:
+            return "KC_F23";
+        case KC_F24:
+            return "KC_F24";
+        case KC_EXECUTE:
+            return "KC_EXECUTE";
+        case KC_HELP:
+            return "KC_HELP";
+        case KC_MENU:
+            return "KC_MENU";
+        case KC_SELECT:
+            return "KC_SELECT";
+        case KC_STOP:
+            return "KC_STOP";
+        case KC_AGAIN:
+            return "KC_AGAIN";
+        case KC_UNDO:
+            return "KC_UNDO";
+        case KC_CUT:
+            return "KC_CUT";
+        case KC_COPY:
+            return "KC_COPY";
+        case KC_PASTE:
+            return "KC_PASTE";
+        case KC_FIND:
+            return "KC_FIND";
+        case KC_KB_MUTE:
+            return "KC_KB_MUTE";
+        case KC_KB_VOLUME_UP:
+            return "KC_KB_VOLUME_UP";
+        case KC_KB_VOLUME_DOWN:
+            return "KC_KB_VOLUME_DOWN";
+        case KC_LOCKING_CAPS_LOCK:
+            return "KC_LOCKING_CAPS_LOCK";
+        case KC_LOCKING_NUM_LOCK:
+            return "KC_LOCKING_NUM_LOCK";
+        case KC_LOCKING_SCROLL_LOCK:
+            return "KC_LOCKING_SCROLL_LOCK";
+        case KC_KP_COMMA:
+            return "KC_KP_COMMA";
+        case KC_KP_EQUAL_AS400:
+            return "KC_KP_EQUAL_AS400";
+        case KC_INTERNATIONAL_1:
+            return "KC_INTERNATIONAL_1";
+        case KC_INTERNATIONAL_2:
+            return "KC_INTERNATIONAL_2";
+        case KC_INTERNATIONAL_3:
+            return "KC_INTERNATIONAL_3";
+        case KC_INTERNATIONAL_4:
+            return "KC_INTERNATIONAL_4";
+        case KC_INTERNATIONAL_5:
+            return "KC_INTERNATIONAL_5";
+        case KC_INTERNATIONAL_6:
+            return "KC_INTERNATIONAL_6";
+        case KC_INTERNATIONAL_7:
+            return "KC_INTERNATIONAL_7";
+        case KC_INTERNATIONAL_8:
+            return "KC_INTERNATIONAL_8";
+        case KC_INTERNATIONAL_9:
+            return "KC_INTERNATIONAL_9";
+        case KC_LANGUAGE_1:
+            return "KC_LANGUAGE_1";
+        case KC_LANGUAGE_2:
+            return "KC_LANGUAGE_2";
+        case KC_LANGUAGE_3:
+            return "KC_LANGUAGE_3";
+        case KC_LANGUAGE_4:
+            return "KC_LANGUAGE_4";
+        case KC_LANGUAGE_5:
+            return "KC_LANGUAGE_5";
+        case KC_LANGUAGE_6:
+            return "KC_LANGUAGE_6";
+        case KC_LANGUAGE_7:
+            return "KC_LANGUAGE_7";
+        case KC_LANGUAGE_8:
+            return "KC_LANGUAGE_8";
+        case KC_LANGUAGE_9:
+            return "KC_LANGUAGE_9";
+        case KC_ALTERNATE_ERASE:
+            return "KC_ALTERNATE_ERASE";
+        case KC_SYSTEM_REQUEST:
+            return "KC_SYSTEM_REQUEST";
+        case KC_CANCEL:
+            return "KC_CANCEL";
+        case KC_CLEAR:
+            return "KC_CLEAR";
+        case KC_PRIOR:
+            return "KC_PRIOR";
+        case KC_RETURN:
+            return "KC_RETURN";
+        case KC_SEPARATOR:
+            return "KC_SEPARATOR";
+        case KC_OUT:
+            return "KC_OUT";
+        case KC_OPER:
+            return "KC_OPER";
+        case KC_CLEAR_AGAIN:
+            return "KC_CLEAR_AGAIN";
+        case KC_CRSEL:
+            return "KC_CRSEL";
+        case KC_EXSEL:
+            return "KC_EXSEL";
+        case KC_SYSTEM_POWER:
+            return "KC_SYSTEM_POWER";
+        case KC_SYSTEM_SLEEP:
+            return "KC_SYSTEM_SLEEP";
+        case KC_SYSTEM_WAKE:
+            return "KC_SYSTEM_WAKE";
+        case KC_AUDIO_MUTE:
+            return "KC_AUDIO_MUTE";
+        case KC_AUDIO_VOL_UP:
+            return "KC_AUDIO_VOL_UP";
+        case KC_AUDIO_VOL_DOWN:
+            return "KC_AUDIO_VOL_DOWN";
+        case KC_MEDIA_NEXT_TRACK:
+            return "KC_MEDIA_NEXT_TRACK";
+        case KC_MEDIA_PREV_TRACK:
+            return "KC_MEDIA_PREV_TRACK";
+        case KC_MEDIA_STOP:
+            return "KC_MEDIA_STOP";
+        case KC_MEDIA_PLAY_PAUSE:
+            return "KC_MEDIA_PLAY_PAUSE";
+        case KC_MEDIA_SELECT:
+            return "KC_MEDIA_SELECT";
+        case KC_MEDIA_EJECT:
+            return "KC_MEDIA_EJECT";
+        case KC_MAIL:
+            return "KC_MAIL";
+        case KC_CALCULATOR:
+            return "KC_CALCULATOR";
+        case KC_MY_COMPUTER:
+            return "KC_MY_COMPUTER";
+        case KC_WWW_SEARCH:
+            return "KC_WWW_SEARCH";
+        case KC_WWW_HOME:
+            return "KC_WWW_HOME";
+        case KC_WWW_BACK:
+            return "KC_WWW_BACK";
+        case KC_WWW_FORWARD:
+            return "KC_WWW_FORWARD";
+        case KC_WWW_STOP:
+            return "KC_WWW_STOP";
+        case KC_WWW_REFRESH:
+            return "KC_WWW_REFRESH";
+        case KC_WWW_FAVORITES:
+            return "KC_WWW_FAVORITES";
+        case KC_MEDIA_FAST_FORWARD:
+            return "KC_MEDIA_FAST_FORWARD";
+        case KC_MEDIA_REWIND:
+            return "KC_MEDIA_REWIND";
+        case KC_BRIGHTNESS_UP:
+            return "KC_BRIGHTNESS_UP";
+        case KC_BRIGHTNESS_DOWN:
+            return "KC_BRIGHTNESS_DOWN";
+        case KC_CONTROL_PANEL:
+            return "KC_CONTROL_PANEL";
+        case KC_ASSISTANT:
+            return "KC_ASSISTANT";
+        case KC_MISSION_CONTROL:
+            return "KC_MISSION_CONTROL";
+        case KC_LAUNCHPAD:
+            return "KC_LAUNCHPAD";
+        case KC_MS_UP:
+            return "KC_MS_UP";
+        case KC_MS_DOWN:
+            return "KC_MS_DOWN";
+        case KC_MS_LEFT:
+            return "KC_MS_LEFT";
+        case KC_MS_RIGHT:
+            return "KC_MS_RIGHT";
+        case KC_MS_BTN1:
+            return "KC_MS_BTN1";
+        case KC_MS_BTN2:
+            return "KC_MS_BTN2";
+        case KC_MS_BTN3:
+            return "KC_MS_BTN3";
+        case KC_MS_BTN4:
+            return "KC_MS_BTN4";
+        case KC_MS_BTN5:
+            return "KC_MS_BTN5";
+        case KC_MS_BTN6:
+            return "KC_MS_BTN6";
+        case KC_MS_BTN7:
+            return "KC_MS_BTN7";
+        case KC_MS_BTN8:
+            return "KC_MS_BTN8";
+        case KC_MS_WH_UP:
+            return "KC_MS_WH_UP";
+        case KC_MS_WH_DOWN:
+            return "KC_MS_WH_DOWN";
+        case KC_MS_WH_LEFT:
+            return "KC_MS_WH_LEFT";
+        case KC_MS_WH_RIGHT:
+            return "KC_MS_WH_RIGHT";
+        case KC_MS_ACCEL0:
+            return "KC_MS_ACCEL0";
+        case KC_MS_ACCEL1:
+            return "KC_MS_ACCEL1";
+        case KC_MS_ACCEL2:
+            return "KC_MS_ACCEL2";
+        case KC_LEFT_CTRL:
+            return "KC_LEFT_CTRL";
+        case KC_LEFT_SHIFT:
+            return "KC_LEFT_SHIFT";
+        case KC_LEFT_ALT:
+            return "KC_LEFT_ALT";
+        case KC_LEFT_GUI:
+            return "KC_LEFT_GUI";
+        case KC_RIGHT_CTRL:
+            return "KC_RIGHT_CTRL";
+        case KC_RIGHT_SHIFT:
+            return "KC_RIGHT_SHIFT";
+        case KC_RIGHT_ALT:
+            return "KC_RIGHT_ALT";
+        case KC_RIGHT_GUI:
+            return "KC_RIGHT_GUI";
+        case CKC_ALPHA_LAYER_SWITCH:
+            return "CKC_ALPHA_LAYER_SWITCH";
+        case CKC_MAGIC:
+            return "CKC_MAGIC";
+        case CKC_SMART_SHIFT:
+            return "CKC_SMART_SHIFT";
+        case CKC_SMART_CTRL:
+            return "CKC_SMART_CTRL";
+        case CKC_SMART_ALT:
+            return "CKC_SMART_ALT";
+        case CKC_SMART_CTRL_SHIFT:
+            return "CKC_SMART_CTRL_SHIFT";
+        case CKC_LOCK_KEY:
+            return "CKC_LOCK_KEY";
     }
     return "UNDEFINED";
 };
 
 char* key_type_to_string(enum smart_key_type type) {
     switch (type) {
-    case DUMB: return "DUMB";
-    case TAP_ONLY: return "TAP_ONLY";
-    case TAP_HOLD: return "TAP_HOLD";
-    case N_TAP: return "N_TAP";
-    case N_TAP_HOLD: return "N_TAP_HOLD";
-    case HOLD_ONLY: return "HOLD_ONLY";
-    case N_HOLD: return "N_HOLD";
+        case DUMB:
+            return "DUMB";
+        case TAP_ONLY:
+            return "TAP_ONLY";
+        case TAP_HOLD:
+            return "TAP_HOLD";
+        case N_TAP:
+            return "N_TAP";
+        case N_TAP_HOLD:
+            return "N_TAP_HOLD";
+        case HOLD_ONLY:
+            return "HOLD_ONLY";
+        case N_HOLD:
+            return "N_HOLD";
     }
     return "UNKNOWN";
 }
 
 char* event_to_string(enum event_type event) {
     switch (event) {
-    case PRESS_SAME: return "PRESS_SAME";
-    case RELEASE_SAME: return "RELEASE_SAME";
-    case RELEASE_OTHER: return "RELEASE_OTHER";
-    case PRESS_OTHER: return "PRESS_OTHER";
+        case PRESS_SAME:
+            return "PRESS_SAME";
+        case RELEASE_SAME:
+            return "RELEASE_SAME";
+        case RELEASE_OTHER:
+            return "RELEASE_OTHER";
+        case PRESS_OTHER:
+            return "PRESS_OTHER";
     }
     return "UNKNOWN";
 }
 
 char* continuation_to_string(enum continuation_type event) {
     switch (event) {
-    case RELEASE_THIRD: return "RELEASE_THIRD";
-    case PRESS_THIRD: return "PRESS_THIRD";
-    case TAP_ORIGINAL: return "TAP_ORIGINAL";
-    case TAP: return "TAP";
-    case ROLL: return "ROLL";
-    case HOLD: return "HOLD";
-    case IDLE: return "IDLE";
+        case RELEASE_THIRD:
+            return "RELEASE_THIRD";
+        case PRESS_THIRD:
+            return "PRESS_THIRD";
+        case TAP_ORIGINAL:
+            return "TAP_ORIGINAL";
+        case TAP:
+            return "TAP";
+        case ROLL:
+            return "ROLL";
+        case HOLD:
+            return "HOLD";
+        case IDLE:
+            return "IDLE";
     }
     return "UNKNOWN";
 }
 
 char* layer_to_string(enum smart_layer layer) {
     switch (layer) {
-    case LAYER_ALPHA_1: return "LAYER_ALPHA_1";
-    case LAYER_ALPHA_2: return "LAYER_ALPHA_2";
-    case LAYER_SYMBOLS: return "LAYER_SYMBOLS";
-    case LAYER_STRINGS: return "LAYER_STRINGS";
-    case LAYER_BRACKETS: return "LAYER_BRACKETS";
-    case LAYER_J_HOLD: return "LAYER_J_HOLD";
-    case LAYER_K_HOLD: return "LAYER_K_HOLD";
-    case LAYER_L_HOLD: return "LAYER_L_HOLD";
-    case LAYER_H_HOLD: return "LAYER_H_HOLD";
-    case LAYER_SEARCH: return "LAYER_SEARCH";
-    case LAYER_SEARCH_2: return "LAYER_SEARCH_2";
-    case LAYER_O_HOLD: return "LAYER_O_HOLD";
-    case LAYER_I_HOLD: return "LAYER_I_HOLD";
-    case LAYER_SYS: return "LAYER_SYS";
-    case LAYER_NUM: return "LAYER_NUM";
-    case LAYER_TMUX: return "LAYER_TMUX";
+        case LAYER_ALPHA_1:
+            return "LAYER_ALPHA_1";
+        case LAYER_ALPHA_2:
+            return "LAYER_ALPHA_2";
+        case LAYER_SYMBOLS:
+            return "LAYER_SYMBOLS";
+        case LAYER_STRINGS:
+            return "LAYER_STRINGS";
+        case LAYER_BRACKETS:
+            return "LAYER_BRACKETS";
+        case LAYER_J_HOLD:
+            return "LAYER_J_HOLD";
+        case LAYER_K_HOLD:
+            return "LAYER_K_HOLD";
+        case LAYER_L_HOLD:
+            return "LAYER_L_HOLD";
+        case LAYER_H_HOLD:
+            return "LAYER_H_HOLD";
+        case LAYER_SEARCH:
+            return "LAYER_SEARCH";
+        case LAYER_SEARCH_2:
+            return "LAYER_SEARCH_2";
+        case LAYER_O_HOLD:
+            return "LAYER_O_HOLD";
+        case LAYER_I_HOLD:
+            return "LAYER_I_HOLD";
+        case LAYER_SYS:
+            return "LAYER_SYS";
+        case LAYER_NUM:
+            return "LAYER_NUM";
+        case LAYER_TMUX:
+            return "LAYER_TMUX";
 #ifdef MOUSEKEY_ENABLE
-    case LAYER_MOUSE: return "LAYER_MOUSE";
+        case LAYER_MOUSE:
+            return "LAYER_MOUSE";
 #endif
-    default: return "UNKNOWN";
+        default:
+            return "UNKNOWN";
     }
 }

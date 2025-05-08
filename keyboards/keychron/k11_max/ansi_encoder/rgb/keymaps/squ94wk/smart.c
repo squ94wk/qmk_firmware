@@ -146,6 +146,8 @@ void release_action(smart_key_t *key) {
 
     if (key->state.release.keycode) {
         unregister_code(key->state.release.keycode);
+    }
+    if (key->state.release.mask) {
         set_mods(get_mods() & ~key->state.release.mask);
     }
     if (key->state.release.layer) {

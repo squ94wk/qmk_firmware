@@ -29,7 +29,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,  _______,	   KC_B,	 KC_F,	  KC_W,    _______,	_______,	  KC_L,    KC_I,	KC_G,	 _______,	   _______,  _______,  _______,          KC_DEL,
         _______, KC_A,	   KC_ESC,	 KC_S,	  KC_T,    _______,              _______,    KC_N,	KC_E,	 KC_O,	   CKC_MAGIC,  _______,  _______,           _______,
         _______,           _______,	 KC_R,	  KC_C,    KC_D,	_______,	  _______,    _______,	 KC_H,	 KC_U,  KC_M,	_______,  _______, _______,
-        _______, _______,  _______,           KC_SPC,           KC_ESC, KC_BSPC,       KC_ENT,            _______,            _______, _______, _______),
+        _______, _______,  _______,           KC_SPC,           KC_ESC, CKC_LOCK_KEY,       KC_ENT,            _______,            _______, _______, _______),
 };
 
 
@@ -65,14 +65,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     uprintf("DEBUG: Event\n");
-    uprintf(
-        "DEBUG: [%d] %s %s [%d, %d]\n",
-        record->event.time,
-        record->event.pressed ? "pressed" : "released",
-        keycode_to_string(keycode),
-        record->event.key.row,
-        record->event.key.col
-    );
+    uprintf("DEBUG: [%d] %s %s [%d, %d]\n", record->event.time, record->event.pressed ? "pressed" : "released", keycode_to_string(keycode), record->event.key.row, record->event.key.col);
 
     if (process_smart_key(keycode, record)) {
         return false;

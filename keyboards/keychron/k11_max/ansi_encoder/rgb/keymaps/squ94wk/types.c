@@ -10,6 +10,7 @@ enum custom_keycodes {
     CKC_SMART_CTRL,
     CKC_SMART_ALT,
     CKC_SMART_CTRL_SHIFT,
+    CKC_LOCK_KEY,
 };
 
 enum smart_key_type {
@@ -70,36 +71,36 @@ struct smart_key_t {
     keypos_t pos;
     uint16_t keycode;
 
-    int max_tap;
+    int  max_tap;
     bool defer_release;
 
     struct {
         uint16_t pressed_time;
         uint16_t tap_count;
         uint16_t tap_timeout;
-        bool fired;
+        bool     fired;
 
         struct {
             uint16_t keycode;
             uint16_t mask;
-            int layer;
+            int      layer;
         } release;
     } state;
 
     struct {
         uint16_t keycode;
-        uint8_t mask;
-        uint8_t mask_oneshot;
-        int layer_toggle;
-        int layer_oneshot;
+        uint8_t  mask;
+        uint8_t  mask_oneshot;
+        int      layer_toggle;
+        int      layer_oneshot;
         void (*action)(smart_key_t *key);
     } tap;
 
     struct {
         uint16_t keycode;
-        bool tap_keycode;
-        uint8_t mask;
-        int layer;
+        bool     tap_keycode;
+        uint8_t  mask;
+        int      layer;
         void (*action)(smart_key_t *key);
     } hold;
 
