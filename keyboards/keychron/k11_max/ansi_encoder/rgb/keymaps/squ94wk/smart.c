@@ -121,6 +121,15 @@ void hold_action(smart_key_t *key) {
         activate_layer(key->hold.layer);
         layer_activations[key->hold.layer] = -1;
         key->state.release.layer = key->hold.layer;
+
+        // apply oneshot mods to layer holds
+        // this makes some things like alt+tab or ctrl+p more convenient
+        if (get_oneshot_mods()) {
+            key->state.release.mask = get_oneshot_mods();
+            set_mods(get_mods() | get_oneshot_mods());
+            clear_oneshot_mods();
+        }
+
         uprintf("DEBUG: remember to deactivate layer %s on release\n", layer_to_string(key->state.release.layer));
         return;
     }
