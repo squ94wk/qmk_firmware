@@ -9,16 +9,28 @@ void register_with_mods(uint16_t keycode, uint16_t mask, uint16_t *release_mask)
     uint16_t current_mods = get_mods();
 
     // apply caps word
-    // switch (keycode) {
-    // case KC_A ... KC_Z:
-    // case KC_MINUS:
-    //     if (caps_word_on()) {
-    //         *mask |= MOD_BIT_RSHIFT;
-    //     }
-    //     break;
-    // default:
-    //     caps_word_off();
-    // }
+    switch (keycode) {
+    case KC_A ... KC_Z:
+    case KC_MINUS:
+    case KC_KP_MINUS:
+        if (is_caps_word_on()) {
+            caps_word_off(); // hack: qmk doesn't handle our keys so otherwise times out after 5s idle
+            caps_word_on();
+            if (get_mods() & MOD_MASK_SHIFT) {
+                mask ^= MOD_MASK_SHIFT; // reverse caps behavior
+            } else {
+                mask |= MOD_MASK_SHIFT;
+            }
+        }
+        break;
+    case KC_BSPC:
+    case KC_1 ... KC_0:
+    case KC_KP_1 ... KC_KP_0:
+    case KC_RIGHT ... KC_LEFT:
+        break;
+    default:
+        caps_word_off();
+    }
 
     // apply oneshot mods
     if (get_oneshot_mods()) {
