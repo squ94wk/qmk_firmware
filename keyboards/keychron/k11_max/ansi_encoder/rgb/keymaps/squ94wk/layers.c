@@ -45,8 +45,12 @@ void tap_lock(smart_key_t *key) {
         return;
     }
 
-    uprintf("DEBUG: unlocking\n");
-    set_mods(0);
+    if (get_mods()) {
+        uprintf("DEBUG: unlocking\n");
+        set_mods(0);
+    }
+
+    print_history();
 }
 
 void hold_lock(smart_key_t *key) {

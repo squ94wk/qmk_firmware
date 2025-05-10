@@ -3,7 +3,7 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT];
 int active_layers[SMART_LAYER_COUNT];
 
 void register_with_mods(uint16_t keycode, uint16_t mask, uint16_t *release_mask);
-void add_key_to_history(uint16_t keycode, uint16_t mask);
+void add_key_to_history(uint16_t keycode, bool shifted);
 
 void register_with_mods(uint16_t keycode, uint16_t mask, uint16_t *release_mask) {
     uint16_t current_mods = get_mods();
@@ -38,7 +38,7 @@ void register_with_mods(uint16_t keycode, uint16_t mask, uint16_t *release_mask)
     }
 
     if (!( current_mods | (mask & ~MOD_MASK_SHIFT) )) {
-        add_key_to_history(keycode, mask);
+        add_key_to_history(keycode, (current_mods & MOD_MASK_SHIFT));
     }
 
     // use up oneshot layer activations
