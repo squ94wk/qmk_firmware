@@ -1,6 +1,5 @@
 #define KEY_HISTORY_MAX 8
 char history[KEY_HISTORY_MAX] = {};
-int history_ptr;
 
 const char keycode_to_char[2][2<<8] = {
     [0] = { // Unshifted characters
@@ -148,3 +147,28 @@ const char keycode_to_char[2][2<<8] = {
         [KC_KP_EQUAL] = '=',
     },
 };
+
+void drop_key_from_history(void) {
+    memmove(&history[0], &history[1], sizeof(history[0]) * (KEY_HISTORY_MAX - 1));
+    history[KEY_HISTORY_MAX - 1] = '\0';
+}
+
+void drop_keys_from_history(int i) {
+    for (; i>0; --i) {
+        drop_key_from_history();
+    }
+}
+
+void add_key_to_history(uint16_t keycode, bool shifted) {
+    if (keycode == KC_BSPC) {
+        drop_key_from_history();
+        return;
+    }
+
+    //    uprintf("DEBUG: add keycode %s to history with mask %d \n", keycode_to_string(keycode), mask);
+    char c = keycode_to_char[shifted ? 1 : 0][keycode];
+    if (c) {
+        memmove(&history[1], &history[0], sizeof(history[0]) * (KEY_HISTORY_MAX - 1));
+        history[0] = c;
+    }
+}

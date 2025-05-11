@@ -1,34 +1,15 @@
+#include <stdnoreturn.h>
 #include "history.c"
 
-void drop_key_from_history(void) {
-    history[history_ptr] = 0;
-    history_ptr = (history_ptr - 1) % KEY_HISTORY_MAX;
-}
-
-void drop_keys_from_history(int i) {
-    for (; i>0; --i) {
-        drop_key_from_history();
-    }
-}
-
-void add_key_to_history(uint16_t keycode, bool shifted) {
-    if (keycode == KC_BSPC) {
-        drop_key_from_history();
-        return;
-    }
-    //    uprintf("DEBUG: add keycode %s to history with mask %d \n", keycode_to_string(keycode), mask);
-    char c = keycode_to_char[shifted][keycode];
-    if (c) {
-        history_ptr = (history_ptr + 1) % KEY_HISTORY_MAX;
-        history[history_ptr] = c;
-        return;
-    }
-}
-
 bool magic_umlaut(void);
+bool magic_apostrophe(void);
 
 void magic_action(smart_key_t *key) {
     if (magic_umlaut()) {
+        return;
+    }
+
+    if (magic_apostrophe()) {
         return;
     }
 
@@ -58,54 +39,127 @@ void magic_action(smart_key_t *key) {
     // }
 }
 
-bool history_matches_string(const char* str) {
-    uprintf("DEBUG: check history string %s\n", str);
-    size_t len = strlen(str);
+void print_history(void) {
+    uprintf("DEBUG: history: %s\n", history);
+}
 
-    if (len > KEY_HISTORY_MAX) {
-        uprintf("DEBUG: check history string %s\n", str);
+bool match_pattern(char **pat, char **sub);
+
+bool history_matches_string(char *pat) {
+    char *p = pat;
+    char *h = history;
+    return match_pattern(&p, &h);
+}
+
+bool match_pattern(char **pat, char **sub) {
+    char *start = *sub;
+    uprintf("DEBUG: match pattern %s on %s\n", *pat, *sub);
+positive:
+    if (!**pat || **pat == ')') {
+        uprintf("DEBUG: reached end of pattern, match\n");
+        return true;
+    }
+
+    if (**pat == '(') {
+        uprintf("DEBUG: continue matching %s with subgroup %s\n", *sub, *pat);
+        (*pat)++;
+        if (!match_pattern(pat, sub)) {
+            (*pat)++;
+            goto negative;
+        }
+        (*pat)++;
+        goto positive;
+    }
+
+    if (**pat == '|') { // we're good so far, but the rest must match too
+        uprintf("DEBUG: skip other alternatives\n");
+        for (int depth = 0; true; ) {
+            (*pat)++;
+            if (!**pat) {
+                return true;
+            }
+            if (**pat == '(') {
+                depth++;
+                continue;
+            }
+            if (**pat == ')') {
+                if (depth == 0) {
+                    return true;
+                }
+
+                depth--;
+                continue;
+            }
+        }
+        goto positive;
+    }
+
+    if (!**sub) {
+        uprintf("DEBUG: subject exceeded unterminated pattern, rest: %s\n", *pat);
         return false;
     }
 
-    for (size_t i = 0; i < len; i++) {
-        uint8_t index = (history_ptr - (len - 1) + i) % KEY_HISTORY_MAX;
+    if (**pat == **sub) {
+        uprintf("DEBUG: match %c on %c\n", **pat, **sub);
+        (*pat)++;
+        (*sub)++;
+        goto positive;
+    }
 
-        if (history[index] != (uint8_t)str[i]) {
-            uprintf("DEBUG: history does not match at index %d: %c != %c\n", index, history[index], (uint8_t)str[i]);
+    uprintf("DEBUG: mismatch %c on %c\n", **pat, **sub);
+    (*pat)++;
+    goto negative;
+
+negative:
+    for (int depth = 0; true; (*pat)++) {
+        if (!**pat) {
+            uprintf("DEBUG: reached end of pattern after negative match\n");
             return false;
         }
-        uprintf("DEBUG: history matches at index %d: %c\n", index, history[index]);
-    }
 
-    return true;
-}
+        if (**pat == ')' && depth == 0) {
+            uprintf("DEBUG: reached end of group after negative match\n");
+            return false;
+        }
 
-void print_history(void) {
-    uprintf("DEBUG: history: ");
-    for (int i=0; i < KEY_HISTORY_MAX; i++) {
-        uprintf("%c", history[(history_ptr - i) % KEY_HISTORY_MAX]);
+        if (**pat == '(') {
+            depth++;
+            continue;
+        }
+
+        if (depth > 0) {
+            if (**pat == ')') {
+                depth--;
+            }
+            continue; // skip anything in a group
+        }
+
+        if (**pat == '|') {
+            (*pat)++;
+            *sub = start;
+            uprintf("DEBUG: try next alternative %s on %s\n", *pat, *sub);
+            goto positive;
+        }
     }
-    uprintf("\n");
 }
 
 bool magic_umlaut(void) {
     uint16_t keycode;
     uint8_t mask = MOD_BIT(KC_RIGHT_ALT);
 
-    if (history_matches_string("ae")) {
-        uprintf("DEBUG: ae\n");
+    if (history_matches_string("ea")) {
         keycode = KC_Q;
-    } else if (history_matches_string("oe")) {
+    } else if (history_matches_string("eo")) {
         keycode = KC_P;
-    } else if (history_matches_string("ue")) {
+    } else if (history_matches_string("eu")) {
         keycode = KC_Y;
-    } else if (history_matches_string("Ae")) {
+    } else if (history_matches_string("eA")) {
         keycode = KC_Q;
         mask |= MOD_BIT(KC_RIGHT_SHIFT);
-    } else if (history_matches_string("Oe")) {
+    } else if (history_matches_string("eO")) {
         keycode = KC_P;
         mask |= MOD_BIT(KC_RIGHT_SHIFT);
-    } else if (history_matches_string("Ue")) {
+    } else if (history_matches_string("eU")) {
         keycode = KC_Y;
         mask |= MOD_BIT(KC_RIGHT_SHIFT);
     } else if (history_matches_string("ss")) {
@@ -120,5 +174,36 @@ bool magic_umlaut(void) {
     register_with_mods(keycode, mask, 0);
     unregister_code(keycode);
 
-    return false;
+    return true;
+}
+
+bool magic_apostrophe(void) {
+    if (history_matches_string("mI")) { // I'm
+        SEND_STRING("\b'm");
+        drop_keys_from_history(1);
+        return true;
+    } else if (history_matches_string("ere(w|W)")) { // 're
+        SEND_STRING("\b\b're");
+        drop_keys_from_history(2);
+        return true;
+    } else if (history_matches_string("ll(I|e(w|W)|yeh(t|T)|t(i|I))")) { // 'll
+        SEND_STRING("\b\b'll");
+        drop_keys_from_history(2);
+        return true;
+    } else if (history_matches_string("eve(w|W)")) { // 've
+        SEND_STRING("\b\b've");
+        drop_keys_from_history(2);
+        return true;
+    } else if (history_matches_string("d(I|uo(y|Y)|yeh(t|T)|e(w|W))")) { // 'd
+        SEND_STRING("\b'd");
+        drop_keys_from_history(1);
+        return true;
+    } else if (history_matches_string("tn((od|oD)|(ow|oW)|(ac|aC)|(dluo(hs|hS|c|C|w|W))|((ev|d|s)a(h|H))|((ere|sa)(w|W)|er(a|A)|s(i|I)))")) { // n't
+        SEND_STRING("\b't");
+        drop_keys_from_history(1);
+        return true;
+    } else {
+        uprintf("DEBUG: no match\n");
+        return false;
+    }
 }
