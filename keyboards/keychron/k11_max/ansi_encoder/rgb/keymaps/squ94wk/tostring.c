@@ -544,6 +544,8 @@ char* layer_to_string(enum smart_layer layer) {
             return "LAYER_SYS";
         case LAYER_NUM:
             return "LAYER_NUM";
+        case LAYER_FUNCTION_KEYS:
+            return "LAYER_FUNCTION_KEYS";
         case LAYER_TMUX:
             return "LAYER_TMUX";
 #ifdef MOUSEKEY_ENABLE

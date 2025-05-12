@@ -48,7 +48,7 @@ void tap_lock(smart_key_t *key) {
             for (int i=1; i<SMART_LAYER_COUNT; i++) {
                 deactivate_layer(i);
             }
-            break;
+            return;
 
         case 2:
             if (get_oneshot_mods()) {
@@ -60,7 +60,7 @@ void tap_lock(smart_key_t *key) {
             if (get_mods()) {
                 set_mods(0);
             }
-            break;
+            return;
 
         default:
             print_history();
@@ -72,6 +72,30 @@ void hold_lock(smart_key_t *key) {
     set_mods(get_mods() | mask);
     clear_oneshot_mods();
     key->state.release.mask = mask;
+}
+
+void tap_num(smart_key_t *key) {
+    switch (key->state.tap_count) {
+    case 1:
+        deactivate_layer(LAYER_NUM);
+        return;
+    case 2:
+        activate_layer(LAYER_NUM);
+        return;
+    }
+}
+
+void hold_num(smart_key_t *key) {
+    switch (key->state.tap_count) {
+    case 1:
+        activate_layer(LAYER_NUM);
+        key->state.release.layer = LAYER_NUM;
+        return;
+    case 2:
+        activate_layer(LAYER_FUNCTION_KEYS);
+        key->state.release.layer = LAYER_FUNCTION_KEYS;
+        return;
+    }
 }
 
 smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
@@ -99,7 +123,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                     },
                                 [4] = {
                                         [5] = &(smart_key_t){ .tap.keycode       = KC_SPC, .hold.layer        = LAYER_SYS, .hold_on_key_press = &always_on_other_press, },
-                                        [6] = &(smart_key_t){ .tap.layer_oneshot = LAYER_NUM, .hold.layer        = LAYER_NUM, .hold_on_key_press = &always_on_other_press, },
+                                        [6] = &(smart_key_t){ .max_tap = 2, .tap.action = &tap_num, .hold.action = &hold_num, .hold_on_key_press = &always_on_other_press, },
                                         [7] = &(smart_key_t){ .max_tap = 2, .tap.action  = &tap_lock, .hold.action = &hold_lock, },
 #ifdef MOUSEKEY_ENABLE
                                         [9] = &(smart_key_t){ .hold.layer = LAYER_MOUSE, },
@@ -276,6 +300,31 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                     [9] = &(smart_key_t){ .tap.keycode = KC_KP_0, },
                                     [10] = &(smart_key_t){ .tap.keycode = KC_KP_ASTERISK, },
                                     [11] = &(smart_key_t){ .tap.keycode = KC_KP_SLASH, },
+                                },
+                            },
+                    },
+
+                [LAYER_FUNCTION_KEYS] = &(smart_layer_t){
+                        .map = {
+                                [1] = {
+                                        [2] = &(smart_key_t){ .tap.keycode = KC_F12, },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_F11, },
+                                        [4] = &(smart_key_t){ .tap.keycode = KC_F10, },
+
+                                        [7] = &(smart_key_t){ .tap.keycode = KC_F7, },
+                                        [8] = &(smart_key_t){ .tap.keycode = KC_F8, },
+                                        [9] = &(smart_key_t){ .tap.keycode = KC_F9, }, },
+                                [2] = {
+                                        [2] = &(smart_key_t){ .tap.keycode = KC_F6, },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_F5, },
+                                        [4] = &(smart_key_t){ .tap.keycode = KC_F4, },
+
+                                        [7] = &(smart_key_t){ .tap.keycode = KC_F1, },
+                                        [8] = &(smart_key_t){ .tap.keycode = KC_F2, },
+                                        [9] = &(smart_key_t){ .tap.keycode = KC_F3, },
+                                    },
+                                [3] = {
+                                    // media controls
                                 },
                             },
                     },

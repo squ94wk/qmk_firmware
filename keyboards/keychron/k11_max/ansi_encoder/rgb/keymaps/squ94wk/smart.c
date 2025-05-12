@@ -57,6 +57,7 @@ bool activate_layer(int layer) {
     }
     memmove(&active_layers[1], &active_layers[0], sizeof(active_layers[0]) * (SMART_LAYER_COUNT-1));
     active_layers[0] = layer;
+    layer_activations[layer] = -1; // assume not oneshot, may be overridden
     uprintf("DEBUG: layer %s activated\n", layer_to_string(layer));
     for (int i=1; i < SMART_LAYER_COUNT && active_layers[i]; i++) {
         smart_layer_t *l = smart_layers[active_layers[i]];
@@ -95,7 +96,6 @@ void tap_action(smart_key_t *key) {
     }
     if (key->tap.layer_toggle) {
         toggle_layer(key->tap.layer_toggle);
-        layer_activations[key->tap.layer_oneshot] = -1;
         return;
     }
     if (key->tap.layer_oneshot) {
@@ -119,7 +119,6 @@ void hold_action(smart_key_t *key) {
     }
     if (key->hold.layer) {
         activate_layer(key->hold.layer);
-        layer_activations[key->hold.layer] = -1;
         key->state.release.layer = key->hold.layer;
 
         // apply oneshot mods to layer holds
