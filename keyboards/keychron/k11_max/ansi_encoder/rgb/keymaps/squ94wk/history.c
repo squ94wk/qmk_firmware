@@ -159,16 +159,18 @@ void drop_keys_from_history(int i) {
     }
 }
 
+void add_char_to_history(char c) {
+    memmove(&history[1], &history[0], sizeof(history[0]) * (KEY_HISTORY_MAX - 1));
+    history[0] = c;
+}
 void add_key_to_history(uint16_t keycode, bool shifted) {
     if (keycode == KC_BSPC) {
         drop_key_from_history();
         return;
     }
 
-    //    uprintf("DEBUG: add keycode %s to history with mask %d \n", keycode_to_string(keycode), mask);
     char c = keycode_to_char[shifted ? 1 : 0][keycode];
     if (c) {
-        memmove(&history[1], &history[0], sizeof(history[0]) * (KEY_HISTORY_MAX - 1));
-        history[0] = c;
+        add_char_to_history(c);
     }
 }
