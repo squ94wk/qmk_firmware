@@ -38,19 +38,33 @@ bool always_on_other_press(smart_key_t *key, keypos_t pos) {
 }
 
 void tap_lock(smart_key_t *key) {
-    if (get_oneshot_mods()) {
-        uprintf("DEBUG: locking oneshot mods: %d\n", get_oneshot_mods());
-        set_mods(get_mods() | get_oneshot_mods());
-        clear_oneshot_mods();
-        return;
-    }
+    switch (key->state.tap_count) {
+        case 1:
+            if (get_oneshot_mods()) {
+                clear_oneshot_mods();
+                return;
+            }
+            set_mods(0);
+            for (int i=1; i<SMART_LAYER_COUNT; i++) {
+                deactivate_layer(i);
+            }
+            break;
 
-    if (get_mods()) {
-        uprintf("DEBUG: unlocking\n");
-        set_mods(0);
-    }
+        case 2:
+            if (get_oneshot_mods()) {
+                set_mods(get_mods() | get_oneshot_mods());
+                clear_oneshot_mods();
+                return;
+            }
 
-    print_history();
+            if (get_mods()) {
+                set_mods(0);
+            }
+            break;
+
+        default:
+            print_history();
+    }
 }
 
 void hold_lock(smart_key_t *key) {
@@ -86,7 +100,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [4] = {
                                         [5] = &(smart_key_t){ .tap.keycode       = KC_SPC, .hold.layer        = LAYER_SYS, .hold_on_key_press = &always_on_other_press, },
                                         [6] = &(smart_key_t){ .tap.layer_oneshot = LAYER_NUM, .hold.layer        = LAYER_NUM, .hold_on_key_press = &always_on_other_press, },
-                                        [7] = &(smart_key_t){ .tap.action  = &tap_lock, .hold.action = &hold_lock, },
+                                        [7] = &(smart_key_t){ .max_tap = 2, .tap.action  = &tap_lock, .hold.action = &hold_lock, },
 #ifdef MOUSEKEY_ENABLE
                                         [9] = &(smart_key_t){ .hold.layer = LAYER_MOUSE, },
 #endif
@@ -240,28 +254,28 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                         [3] = &(smart_key_t){ .tap.keycode = KC_5, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                                         [4] = &(smart_key_t){ .tap.keycode = KC_4, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
 
-                                        [7] = &(smart_key_t){ .tap.keycode = KC_MINUS, },
-                                        [8] = &(smart_key_t){ .tap.keycode = KC_EQUAL, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                        [7] = &(smart_key_t){ .tap.keycode = KC_KP_MINUS, },
+                                        [8] = &(smart_key_t){ .tap.keycode = KC_KP_PLUS, },
                                         [9] = &(smart_key_t){ .tap.keycode = KC_BSPC, }, },
                                 [2] = {
-                                        [1] = &(smart_key_t){ .tap.keycode = KC_8, },
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_7, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_6, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_5, },
+                                        [1] = &(smart_key_t){ .tap.keycode = KC_KP_8, },
+                                        [2] = &(smart_key_t){ .tap.keycode = KC_KP_7, },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_KP_6, },
+                                        [4] = &(smart_key_t){ .tap.keycode = KC_KP_5, },
 
-                                        [7] = &(smart_key_t){ .tap.keycode = KC_1, },
-                                        [8] = &(smart_key_t){ .tap.keycode = KC_2, },
-                                        [9] = &(smart_key_t){ .tap.keycode = KC_3, },
-                                        [10] = &(smart_key_t){ .tap.keycode = KC_4, },
+                                        [7] = &(smart_key_t){ .tap.keycode = KC_KP_1, },
+                                        [8] = &(smart_key_t){ .tap.keycode = KC_KP_2, },
+                                        [9] = &(smart_key_t){ .tap.keycode = KC_KP_3, },
+                                        [10] = &(smart_key_t){ .tap.keycode = KC_KP_4, },
                                     },
                                 [3] = {
                                     [3] = &(smart_key_t){ .tap.keycode = KC_COMMA, },
-                                    [4] = &(smart_key_t){ .tap.keycode = KC_DOT, },
-                                    [5] = &(smart_key_t){ .tap.keycode = KC_9, },
+                                    [4] = &(smart_key_t){ .tap.keycode = KC_KP_DOT, },
+                                    [5] = &(smart_key_t){ .tap.keycode = KC_KP_9, },
 
-                                    [9] = &(smart_key_t){ .tap.keycode = KC_0, },
-                                    [10] = &(smart_key_t){ .tap.keycode = KC_8, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                    [11] = &(smart_key_t){ .tap.keycode = KC_SLASH, },
+                                    [9] = &(smart_key_t){ .tap.keycode = KC_KP_0, },
+                                    [10] = &(smart_key_t){ .tap.keycode = KC_KP_ASTERISK, },
+                                    [11] = &(smart_key_t){ .tap.keycode = KC_KP_SLASH, },
                                 },
                             },
                     },
