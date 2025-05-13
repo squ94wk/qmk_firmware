@@ -1,4 +1,3 @@
-#include <stdnoreturn.h>
 #include "history.c"
 
 bool magic_umlaut(void);

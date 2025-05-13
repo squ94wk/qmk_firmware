@@ -1,4 +1,4 @@
-#define KEY_HISTORY_MAX 8
+#define KEY_HISTORY_MAX 32
 char history[KEY_HISTORY_MAX] = {};
 
 const char keycode_to_char[2][2<<8] = {
