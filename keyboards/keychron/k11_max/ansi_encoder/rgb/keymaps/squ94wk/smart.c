@@ -125,7 +125,11 @@ void hold_action(smart_key_t *key) {
         // this makes some things like alt+tab or ctrl+p more convenient
         if (get_oneshot_mods()) {
             key->state.release.mask = get_oneshot_mods();
-            set_mods(get_mods() | get_oneshot_mods());
+            for (uint16_t kc = KC_LEFT_CTRL; kc <= KC_RIGHT_GUI; kc++) {
+                if (key->state.release.mask & MOD_BIT(kc)) {
+                    register_code(kc);
+                }
+            }
             clear_oneshot_mods();
         }
 
@@ -156,7 +160,11 @@ void release_action(smart_key_t *key) {
         unregister_code(key->state.release.keycode);
     }
     if (key->state.release.mask) {
-        set_mods(get_mods() & ~key->state.release.mask);
+        for (uint16_t kc = KC_LEFT_CTRL; kc <= KC_RIGHT_GUI; kc++) {
+            if (key->state.release.mask & MOD_BIT(kc)) {
+                unregister_code(kc);
+            }
+        }
     }
     if (key->state.release.layer) {
         deactivate_layer(key->state.release.layer);

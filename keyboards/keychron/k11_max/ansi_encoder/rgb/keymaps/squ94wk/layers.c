@@ -98,6 +98,16 @@ void hold_num(smart_key_t *key) {
     }
 }
 
+void tap_backspace(smart_key_t *key) {
+    if (get_mods() & MOD_MASK_SHIFT) {
+        register_with_mods(KC_DELETE, 0, 0);
+        key->state.release.keycode = KC_DELETE;
+        return;
+    }
+    register_with_mods(KC_BACKSPACE, 0, 0);
+    key->state.release.keycode = KC_BACKSPACE;
+}
+
 smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_ALPHA_1] =
                     &(smart_layer_t){
@@ -250,7 +260,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_SYS] =
                     &(smart_layer_t){
                         .map = {
-                                [1][2] = &(smart_key_t){ .tap.keycode = KC_DELETE, },
+                                [1][2] = &(smart_key_t){ .tap.keycode = KC_TAB, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                                 [1][3] = &(smart_key_t){ .tap.keycode      = KC_C, .tap.mask         = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode     = KC_V, .hold.tap_keycode = true, .hold.mask        = MOD_BIT(KC_RIGHT_CTRL), },
                                 [1][4] = &(smart_key_t){ .tap.keycode = KC_GRV, },
 
@@ -260,7 +270,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
 
                                 [1][7] = &(smart_key_t){ .tap.keycode = KC_TAB, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                                 [1][8] = &(smart_key_t){ .tap.keycode = KC_UP, },
-                                [1][9] = &(smart_key_t){ .tap.keycode = KC_BSPC, },
+                                [1][9] = &(smart_key_t){ .tap.action = &tap_backspace, },
 
                                 [2][7] = &(smart_key_t){ .tap.keycode = KC_LEFT, },
                                 [2][8] = &(smart_key_t){ .tap.keycode = KC_DOWN, },
