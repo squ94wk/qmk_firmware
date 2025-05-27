@@ -53,6 +53,11 @@ bool lookup_keypos_in_base_keymap(uint16_t keycode, keypos_t *key) {
 
 // clang-format on
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    last_input = timer_read32();
+    if (!rgb_matrix_is_enabled()) {
+        rgb_matrix_enable();
+    }
+
     if (!process_record_keychron_common(keycode, record)) {
         uprintf("DEBUG: QMK handled event\n");
         return false;

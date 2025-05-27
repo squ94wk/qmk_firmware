@@ -25,6 +25,7 @@ static enum event_type get_event_type(smart_key_t *key, keyevent_t event);
 static enum continuation_type get_continuation_type(smart_key_t *key, keyevent_t event, keyevent_t cont);
 
 bool run_housekeeping = false;
+uint32_t last_input;
 
 bool is_layer_active(int layer) {
     for (int i=0; i < SMART_LAYER_COUNT && active_layers[i]; ++i) {
@@ -521,6 +522,10 @@ void matrix_scan_user() {
             process_continuation(key, IDLE);
             continue;
         }
+    }
+
+    if (rgb_matrix_is_enabled() && timer_read32() > last_input + RGB_MATRIX_IDLE_TIMEOUT) {
+        rgb_matrix_disable();
     }
 }
 
