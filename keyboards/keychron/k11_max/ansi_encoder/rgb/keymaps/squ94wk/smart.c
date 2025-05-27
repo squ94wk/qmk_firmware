@@ -573,12 +573,12 @@ static enum event_type get_event_type(smart_key_t *key, keyevent_t event) {
 
 static enum continuation_type get_continuation_type(smart_key_t *key, keyevent_t deferred, keyevent_t cont) {
     bool original_key = is_same_pos(key->pos, cont.key);
-    bool same_key = is_same_pos(key->pos, deferred.key);
+    bool same_key = is_same_pos(cont.key, deferred.key);
 
     // deferred press
     if (deferred.pressed) {
         if (cont.pressed) {
-            return PRESS_OTHER;
+            return PRESS_THIRD;
         }
         if (same_key) {
             return TAP;
