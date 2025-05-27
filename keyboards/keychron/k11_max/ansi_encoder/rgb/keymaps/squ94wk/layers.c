@@ -119,7 +119,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                         [7] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_J_HOLD, },
                                         [8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_K_HOLD, },
                                         [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_L_HOLD, },
-                                        [10] = &(smart_key_t){ .defer_release = true, .tap.action = &magic_action, .hold.layer = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, },
+                                        [10] = &(smart_key_t){ .max_tap = 2, .defer_release = true, .tap.action = &magic_action, .hold.layer = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, },
                                     },
                                 [3] = {
                                         [5] = &(smart_key_t){ .tap.keycode = KC_D, .hold.layer  = LAYER_BRACKETS, },

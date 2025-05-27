@@ -6,84 +6,92 @@ bool match_pattern(char **pat, char **sub);
 
 void magic_action(smart_key_t *key) {
     uprintf("DEBUG: magic start: %d\n", timer_read());
-    if (magic_umlaut()) {
-        uprintf("DEBUG: magic done (umlaut): %d\n", timer_read());
-        return;
-    }
-
-    if (magic_apostrophe()) {
-        uprintf("DEBUG: magic done (apostrophe): %d\n", timer_read());
-        return;
-    }
-
-    int parens = 0;
-    int brackets = 0;
-    int braces = 0;
-    int angle = 0;
-    for (int i=0; i < strlen(history); i++) {
-        switch (history[i]) {
-        case '"':
-            SEND_STRING("\"");
-            return;
-        case '\'':
-            SEND_STRING("'");
-            return;
-        case '`': {
-            char *p = "```";
-            char *h = &history[i];
-            if (match_pattern(&p, &h)) {
-                SEND_STRING("```");
-                return;
-            }
-            SEND_STRING("`");
+    switch (key->state.tap_count) {
+    case 2:
+        if (magic_umlaut()) {
+            uprintf("DEBUG: magic done (umlaut): %d\n", timer_read());
             return;
         }
-        case ')':
-            parens++;
-            break;
-        case '(':
-            if (parens == 0) {
-                SEND_STRING(")");
-                add_char_to_history(')');
-                return;
-            }
-            parens--;
-            break;
-        case ']':
-            brackets++;
-            break;
-        case '[':
-            if (brackets == 0) {
-                SEND_STRING("]");
-                add_char_to_history(']');
-                return;
-            }
-            brackets--;
-            break;
-        case '}':
-            braces++;
-            break;
-        case '{':
-            if (braces == 0) {
-                SEND_STRING("}");
-                add_char_to_history('}');
-                return;
-            }
-            braces--;
-            break;
-        case '>':
-            angle++;
-            break;
-        case '<':
-            if (angle == 0) {
-                SEND_STRING(">");
-                add_char_to_history('>');
-                return;
-            }
-            angle--;
-            break;
+
+        if (magic_apostrophe()) {
+            uprintf("DEBUG: magic done (apostrophe): %d\n", timer_read());
+            return;
         }
+        break;
+
+    case 1: {
+        int parens = 0;
+        int brackets = 0;
+        int braces = 0;
+        int angle = 0;
+        for (int i=0; i < strlen(history); i++) {
+            switch (history[i]) {
+            case '"':
+                SEND_STRING("\"");
+                return;
+            case '\'':
+                SEND_STRING("'");
+                return;
+            case '`': {
+                char *p = "```";
+                char *h = &history[i];
+                if (match_pattern(&p, &h)) {
+                    SEND_STRING("```");
+                    return;
+                }
+                SEND_STRING("`");
+                return;
+            }
+            case ')':
+                parens++;
+                break;
+            case '(':
+                if (parens == 0) {
+                    SEND_STRING(")");
+                    add_char_to_history(')');
+                    return;
+                }
+                parens--;
+                break;
+            case ']':
+                brackets++;
+                break;
+            case '[':
+                if (brackets == 0) {
+                    SEND_STRING("]");
+                    add_char_to_history(']');
+                    return;
+                }
+                brackets--;
+                break;
+            case '}':
+                braces++;
+                break;
+            case '{':
+                if (braces == 0) {
+                    SEND_STRING("}");
+                    add_char_to_history('}');
+                    return;
+                }
+                braces--;
+                break;
+            case '>':
+                angle++;
+                break;
+            case '<':
+                if (angle == 0) {
+                    SEND_STRING(">");
+                    add_char_to_history('>');
+                    return;
+                }
+                angle--;
+                break;
+            }
+        }
+        break;
     }
+    }
+
     uprintf("DEBUG: magic done (nothing): %d\n", timer_read());
 }
 
