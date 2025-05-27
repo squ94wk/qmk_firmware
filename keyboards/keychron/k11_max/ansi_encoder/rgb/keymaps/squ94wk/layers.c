@@ -390,6 +390,7 @@ enum smart_keys {
     SMART_KEY_SMART_SHIFT,
     SMART_KEY_SMART_CTRL,
     SMART_KEY_SMART_ALT,
+    SMART_KEY_SMART_GUI,
     SMART_KEY_SMART_CTRL_SHIFT,
     SMART_KEY_LOCK_KEY,
     // end
@@ -434,6 +435,13 @@ smart_key_t smart_keys[] = {
             .max_tap      = 1,
             .tap.action   = &smart_mod_n_tap,
             .hold.keycode = KC_LEFT_ALT,
+        },
+    [SMART_KEY_SMART_GUI] =
+        {
+            .keycode      = CKC_SMART_GUI,
+            .max_tap      = 1,
+            .tap.action   = &smart_mod_n_tap,
+            .hold.keycode = KC_LEFT_GUI,
         },
     [SMART_KEY_SMART_CTRL_SHIFT] = {.keycode = CKC_SMART_CTRL_SHIFT, .max_tap = 1, .tap.action = &smart_mod_n_tap, .hold.keycode = KC_LEFT_CTRL, .hold.mask = MOD_BIT(KC_LEFT_SHIFT)},
 };

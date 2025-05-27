@@ -9,6 +9,7 @@ enum custom_keycodes {
     CKC_SMART_SHIFT,
     CKC_SMART_CTRL,
     CKC_SMART_ALT,
+    CKC_SMART_GUI,
     CKC_SMART_CTRL_SHIFT,
     CKC_LOCK_KEY,
 };
