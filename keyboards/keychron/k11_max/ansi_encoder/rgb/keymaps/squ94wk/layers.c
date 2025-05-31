@@ -284,6 +284,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [3][5] = &(smart_key_t){ .tap.action = &activate_tmux, },
                                 [3][4] = &(smart_key_t){ .tap.mask_oneshot = MOD_BIT(KC_RIGHT_GUI), .hold.keycode = KC_RIGHT_GUI, },
                                 [3][3] = &(smart_key_t){ .tap.mask_oneshot = MOD_MASK_CSAG, },
+
+                                [3][9] = &(smart_key_t){ .tap.keycode = KC_LEFT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_HOME, },
+                                [3][11] = &(smart_key_t){ .tap.keycode = KC_RIGHT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_END, },
                             },
                     },
 
