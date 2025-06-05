@@ -66,6 +66,17 @@ enum smart_layer {
     SMART_LAYER_COUNT,
 };
 
+enum smart_keys {
+    SMART_KEY_SMART_SHIFT,
+    SMART_KEY_SMART_CTRL,
+    SMART_KEY_SMART_ALT,
+    SMART_KEY_SMART_GUI,
+    SMART_KEY_SMART_CTRL_SHIFT,
+    SMART_KEY_LOCK_KEY,
+    // end
+    SMART_KEY_COUNT,
+};
+
 // allows self referencing
 typedef struct smart_key_t smart_key_t;
 

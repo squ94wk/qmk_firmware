@@ -1,3 +1,5 @@
+#include "os_detection.h"
+
 bool fire_for_all(smart_key_t *key, keypos_t pos) {
     return true;
 }
@@ -389,17 +391,6 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
 #endif
 };
 
-enum smart_keys {
-    SMART_KEY_SMART_SHIFT,
-    SMART_KEY_SMART_CTRL,
-    SMART_KEY_SMART_ALT,
-    SMART_KEY_SMART_GUI,
-    SMART_KEY_SMART_CTRL_SHIFT,
-    SMART_KEY_LOCK_KEY,
-    // end
-    SMART_KEY_COUNT,
-};
-
 void smart_mod_n_tap(smart_key_t *key) {
     switch (key->state.tap_count) {
         case 1: {
@@ -417,44 +408,82 @@ void smart_mod_n_tap(smart_key_t *key) {
     return;
 }
 
-smart_key_t smart_keys[] = {
-    [SMART_KEY_SMART_SHIFT] =
-        {
-            .keycode      = CKC_SMART_SHIFT,
-            .max_tap      = 2,
-            .tap.action   = &smart_mod_n_tap,
-            .hold.keycode = KC_LEFT_SHIFT,
-        },
-    [SMART_KEY_SMART_CTRL] =
-        {
-            .keycode      = CKC_SMART_CTRL,
-            .max_tap      = 1,
-            .tap.action   = &smart_mod_n_tap,
+smart_key_t smart_keys[2][SMART_KEY_COUNT] = {
+    [0] = {
+        [SMART_KEY_SMART_SHIFT] = {
+                .keycode      = CKC_SMART_SHIFT,
+                .max_tap      = 2,
+                .tap.action   = &smart_mod_n_tap,
+                .hold.keycode = KC_LEFT_SHIFT,
+            },
+        [SMART_KEY_SMART_CTRL] = {
+                .keycode      = CKC_SMART_CTRL,
+                .max_tap      = 1,
+                .tap.action   = &smart_mod_n_tap,
+                .hold.keycode = KC_LEFT_CTRL,
+            },
+        [SMART_KEY_SMART_ALT] = {
+                .keycode      = CKC_SMART_ALT,
+                .max_tap      = 1,
+                .tap.action   = &smart_mod_n_tap,
+                .hold.keycode = KC_LEFT_ALT,
+            },
+        [SMART_KEY_SMART_GUI] = {
+                .keycode      = CKC_SMART_GUI,
+                .max_tap      = 1,
+                .tap.action   = &smart_mod_n_tap,
+                .hold.keycode = KC_LEFT_GUI,
+            },
+        [SMART_KEY_SMART_CTRL_SHIFT] = {
+            .keycode = CKC_SMART_CTRL_SHIFT,
+            .max_tap = 1,
+            .tap.action = &smart_mod_n_tap,
             .hold.keycode = KC_LEFT_CTRL,
+            .hold.mask = MOD_BIT(KC_LEFT_SHIFT)
         },
-    [SMART_KEY_SMART_ALT] =
-        {
-            .keycode      = CKC_SMART_ALT,
-            .max_tap      = 1,
-            .tap.action   = &smart_mod_n_tap,
-            .hold.keycode = KC_LEFT_ALT,
+    },
+    [1] = {
+        [SMART_KEY_SMART_SHIFT] = {
+                .keycode      = CKC_SMART_SHIFT,
+                .max_tap      = 2,
+                .tap.action   = &smart_mod_n_tap,
+                .hold.keycode = KC_LEFT_SHIFT,
+            },
+        [SMART_KEY_SMART_CTRL] = {
+                .keycode      = CKC_SMART_CTRL,
+                .max_tap      = 1,
+                .tap.action   = &smart_mod_n_tap,
+                .hold.keycode = KC_LCMD,
+            },
+        [SMART_KEY_SMART_ALT] = {
+                .keycode      = CKC_SMART_ALT,
+                .max_tap      = 1,
+                .tap.action   = &smart_mod_n_tap,
+                .hold.keycode = KC_LEFT_CTRL,
+            },
+        [SMART_KEY_SMART_GUI] = {
+                .keycode      = CKC_SMART_GUI,
+                .max_tap      = 1,
+                .tap.action   = &smart_mod_n_tap,
+                .hold.keycode = KC_LOPT,
+            },
+        [SMART_KEY_SMART_CTRL_SHIFT] = {
+            .keycode = CKC_SMART_CTRL_SHIFT,
+            .max_tap = 1,
+            .tap.action = &smart_mod_n_tap,
+            .hold.keycode = KC_LCMD,
+            .hold.mask = MOD_BIT(KC_LEFT_SHIFT)
         },
-    [SMART_KEY_SMART_GUI] =
-        {
-            .keycode      = CKC_SMART_GUI,
-            .max_tap      = 1,
-            .tap.action   = &smart_mod_n_tap,
-            .hold.keycode = KC_LEFT_GUI,
-        },
-    [SMART_KEY_SMART_CTRL_SHIFT] = {.keycode = CKC_SMART_CTRL_SHIFT, .max_tap = 1, .tap.action = &smart_mod_n_tap, .hold.keycode = KC_LEFT_CTRL, .hold.mask = MOD_BIT(KC_LEFT_SHIFT)},
+    }
 };
 
 smart_key_t *lookup_key(uint16_t keycode, keypos_t pos) {
     if (!pos.row && !pos.col) {
         for (int i = 0; i < SMART_KEY_COUNT; ++i) {
-            if (keycode == smart_keys[i].keycode) {
+            int os_index = detected_host_os() == OS_MACOS ? 1 : 0;
+            if (keycode == smart_keys[os_index][i].keycode) {
                 uprintf("DEBUG: found smart key by keycode %s\n", keycode_to_string(keycode));
-                return &smart_keys[i];
+                return &smart_keys[os_index][i];
             }
         }
         uprintf("DEBUG: found smart key by falling back to ALPHA1 %s\n", keycode_to_string(keycode));

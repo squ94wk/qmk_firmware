@@ -7,7 +7,7 @@ static uint16_t deferred_keycode;
 int layer_activations[SMART_LAYER_COUNT];
 
 smart_layer_t *smart_layers[SMART_LAYER_COUNT];
-smart_key_t smart_keys[];
+smart_key_t smart_keys[2][SMART_KEY_COUNT];
 int active_layers[SMART_LAYER_COUNT];
 smart_key_t *lookup_key(uint16_t keycode, keypos_t key);
 
