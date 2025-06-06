@@ -606,7 +606,10 @@ static enum continuation_type get_continuation_type(smart_key_t *key, keyevent_t
         return TAP;
     }
 
-    return PRESS_OTHER;
+    if (key->hold_on_key_press && key->hold_on_key_press(key, cont.key)) {
+        return TAP; // TODO: add extra keycode
+    }
+    return ROLL;
 }
 
 static void reset_smart_key(smart_key_t *key) {
