@@ -147,24 +147,32 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_ALPHA_2] =
                     &(smart_layer_t){
                         .map = {
-                                [1][2] = &(smart_key_t){ .tap.keycode = KC_2, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [1][3] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [1][4] = &(smart_key_t){ .tap.keycode = KC_SLASH, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [2][3] = &(smart_key_t){ .tap.keycode = KC_COMMA, },
-                                [2][4] = &(smart_key_t){ .tap.keycode = KC_DOT, },
-                                [3][4] = &(smart_key_t){ .tap.keycode = KC_X, },
-                                [3][5] = &(smart_key_t){ .tap.keycode = KC_V, },
+                            [1] = {
+                                [2] = &(smart_key_t){ .tap.keycode = KC_2, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [3] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [4] = &(smart_key_t){ .tap.keycode = KC_J, },
 
-                                [1][7] = &(smart_key_t){ .tap.keycode = KC_GRV, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [1][8] = &(smart_key_t){ .tap.keycode = KC_K, },
-                                [1][9] = &(smart_key_t){ .tap.keycode = KC_P, },
-                                [2][7] = &(smart_key_t){ .tap.keycode = KC_Y, },
-                                [2][8] = &(smart_key_t){ .tap.keycode = KC_J, },
-                                [2][9] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, },
-                                [3][9] = &(smart_key_t){ .tap.keycode = KC_Z, },
-                                [3][10] = &(smart_key_t){ .tap.keycode = KC_Q, },
-                                [3][11] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, },
+                                [7] = &(smart_key_t){ .tap.keycode = KC_GRV, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [8] = &(smart_key_t){ .tap.keycode = KC_P, },
+                                [9] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                             },
+                            [2] = {
+                                [3] = &(smart_key_t){ .tap.keycode = KC_SLASH, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [4] = &(smart_key_t){ .tap.keycode = KC_K, },
+
+                                [7] = &(smart_key_t){ .tap.keycode = KC_Y, },
+                                [8] = &(smart_key_t){ .tap.keycode = KC_DOT, },
+                                [9] = &(smart_key_t){ .tap.keycode = KC_COMMA, },
+                            },
+                            [3] = {
+                                [4] = &(smart_key_t){ .tap.keycode = KC_X, },
+                                [5] = &(smart_key_t){ .tap.keycode = KC_V, },
+
+                                [9] = &(smart_key_t){ .tap.keycode = KC_Z, },
+                                [10] = &(smart_key_t){ .tap.keycode = KC_Q, },
+                                [11] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, },
+                            },
+                        },
                         .on_layer_activate = &deactivate_on_other_layer,
                     },
 
