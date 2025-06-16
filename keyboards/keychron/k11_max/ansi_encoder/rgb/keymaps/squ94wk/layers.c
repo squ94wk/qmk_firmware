@@ -1,5 +1,3 @@
-#include "os_detection.h"
-
 bool fire_for_all(smart_key_t *key, keypos_t pos) {
     return true;
 }
@@ -108,6 +106,11 @@ void tap_backspace(smart_key_t *key) {
     }
     register_with_mods(KC_BACKSPACE, 0, 0);
     key->state.release.keycode = KC_BACKSPACE;
+}
+
+int os_index = 0;
+void toggle_os_index(smart_key_t *key) {
+    os_index = key->state.tap_count - 1;
 }
 
 smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
@@ -275,28 +278,35 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_SYS] =
                     &(smart_layer_t){
                         .map = {
-                                [1][2] = &(smart_key_t){ .tap.keycode = KC_TAB, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [1][3] = &(smart_key_t){ .tap.keycode      = KC_C, .tap.mask         = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode     = KC_V, .hold.tap_keycode = true, .hold.mask        = MOD_BIT(KC_RIGHT_CTRL), },
-                                [1][4] = &(smart_key_t){ .tap.keycode = KC_GRV, },
+                            [1] = {
+                                [2] = &(smart_key_t){ .tap.keycode = KC_TAB, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [3] = &(smart_key_t){ .tap.keycode      = KC_C, .tap.mask         = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode     = KC_V, .hold.tap_keycode = true, .hold.mask        = MOD_BIT(KC_RIGHT_CTRL), },
+                                [4] = &(smart_key_t){ .tap.keycode = KC_GRV, },
 
-                                [2][2] = &(smart_key_t){ .tap.keycode  = KC_ESC, },
-                                [2][3] = &(smart_key_t){ .tap.keycode = KC_ENT, },
-                                [2][4] = &(smart_key_t){ .tap.keycode = KC_TAB, },
+                                [7] = &(smart_key_t){ .tap.keycode = KC_TAB, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [8] = &(smart_key_t){ .tap.keycode = KC_UP, },
+                                [9] = &(smart_key_t){ .tap.action = &tap_backspace, },
+                            },
+                            [2] = {
+                                [2] = &(smart_key_t){ .tap.keycode  = KC_ESC, },
+                                [3] = &(smart_key_t){ .tap.keycode = KC_ENT, },
+                                [4] = &(smart_key_t){ .tap.keycode = KC_TAB, },
 
-                                [1][7] = &(smart_key_t){ .tap.keycode = KC_TAB, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [1][8] = &(smart_key_t){ .tap.keycode = KC_UP, },
-                                [1][9] = &(smart_key_t){ .tap.action = &tap_backspace, },
+                                [7] = &(smart_key_t){ .tap.keycode = KC_LEFT, },
+                                [8] = &(smart_key_t){ .tap.keycode = KC_DOWN, },
+                                [9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, },
+                            },
+                            [3] = {
+                                [5] = &(smart_key_t){ .tap.action = &activate_tmux, },
+                                [4] = &(smart_key_t){ .tap.mask_oneshot = MOD_BIT(KC_RIGHT_GUI), .hold.keycode = KC_RIGHT_GUI, },
+                                [3] = &(smart_key_t){ .tap.mask_oneshot = MOD_MASK_CSAG, },
 
-                                [2][7] = &(smart_key_t){ .tap.keycode = KC_LEFT, },
-                                [2][8] = &(smart_key_t){ .tap.keycode = KC_DOWN, },
-                                [2][9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, },
-
-                                [3][5] = &(smart_key_t){ .tap.action = &activate_tmux, },
-                                [3][4] = &(smart_key_t){ .tap.mask_oneshot = MOD_BIT(KC_RIGHT_GUI), .hold.keycode = KC_RIGHT_GUI, },
-                                [3][3] = &(smart_key_t){ .tap.mask_oneshot = MOD_MASK_CSAG, },
-
-                                [3][9] = &(smart_key_t){ .tap.keycode = KC_LEFT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_HOME, },
-                                [3][11] = &(smart_key_t){ .tap.keycode = KC_RIGHT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_END, },
+                                [9] = &(smart_key_t){ .tap.keycode = KC_LEFT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_HOME, },
+                                [11] = &(smart_key_t){ .tap.keycode = KC_RIGHT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_END, },
+                            },
+                            [4] = {
+                                [9] = &(smart_key_t){ .max_tap = 2, .tap.action = &toggle_os_index, },
+                            },
                             },
                     },
 
@@ -488,7 +498,6 @@ smart_key_t smart_keys[2][SMART_KEY_COUNT] = {
 smart_key_t *lookup_key(uint16_t keycode, keypos_t pos) {
     if (!pos.row && !pos.col) {
         for (int i = 0; i < SMART_KEY_COUNT; ++i) {
-            int os_index = detected_host_os() == OS_MACOS ? 1 : 0;
             if (keycode == smart_keys[os_index][i].keycode) {
                 uprintf("DEBUG: found smart key by keycode %s\n", keycode_to_string(keycode));
                 return &smart_keys[os_index][i];
