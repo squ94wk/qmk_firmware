@@ -113,6 +113,20 @@ void toggle_os_index(smart_key_t *key) {
     os_index = key->state.tap_count - 1;
 }
 
+void jump_layer(smart_key_t *key) {
+    switch (os_index) {
+    case 0:
+        activate_layer(LAYER_JUMP_WIN);
+        key->state.release.layer = LAYER_JUMP_WIN;
+        return;
+    case 1:
+        activate_layer(LAYER_JUMP_MAC);
+        key->state.release.layer = LAYER_JUMP_MAC;
+        return;
+    }
+    return;
+}
+
 smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_ALPHA_1] =
                     &(smart_layer_t){
@@ -210,7 +224,6 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [1][8] = &(smart_key_t){ .tap.keycode = KC_SLASH, },
                                 [1][9] = &(smart_key_t){ .tap.keycode = KC_7, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                                 [2][7] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                //[2][7] = &(smart_key_t){ .tap.keycode = KC_EQUAL, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                                 [2][8] = &(smart_key_t){ .tap.keycode = KC_MINUS, },
                                 [2][9] = &(smart_key_t){ .tap.keycode = KC_EQUAL, },
                                 [2][10] = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, },
@@ -297,9 +310,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, },
                             },
                             [3] = {
+                                [3] = &(smart_key_t){ .hold.action = &jump_layer, },
+                                [4] = &(smart_key_t){ .tap.mask_oneshot = MOD_MASK_CSAG, },
                                 [5] = &(smart_key_t){ .tap.action = &activate_tmux, },
-                                [4] = &(smart_key_t){ .tap.mask_oneshot = MOD_BIT(KC_RIGHT_GUI), .hold.keycode = KC_RIGHT_GUI, },
-                                [3] = &(smart_key_t){ .tap.mask_oneshot = MOD_MASK_CSAG, },
 
                                 [9] = &(smart_key_t){ .tap.keycode = KC_LEFT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_HOME, },
                                 [11] = &(smart_key_t){ .tap.keycode = KC_RIGHT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_END, },
@@ -339,6 +352,32 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                     [9] = &(smart_key_t){ .tap.keycode = KC_0, },
                                     [10] = &(smart_key_t){ .tap.keycode = KC_8, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
                                     [11] = &(smart_key_t){ .tap.keycode = KC_SLASH, },
+                                },
+                            },
+                    },
+
+                [LAYER_JUMP_MAC] = &(smart_layer_t){
+                        .map = {
+                                [1] = {
+                                    [8] = &(smart_key_t){ .tap.keycode = KC_PAGE_UP, },
+                                },
+                                [2] = {
+                                    [7] = &(smart_key_t){ .tap.keycode = KC_LEFT, .tap.mask = MOD_BIT(KC_ROPT), .hold.keycode = KC_HOME, },
+                                    [8] = &(smart_key_t){ .tap.keycode = KC_PAGE_DOWN, },
+                                    [9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, .tap.mask = MOD_BIT(KC_ROPT), .hold.keycode = KC_END, },
+                                },
+                            },
+                    },
+
+                [LAYER_JUMP_WIN] = &(smart_layer_t){
+                        .map = {
+                                [1] = {
+                                    [8] = &(smart_key_t){ .tap.keycode = KC_PAGE_UP, },
+                                },
+                                [2] = {
+                                    [7] = &(smart_key_t){ .tap.keycode = KC_LEFT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_HOME, },
+                                    [8] = &(smart_key_t){ .tap.keycode = KC_PAGE_DOWN, },
+                                    [9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_END, },
                                 },
                             },
                     },
