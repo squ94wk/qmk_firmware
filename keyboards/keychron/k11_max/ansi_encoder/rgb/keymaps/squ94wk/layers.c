@@ -311,7 +311,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                             },
                             [3] = {
                                 [3] = &(smart_key_t){ .hold.action = &jump_layer, },
-                                [4] = &(smart_key_t){ .tap.mask_oneshot = MOD_MASK_CTRL | MOD_MASK_ALT | MOD_MASK_GUI, },
+                                [4] = &(smart_key_t){ .tap.mask_oneshot = MOD_BIT_LCTRL | MOD_BIT_LALT | MOD_BIT_LGUI, },
                                 [5] = &(smart_key_t){ .tap.action = &activate_tmux, },
                             },
                             [4] = {
