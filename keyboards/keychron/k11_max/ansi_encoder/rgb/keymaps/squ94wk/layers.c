@@ -110,7 +110,18 @@ void tap_backspace(smart_key_t *key) {
 
 int os_index = 0;
 void toggle_os_index(smart_key_t *key) {
-    os_index = key->state.tap_count - 1;
+    deactivate_layer(LAYER_DUMB);
+    int count = key->state.tap_count;
+    switch (count) {
+    case 1:
+    case 2:
+        os_index = count - 1;
+        break;
+    case 3:
+        os_index = 0;
+        activate_layer(LAYER_DUMB);
+        break;
+    }
 }
 
 void jump_layer(smart_key_t *key) {
@@ -131,6 +142,12 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_ALPHA_1] =
                     &(smart_layer_t){
                         .map = {
+                                [1] = {
+                                    [3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SEARCH, },
+                                    [2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SEARCH_2, },
+                                    [8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_I_HOLD, },
+                                    [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_O_HOLD, },
+                                },
                                 [2] = {
                                         [2] = &(smart_key_t){ .defer_release     = true, .tap.keycode       = KC_TRANSPARENT, .hold.layer        = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, },
                                         [3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_STRINGS, },
@@ -143,12 +160,6 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [3] = {
                                         [5] = &(smart_key_t){ .tap.keycode = KC_D, .hold.layer  = LAYER_BRACKETS, },
                                         [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_H_HOLD, },
-                                    },
-                                [1] = {
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SEARCH, },
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SEARCH_2, },
-                                        [8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_I_HOLD, },
-                                        [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_O_HOLD, },
                                     },
                                 [4] = {
                                         [5] = &(smart_key_t){ .tap.keycode       = KC_SPC, .hold.layer        = LAYER_SYS, .hold_on_key_press = &always_on_other_press, },
@@ -293,7 +304,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                         .map = {
                             [1] = {
                                 [2] = &(smart_key_t){ .tap.keycode = KC_TAB, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                // [3] = &(smart_key_t){},
+                                [3] = &(smart_key_t){ .tap.keycode = KC_INSERT, },
                                 [4] = &(smart_key_t){ .tap.keycode = KC_GRV, },
 
                                 [7] = &(smart_key_t){ .tap.keycode = KC_TAB, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
@@ -315,7 +326,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [5] = &(smart_key_t){ .tap.action = &activate_tmux, },
                             },
                             [4] = {
-                                [9] = &(smart_key_t){ .max_tap = 2, .tap.action = &toggle_os_index, },
+                                [9] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, },
                             },
                             },
                     },
@@ -402,6 +413,57 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                     },
                                 [3] = {
                                     // media controls
+                                },
+                            },
+                    },
+
+                [LAYER_DUMB] = &(smart_layer_t){
+                        .map = {
+                                [1] = {
+                                        [2] = &(smart_key_t){ .tap.keycode = KC_B, },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_F, },
+                                        [4] = &(smart_key_t){ .tap.keycode = KC_W, },
+                                    },
+                                [2] = {
+                                        [1] = &(smart_key_t){ .tap.keycode = KC_LEFT_SHIFT, },
+                                        [2] = &(smart_key_t){ .tap.keycode = KC_A, },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_S, },
+                                        [4] = &(smart_key_t){ .tap.keycode = KC_T, },
+                                    },
+                                [3] = {
+                                        [2] = &(smart_key_t){ .tap.keycode = KC_LEFT_CTRL, },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_R, },
+                                        [4] = &(smart_key_t){ .tap.keycode = KC_C, },
+                                        [5] = &(smart_key_t){ .tap.keycode = KC_D, },
+                                    },
+                                [4] = {
+                                        [5] = &(smart_key_t){ .tap.keycode = KC_SPC, },
+                                        [6] = &(smart_key_t){ .hold.layer = LAYER_DUMB_2, },
+                                },
+                            },
+                    },
+
+                [LAYER_DUMB_2] = &(smart_layer_t){
+                        .map = {
+                                [1] = {
+                                        [2] = &(smart_key_t){ .tap.keycode = KC_3, },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_2, },
+                                        [4] = &(smart_key_t){ .tap.keycode = KC_1, },
+                                    },
+                                [2] = {
+                                        // [1] = &(smart_key_t){ .tap.keycode = , },
+                                        [2] = &(smart_key_t){ .tap.keycode = KC_ESC, },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_ENTER, },
+                                        [4] = &(smart_key_t){ .tap.keycode = KC_TAB, },
+                                    },
+                                [3] = {
+                                        // [2] = &(smart_key_t){ .tap.keycode = KC_LEFT_CTRL, },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_7, },
+                                        [4] = &(smart_key_t){ .tap.keycode = KC_8, },
+                                        [5] = &(smart_key_t){ .tap.keycode = KC_9, },
+                                    },
+                                [4] = {
+                                        [5] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, },
                                 },
                             },
                     },

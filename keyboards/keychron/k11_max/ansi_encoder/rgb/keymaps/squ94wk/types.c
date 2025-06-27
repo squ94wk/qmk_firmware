@@ -59,6 +59,8 @@ enum smart_layer {
     LAYER_NUM,
     LAYER_FUNCTION_KEYS,
     LAYER_TMUX,
+    LAYER_DUMB,
+    LAYER_DUMB_2,
 #ifdef MOUSEKEY_ENABLE
     LAYER_MOUSE,
 #endif
