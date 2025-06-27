@@ -228,8 +228,7 @@ static bool process_continuation(smart_key_t *key, enum continuation_type cont) 
             return true;
 
         case TAP_ORIGINAL:
-            tap_action(key);
-            return true;
+            return false; // handle properly by downstream handler
 
         case IDLE:
             tap_action(key);
@@ -422,7 +421,19 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
             if (key->state.fired) {
                 return true;
             }
-            key->state.pressed_time = 0;
+
+            if (deferred_event.time == event.time) { // we're handling the deferred event itself
+                release_key(key);
+                return true;
+            }
+
+            if (key->defer_release) {
+                uprintf("DEBUG: defer release of key %s\n", keycode_to_string(keycode));
+                deferred_event = event;
+                deferred_keycode = keycode;
+                return true;
+            }
+
             return true;
         case PRESS_OTHER:
             if (key->state.fired) {
@@ -602,8 +613,8 @@ static enum continuation_type get_continuation_type(smart_key_t *key, keyevent_t
         return RELEASE_OTHER;
     }
 
-    if (same_key) {
-        return TAP;
+    if (original_key) {
+        return TAP_ORIGINAL;
     }
 
     if (key->hold_on_key_press && key->hold_on_key_press(key, cont.key)) {
