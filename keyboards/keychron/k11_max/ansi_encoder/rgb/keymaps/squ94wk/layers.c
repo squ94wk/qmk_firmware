@@ -219,28 +219,26 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                         .on_layer_activate = &deactivate_on_other_layer,
                     },
 
-                [LAYER_STRINGS] =
-                    &(smart_layer_t){
-                        .map = {
-                                [1][7] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [1][8] = &(smart_key_t){ .tap.keycode = KC_3, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [1][9] = &(smart_key_t){ .tap.keycode = KC_4, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-
-                                [2][7] = &(smart_key_t){ .tap.keycode = KC_QUOTE, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [2][8] = &(smart_key_t){ .tap.keycode = KC_QUOTE, },
-                                [2][10] = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [2][9] = &(smart_key_t){ .tap.keycode = KC_GRV, },
-                            },
-                    },
-
                 [LAYER_BRACKETS] =
                     &(smart_layer_t){
                         .map = {
-                                [3][9] = &(smart_key_t){ .tap.keycode = KC_COMMA, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [2][7] = &(smart_key_t){ .tap.keycode = KC_9, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), .max_tap     = 2, .tap.action  = &tap_multi_matching_brace, },
-                                [2][8] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [2][9] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, },
+                            [1] = {
+                                [7] = &(smart_key_t){ .tap.keycode = KC_QUOTE, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [8] = &(smart_key_t){ .tap.keycode = KC_QUOTE, },
+                                [9] = &(smart_key_t){ .tap.keycode = KC_GRV, },
                             },
+                            [2] = {
+                                [7] = &(smart_key_t){ .tap.keycode = KC_9, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), .max_tap     = 2, .tap.action  = &tap_multi_matching_brace, },
+                                [8] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [9] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, },
+                                [10] = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                            },
+                            [3] = {
+                                [9] = &(smart_key_t){ .tap.keycode = KC_COMMA, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [10] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [11] = &(smart_key_t){ .tap.keycode = KC_4, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                            },
+                        },
                     },
 
                 [LAYER_SYMBOLS] =
