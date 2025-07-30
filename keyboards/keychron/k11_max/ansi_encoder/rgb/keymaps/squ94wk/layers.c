@@ -138,6 +138,20 @@ void jump_layer(smart_key_t *key) {
     return;
 }
 
+void hold_mouse(smart_key_t *key) {
+    switch (key->state.tap_count) {
+    case 1:
+        register_with_mods(KC_RIGHT_SHIFT, 0, NULL);
+        key->state.release.keycode = KC_RIGHT_SHIFT;
+        return;
+    case 2:
+        activate_layer(LAYER_MOUSE);
+        key->state.release.layer = LAYER_MOUSE;
+        return;
+    }
+    return;
+}
+
 smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_ALPHA_1] =
                     &(smart_layer_t){
@@ -166,7 +180,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                         [6] = &(smart_key_t){ .max_tap = 2, .tap.action = &tap_num, .hold.action = &hold_num, .hold_on_key_press = &always_on_other_press, },
                                         [7] = &(smart_key_t){ .max_tap = 2, .tap.action  = &tap_lock, .hold.action = &hold_lock, },
 #ifdef MOUSEKEY_ENABLE
-                                        [9] = &(smart_key_t){ .hold.layer = LAYER_MOUSE, },
+                                        [9] = &(smart_key_t){ .max_tap = 2, .hold.action = &hold_mouse, },
 #endif
                                     },
                             },
