@@ -164,7 +164,6 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 },
                                 [2] = {
                                         [2] = &(smart_key_t){ .defer_release     = true, .tap.keycode       = KC_TRANSPARENT, .hold.layer        = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_STRINGS, },
                                         [4] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SYMBOLS, },
                                         [7] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_J_HOLD, },
                                         [8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_K_HOLD, },
@@ -172,11 +171,12 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                         [10] = &(smart_key_t){ .defer_release = true, .tap.action = &magic_action, .hold.layer = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, },
                                     },
                                 [3] = {
+                                        [2] = &(smart_key_t){ .tap.keycode = KC_LEFT_SHIFT, },
                                         [5] = &(smart_key_t){ .tap.keycode = KC_D, .hold.layer  = LAYER_BRACKETS, },
                                         [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_H_HOLD, },
                                     },
                                 [4] = {
-                                        [5] = &(smart_key_t){ .tap.keycode       = KC_SPC, .hold.layer        = LAYER_SYS, .hold_on_key_press = &always_on_other_press, },
+                                        [5] = &(smart_key_t){ .tap.keycode = KC_SPC, .hold.layer = LAYER_SYS, },
                                         [6] = &(smart_key_t){ .max_tap = 2, .tap.action = &tap_num, .hold.action = &hold_num, .hold_on_key_press = &always_on_other_press, },
                                         [7] = &(smart_key_t){ .max_tap = 2, .tap.action  = &tap_lock, .hold.action = &hold_lock, },
 #ifdef MOUSEKEY_ENABLE

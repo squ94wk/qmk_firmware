@@ -45,7 +45,6 @@ enum smart_layer {
     LAYER_ALPHA_1,
     LAYER_ALPHA_2,
     LAYER_SYMBOLS,
-    LAYER_STRINGS,
     LAYER_BRACKETS,
     LAYER_J_HOLD,
     LAYER_K_HOLD,
