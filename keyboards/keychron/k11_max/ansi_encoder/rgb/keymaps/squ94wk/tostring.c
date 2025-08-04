@@ -520,8 +520,6 @@ char* layer_to_string(enum smart_layer layer) {
             return "LAYER_ALPHA_2";
         case LAYER_SYMBOLS:
             return "LAYER_SYMBOLS";
-        case LAYER_STRINGS:
-            return "LAYER_STRINGS";
         case LAYER_BRACKETS:
             return "LAYER_BRACKETS";
         case LAYER_J_HOLD:
