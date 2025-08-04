@@ -148,14 +148,16 @@ const char keycode_to_char[2][2<<8] = {
     },
 };
 
-void drop_key_from_history(void) {
-    memmove(&history[0], &history[1], sizeof(history[0]) * (KEY_HISTORY_MAX - 1));
+void drop_key_from_history(int index) {
+    if (index < KEY_HISTORY_MAX - 1) {
+        memmove(&history[index], &history[index+1], sizeof(history[index]) * (KEY_HISTORY_MAX - index - 1));
+    }
     history[KEY_HISTORY_MAX - 1] = '\0';
 }
 
-void drop_keys_from_history(int i) {
+void drop_keys_from_history(int i, int index_start) {
     for (; i>0; --i) {
-        drop_key_from_history();
+        drop_key_from_history(index_start);
     }
 }
 
@@ -163,9 +165,10 @@ void add_char_to_history(char c) {
     memmove(&history[1], &history[0], sizeof(history[0]) * (KEY_HISTORY_MAX - 1));
     history[0] = c;
 }
+
 void add_key_to_history(uint16_t keycode, bool shifted) {
     if (keycode == KC_BSPC) {
-        drop_key_from_history();
+        drop_key_from_history(0);
         return;
     }
 

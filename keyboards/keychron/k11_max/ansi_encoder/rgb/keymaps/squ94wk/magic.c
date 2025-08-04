@@ -2,6 +2,7 @@
 
 bool magic_umlaut(void);
 bool magic_apostrophe(void);
+bool magic_abbreviation(void);
 bool match_pattern(char **pat, char **sub);
 
 void magic_action(smart_key_t *key) {
@@ -13,18 +14,22 @@ void magic_action(smart_key_t *key) {
         switch (history[i]) {
         case '"':
             SEND_STRING("\"");
+            drop_key_from_history(i);
             return;
         case '\'':
             SEND_STRING("'");
+            drop_key_from_history(i);
             return;
         case '`': {
             char *p = "```";
             char *h = &history[i];
             if (match_pattern(&p, &h)) {
                 SEND_STRING("```");
+                drop_keys_from_history(3, i);
                 return;
             }
             SEND_STRING("`");
+            drop_key_from_history(i);
             return;
         }
         case ')':
@@ -83,6 +88,11 @@ void magic_action2(smart_key_t *key) {
 
     if (magic_apostrophe()) {
         uprintf("DEBUG: magic done (apostrophe): %d\n", timer_read());
+        return;
+    }
+
+    if (magic_abbreviation()) {
+        uprintf("DEBUG: magic done (abbreviation): %d\n", timer_read());
         return;
     }
 }
@@ -216,7 +226,7 @@ bool magic_umlaut(void) {
     }
 
     SEND_STRING("\b\b");
-    drop_keys_from_history(2);
+    drop_keys_from_history(2, 0);
     register_with_mods(keycode, mask, 0);
     unregister_code(keycode);
 
@@ -226,31 +236,50 @@ bool magic_umlaut(void) {
 bool magic_apostrophe(void) {
     if (history_matches_string("mI")) { // I'm
         SEND_STRING("\b'm");
-        drop_keys_from_history(1);
+        drop_keys_from_history(1, 0);
         return true;
     } else if (history_matches_string("s(t(i|I)|(te(l|L))|e(h|H)|tah(t|T)|ereh(t|T)|tah(w|W)|neh(w|W)|ereh(w|W)|oh(w|W)|yh(w|W)|wo(h|H))")) { // 's
         SEND_STRING("\b's");
-        drop_keys_from_history(1);
+        drop_keys_from_history(1, 0);
         return true;
     } else if (history_matches_string("er(uo(y|Y)|e(w|W)|yeh(t|T)|tah(w|W))")) { // 're
         SEND_STRING("\b\b're");
-        drop_keys_from_history(2);
+        drop_keys_from_history(2, 0);
         return true;
     } else if (history_matches_string("tn((od|oD)|(seo(d|D))|(ow|oW)|(ac|aC)|(dluo(hs|hS|c|C|w|W))|tsu(m|M)|(di(d|D))|((ev|d|s)a(h|H))|((ere|sa)(w|W)|er(a|A)|s(i|I)))")) { // n't
         SEND_STRING("\b't");
-        drop_keys_from_history(1);
+        drop_keys_from_history(1, 0);
         return true;
     } else if (history_matches_string("ll(I|uo(y|Y)|e(w|W)|yeh(t|T)|t(i|I))")) { // 'll
         SEND_STRING("\b\b'll");
-        drop_keys_from_history(2);
+        drop_keys_from_history(2, 0);
         return true;
     } else if (history_matches_string("d(I|uo(y|Y)|yeh(t|T)|e(w|W)|(e(h|H|hs|hS))|tah(w|W)|neh(w|W)|ereh(w|W)|oh(w|W)|yh(w|W)|wo(h|H)|t(i|I))")) { // 'd
         SEND_STRING("\b'd");
-        drop_keys_from_history(1);
+        drop_keys_from_history(1, 0);
         return true;
     } else if (history_matches_string("ev(I|uo(y|Y)|e(w|W)|yeh(t|T)|dluo(hs|hS|c|C|w|W)|thgi(m|M)|tsu(m|M))")) { // 've
         SEND_STRING("\b\b've");
-        drop_keys_from_history(2);
+        drop_keys_from_history(2, 0);
+        return true;
+    } else {
+        // uprintf("DEBUG: no match\n");
+        return false;
+    }
+}
+
+bool magic_abbreviation(void) {
+    if (history_matches_string("ge")) { // e.g.
+        SEND_STRING("\b.g.");
+        drop_keys_from_history(1, 0);
+        return true;
+    } else if (history_matches_string("(b|B)(z|Z)")) { // z.B.
+        SEND_STRING("\b.B.");
+        drop_keys_from_history(1, 0);
+        return true;
+    } else if (history_matches_string("rre fi")) { // if err != nil {
+        SEND_STRING(" != nil {");
+        add_char_to_history('{');
         return true;
     } else {
         // uprintf("DEBUG: no match\n");

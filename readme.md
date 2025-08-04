@@ -267,12 +267,12 @@ I have two separate functions for it.
 The idea is one acts on only what was typed just before:
 
 - Transform "ue", "ae", "oe", "ss" into their german _Umlaute_ "üäöß"
-- TODO: expand abbreviations like "eg", "zB", "iferr" :), ...
+- Expand abbreviations like "eg", "zB", "iferr" :), ...
 
 and the other may look back until it finds "something":
 
 - Close "brackets" like `({[<` or strings `"'` or the grave (or triple) char
 
     Matching one removes it from the history stack.
-    Thus, subsequent magic presses can close entire sequences typed previously, like `"[[ $(` with `)]]"` (I can currently not yet "skip" quotes that were closed.).
+    Thus, subsequent magic presses can close entire sequences typed previously, like `"[[ "$(` with `)"]]"`.
     In an IDE scenario with auto-closing brackets, this also makes for smooth typing over closing brackets without thinking about what bracket it is.
