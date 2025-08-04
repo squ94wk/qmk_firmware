@@ -178,7 +178,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [4] = {
                                         [5] = &(smart_key_t){ .tap.keycode = KC_SPC, .hold.layer = LAYER_SYS, },
                                         [6] = &(smart_key_t){ .max_tap = 2, .tap.action = &tap_num, .hold.action = &hold_num, .hold_on_key_press = &always_on_other_press, },
-                                        [7] = &(smart_key_t){ .max_tap = 2, .tap.action  = &tap_lock, .hold.action = &hold_lock, },
+                                        [7] = &(smart_key_t){ .hold.layer  = LAYER_SYMBOLS, },
 #ifdef MOUSEKEY_ENABLE
                                         [9] = &(smart_key_t){ .max_tap = 2, .hold.action = &hold_mouse, },
 #endif
@@ -231,7 +231,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [7] = &(smart_key_t){ .tap.keycode = KC_9, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), .max_tap     = 2, .tap.action  = &tap_multi_matching_brace, },
                                 [8] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                                 [9] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, },
-                                [10] = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [10] = &(smart_key_t){ .tap.keycode = KC_3, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                             },
                             [3] = {
                                 [9] = &(smart_key_t){ .tap.keycode = KC_COMMA, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
@@ -244,18 +244,24 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_SYMBOLS] =
                     &(smart_layer_t){
                         .map = {
-                                [1][7] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [1][8] = &(smart_key_t){ .tap.keycode = KC_SLASH, },
-                                [1][9] = &(smart_key_t){ .tap.keycode = KC_7, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [2][7] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [2][8] = &(smart_key_t){ .tap.keycode = KC_MINUS, },
-                                [2][9] = &(smart_key_t){ .tap.keycode = KC_EQUAL, },
-                                [2][10] = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, },
-                                [3][8] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [3][9] = &(smart_key_t){ .tap.keycode = KC_MINUS, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [3][10] = &(smart_key_t){ .tap.keycode = KC_8, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [3][11] = &(smart_key_t){ .tap.keycode = KC_3, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                            [1] = {
+                                [7] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [8] = &(smart_key_t){ .tap.keycode = KC_SLASH, },
+                                [9] = &(smart_key_t){ .tap.keycode = KC_7, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                             },
+                            [2] = {
+                                [7] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [8] = &(smart_key_t){ .tap.keycode = KC_MINUS, },
+                                [9] = &(smart_key_t){ .tap.keycode = KC_EQUAL, },
+                                [10] = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            },
+                            [3] = {
+                                [8] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [9] = &(smart_key_t){ .tap.keycode = KC_MINUS, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [10] = &(smart_key_t){ .tap.keycode = KC_8, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [11] = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, },
+                            },
+                        },
                     },
 
                 // Closing brackets
