@@ -269,7 +269,7 @@ bool magic_apostrophe(void) {
 }
 
 bool magic_abbreviation(void) {
-    if (history_matches_string("ge")) { // e.g.
+    if (history_matches_string("g(e|E)")) { // e.g.
         SEND_STRING("\b.g.");
         drop_keys_from_history(1, 0);
         return true;
