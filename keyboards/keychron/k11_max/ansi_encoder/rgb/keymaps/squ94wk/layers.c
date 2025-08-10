@@ -157,9 +157,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                     &(smart_layer_t){
                         .map = {
                                 [1] = {
-                                    [3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SEARCH, },
-                                    [2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SEARCH_2, },
-                                    [8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_I_HOLD, },
+                                    [2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SEARCH, },
                                     [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_O_HOLD, },
                                 },
                                 [2] = {
@@ -291,20 +289,6 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                     },
 
                 [LAYER_SEARCH] =
-                    &(smart_layer_t){
-                        .map = {
-                                [1][6] = &(smart_key_t){ .tap.keycode = KC_5, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                            },
-                    },
-
-                [LAYER_I_HOLD] =
-                    &(smart_layer_t){
-                        .map = {
-                                [1][3] = &(smart_key_t){ .tap.keycode = KC_SLASH, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                            },
-                    },
-
-                [LAYER_SEARCH_2] =
                     &(smart_layer_t){
                         .map = {
                                 [1][9] = &(smart_key_t){ .tap.keycode = KC_4, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },

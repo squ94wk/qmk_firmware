@@ -532,12 +532,8 @@ char* layer_to_string(enum smart_layer layer) {
             return "LAYER_H_HOLD";
         case LAYER_SEARCH:
             return "LAYER_SEARCH";
-        case LAYER_SEARCH_2:
-            return "LAYER_SEARCH_2";
         case LAYER_O_HOLD:
             return "LAYER_O_HOLD";
-        case LAYER_I_HOLD:
-            return "LAYER_I_HOLD";
         case LAYER_SYS:
             return "LAYER_SYS";
         case LAYER_NUM:
