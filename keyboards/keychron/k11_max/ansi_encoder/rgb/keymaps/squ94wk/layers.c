@@ -75,14 +75,7 @@ void hold_lock(smart_key_t *key) {
 }
 
 void tap_num(smart_key_t *key) {
-    switch (key->state.tap_count) {
-    case 1:
-        deactivate_layer(LAYER_NUM);
-        return;
-    case 2:
-        activate_layer(LAYER_NUM);
-        return;
-    }
+    toggle_layer(LAYER_NUM);
 }
 
 void hold_num(smart_key_t *key) {
@@ -175,10 +168,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                     },
                                 [4] = {
                                         [5] = &(smart_key_t){ .tap.keycode = KC_SPC, .hold.layer = LAYER_SYS, },
-                                        [6] = &(smart_key_t){ .max_tap = 2, .tap.action = &tap_num, .hold.action = &hold_num, .hold_on_key_press = &always_on_other_press, },
-                                        [7] = &(smart_key_t){ .hold.layer  = LAYER_SYMBOLS, },
+                                        [7] = &(smart_key_t){ .max_tap = 2, .tap.action = &tap_num, .hold.action = &hold_num, .hold_on_key_press = &always_on_other_press, },
 #ifdef MOUSEKEY_ENABLE
-                                        [9] = &(smart_key_t){ .max_tap = 2, .hold.action = &hold_mouse, },
+                                        [9] = &(smart_key_t){ .tap.layer_oneshot = LAYER_SYMBOLS, .hold.layer = LAYER_SYMBOLS, },
 #endif
                                     },
                             },
@@ -337,9 +329,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_NUM] = &(smart_layer_t){
                         .map = {
                                 [1] = {
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_6, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_5, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_4, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                        [2] = &(smart_key_t){ .tap.keycode = KC_6, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_5, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                                        [4] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
 
                                         [7] = &(smart_key_t){ .tap.keycode = KC_BACKSPACE, },
                                         [8] = &(smart_key_t){ .tap.keycode = KC_MINUS, },
