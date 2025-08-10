@@ -493,18 +493,19 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                         .map = {
                                 [1] = {
                                         [2] = &(smart_key_t){ .tap.keycode = KC_P, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_N, },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_5, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                                        [4] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, },
                                     },
                                 [2] = {
+                                        [1] = &(smart_key_t){ .tap.keycode = KC_Z, },
                                         [2] = &(smart_key_t){ .tap.layer_toggle = LAYER_TMUX, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_5, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_QUOTE, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_QUOTE, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                                        [4] = &(smart_key_t){ .tap.keycode = KC_N, },
                                     },
                                 [3] = {
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_Z, },
+                                        [3] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, },
                                         [4] = &(smart_key_t){ .tap.keycode = KC_C, },
-                                        [5] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, },
+                                        [5] = &(smart_key_t){ .tap.action = &activate_tmux, },
                                     },
                             },
                     },
