@@ -246,7 +246,6 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [10] = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
                             },
                             [3] = {
-                                [8] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                                 [9] = &(smart_key_t){ .tap.keycode = KC_MINUS, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                                 [10] = &(smart_key_t){ .tap.keycode = KC_8, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                                 [11] = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, },
