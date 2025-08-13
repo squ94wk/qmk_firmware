@@ -5,19 +5,21 @@ bool fire_for_all(smart_key_t *key, keypos_t pos) {
 void tap_multi_matching_brace(smart_key_t *key) {
     uprintf("DEBUG: tap matching braces, tap count: %d\n", key->state.tap_count);
     uint16_t mask = key->tap.mask;
+    uint16_t kc = key->tap.keycode;
     switch (key->state.tap_count) {
         case 1:
             uprintf("DEBUG: send only opening bracket\n");
-            register_with_mods(key->tap.keycode, mask, NULL);
-            key->state.release.keycode = key->tap.keycode;
+            register_with_mods(&kc, mask, NULL);
+            key->state.release.keycode = kc;
             break;
         case 2:
             uprintf("DEBUG: send opening bracket\n");
-            register_with_mods(key->tap.keycode, mask, NULL);
-            unregister_code(key->tap.keycode);
+            register_with_mods(&kc, mask, NULL);
+            unregister_code(kc);
             uprintf("DEBUG: send closing bracket\n");
-            register_with_mods(key->tap.keycode + 1, mask, NULL);
-            key->state.release.keycode = key->tap.keycode + 1;
+            kc++;
+            register_with_mods(&kc, mask, NULL);
+            key->state.release.keycode = kc;
             break;
     }
 }
@@ -27,7 +29,7 @@ bool deactivate_on_other_layer(smart_layer_t *layer, int index) {
 }
 
 void activate_tmux(smart_key_t *key) {
-    register_with_mods(KC_B, MOD_BIT(KC_LEFT_CTRL), NULL);
+    register_with_mods(PTR_TO(KC_B), MOD_BIT(KC_LEFT_CTRL), NULL);
     unregister_code(KC_B);
     activate_layer(LAYER_TMUX);
     layer_activations[LAYER_TMUX] = 1;
@@ -39,48 +41,11 @@ bool always_on_other_press(smart_key_t *key, keypos_t pos) {
 
 void clear(smart_key_t *key) {
     clear_oneshot_mods();
-    caps_word_off();
+    smart_case_off();
     set_mods(0);
     for (int i=1; i<SMART_LAYER_COUNT; i++) {
         deactivate_layer(i);
     }
-}
-
-void tap_lock(smart_key_t *key) {
-    switch (key->state.tap_count) {
-        case 1:
-            if (get_oneshot_mods()) {
-                clear_oneshot_mods();
-                return;
-            }
-            set_mods(0);
-            for (int i=1; i<SMART_LAYER_COUNT; i++) {
-                deactivate_layer(i);
-            }
-            return;
-
-        case 2:
-            if (get_oneshot_mods()) {
-                set_mods(get_mods() | get_oneshot_mods());
-                clear_oneshot_mods();
-                return;
-            }
-
-            if (get_mods()) {
-                set_mods(0);
-            }
-            return;
-
-        default:
-            print_history();
-    }
-}
-
-void hold_lock(smart_key_t *key) {
-    uint8_t mask = get_oneshot_mods();
-    set_mods(get_mods() | mask);
-    clear_oneshot_mods();
-    key->state.release.mask = mask;
 }
 
 void tap_num(smart_key_t *key) {
@@ -102,11 +67,11 @@ void hold_num(smart_key_t *key) {
 
 void tap_backspace(smart_key_t *key) {
     if (get_mods() & MOD_MASK_SHIFT) {
-        register_with_mods(KC_DELETE, 0, 0);
+        register_with_mods(PTR_TO(KC_DELETE), 0, 0);
         key->state.release.keycode = KC_DELETE;
         return;
     }
-    register_with_mods(KC_BACKSPACE, 0, 0);
+    register_with_mods(PTR_TO(KC_BACKSPACE), 0, 0);
     key->state.release.keycode = KC_BACKSPACE;
 }
 
@@ -143,7 +108,7 @@ void jump_layer(smart_key_t *key) {
 void hold_mouse(smart_key_t *key) {
     switch (key->state.tap_count) {
     case 1:
-        register_with_mods(KC_RIGHT_SHIFT, 0, NULL);
+        register_with_mods(PTR_TO(KC_RIGHT_SHIFT), 0, NULL);
         key->state.release.keycode = KC_RIGHT_SHIFT;
         return;
     case 2:
@@ -156,6 +121,10 @@ void hold_mouse(smart_key_t *key) {
 
 void vim_blackhole_register(smart_key_t *key) {
     SEND_STRING("\"_");
+}
+
+void smart_case(smart_key_t *key) {
+    smart_case_on();
 }
 
 smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
@@ -214,6 +183,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [9] = &(smart_key_t){ .tap.keycode = KC_Z, },
                                 [10] = &(smart_key_t){ .tap.keycode = KC_Q, },
                                 [11] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, },
+                            },
+                            [4] = {
+                                [5] = &(smart_key_t){ .tap.action = &smart_case, },
                             },
                         },
                         .on_layer_activate = &deactivate_on_other_layer,
@@ -339,11 +311,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [3] = &(smart_key_t){ .hold.action = &jump_layer, },
                                 [4] = &(smart_key_t){ .tap.mask_oneshot = MOD_BIT_LCTRL | MOD_BIT_LALT | MOD_BIT_LGUI, },
                                 [5] = &(smart_key_t){ .tap.action = &activate_tmux, },
-
-                                [9] = &(smart_key_t){ .tap.action = &clear, },
                             },
                             [4] = {
-                                [9] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, },
+                                [9] = &(smart_key_t){ .tap.action = &clear, },
                             },
                             },
                     },
@@ -378,6 +348,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                     [9] = &(smart_key_t){ .tap.keycode = KC_0, },
                                     [10] = &(smart_key_t){ .tap.keycode = KC_8, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
                                     [11] = &(smart_key_t){ .tap.keycode = KC_SLASH, },
+                                },
+                                [4] = {
+                                    [5] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, },
                                 },
                             },
                     },
@@ -540,7 +513,8 @@ void smart_mod_n_tap(smart_key_t *key) {
         case 2:
             // FIXME: CAPS word doesn't work with smart keys yet
             uprintf("DEBUG: caps word\n");
-            caps_word_on();
+            smart_case_on();
+            smart_case_char = 'a';
             break;
     }
     return;

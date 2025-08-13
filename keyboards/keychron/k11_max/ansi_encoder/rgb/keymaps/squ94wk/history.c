@@ -148,6 +148,10 @@ const char keycode_to_char[2][2<<8] = {
     },
 };
 
+char history_top(void) {
+    return history[0];
+}
+
 void drop_key_from_history(int index) {
     if (index < KEY_HISTORY_MAX - 1) {
         memmove(&history[index], &history[index+1], sizeof(history[index]) * (KEY_HISTORY_MAX - index - 1));

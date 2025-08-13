@@ -108,8 +108,9 @@ void tap_action(smart_key_t *key) {
         set_oneshot_mods(key->tap.mask_oneshot);
         return;
     }
-    register_with_mods(key->tap.keycode, key->tap.mask, &key->state.release.mask);
-    key->state.release.keycode = key->tap.keycode;
+    uint16_t kc = key->tap.keycode;
+    register_with_mods(&kc, key->tap.mask, &key->state.release.mask);
+    key->state.release.keycode = kc;
 }
 
 void hold_action(smart_key_t *key) {
@@ -138,9 +139,10 @@ void hold_action(smart_key_t *key) {
         return;
     }
 
-    register_with_mods(key->hold.keycode, key->hold.mask, &key->state.release.mask);
+    uint16_t kc = key->hold.keycode;
+    register_with_mods(&kc, key->hold.mask, &key->state.release.mask);
     uprintf("DEBUG: remembered mask: %d\n", key->state.release.mask);
-    key->state.release.keycode = key->hold.keycode;
+    key->state.release.keycode = kc;
     if (key->hold.tap_keycode) {
         key->state.pressed_time = 0; // mark as released
     }
@@ -269,7 +271,7 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
     case DUMB: {
         switch (event_type) {
         case PRESS_SAME: {
-            register_with_mods(keycode, 0, NULL);
+            register_with_mods(&keycode, 0, NULL);
             return true;
         }
         case RELEASE_SAME:

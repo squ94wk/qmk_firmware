@@ -227,7 +227,7 @@ bool magic_umlaut(void) {
 
     SEND_STRING("\b\b");
     drop_keys_from_history(2, 0);
-    register_with_mods(keycode, mask, 0);
+    register_with_mods(&keycode, mask, 0);
     unregister_code(keycode);
 
     return true;
