@@ -170,7 +170,9 @@ void release_action(smart_key_t *key) {
         }
     }
     if (key->state.release.layer) {
-        deactivate_layer(key->state.release.layer);
+        if (layer_activations[key->state.release.layer] != -2) {
+            deactivate_layer(key->state.release.layer);
+        }
     }
 
     return;

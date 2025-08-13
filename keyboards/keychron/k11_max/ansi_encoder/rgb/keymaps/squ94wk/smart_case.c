@@ -1,3 +1,4 @@
+int layer_activations[SMART_LAYER_COUNT];
 bool is_layer_active(int layer);
 bool activate_layer(int layer);
 bool deactivate_layer(int layer);
@@ -25,6 +26,17 @@ void smart_case_off(void) {
 }
 
 bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask) {
+    if (is_layer_active(LAYER_NUM)) {
+        switch (*keycode) {
+        case KC_SPACE:
+        case KC_ENTER:
+        case KC_TAB:
+        case KC_ESC:
+            deactivate_layer(LAYER_NUM);
+            return false;
+        }
+    }
+
     if (!is_smart_case_on()) {
         return false;
     }
@@ -52,11 +64,12 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
             smart_case_char = '/';
             return true;
         case KC_1 ... KC_0: // numbers
+            smart_case_off();
             if (*mask & MOD_MASK_SHIFT) {
-                smart_case_off();
                 return false;
             }
             activate_layer(LAYER_NUM);
+            layer_activations[LAYER_NUM] = -2;
             return false;
         case KC_A ... KC_Z: // CAPS word
             smart_case_char = 'a';
@@ -76,7 +89,6 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
     case KC_ENTER:
     case KC_TAB:
     case KC_ESC:
-        deactivate_layer(LAYER_NUM);
         smart_case_off();
         return false;
 

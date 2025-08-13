@@ -350,7 +350,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                     [11] = &(smart_key_t){ .tap.keycode = KC_SLASH, },
                                 },
                                 [4] = {
-                                    [5] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, },
+                                    [6] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, },
                                 },
                             },
                     },
