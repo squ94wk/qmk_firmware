@@ -1,6 +1,7 @@
 int layer_activations[SMART_LAYER_COUNT];
 smart_layer_t *smart_layers[SMART_LAYER_COUNT];
 int active_layers[SMART_LAYER_COUNT];
+bool deactivate_layer(int);
 
 void register_with_mods(uint16_t keycode, uint16_t mask, uint16_t *release_mask);
 void add_key_to_history(uint16_t keycode, bool shifted);
@@ -24,10 +25,16 @@ void register_with_mods(uint16_t keycode, uint16_t mask, uint16_t *release_mask)
         }
         break;
     case KC_BSPC:
+    case KC_DELETE:
     case KC_1 ... KC_0:
-    case KC_KP_1 ... KC_KP_0:
     case KC_RIGHT ... KC_LEFT:
         break;
+    case KC_SPACE:
+    case KC_ENTER:
+    case KC_TAB:
+    case KC_ESC:
+        deactivate_layer(LAYER_NUM);
+        // fallthrough
     default:
         caps_word_off();
     }

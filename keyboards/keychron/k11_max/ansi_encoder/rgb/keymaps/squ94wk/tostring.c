@@ -520,20 +520,18 @@ char* layer_to_string(enum smart_layer layer) {
             return "LAYER_ALPHA_2";
         case LAYER_SYMBOLS:
             return "LAYER_SYMBOLS";
-        case LAYER_BRACKETS:
-            return "LAYER_BRACKETS";
-        case LAYER_J_HOLD:
-            return "LAYER_J_HOLD";
-        case LAYER_K_HOLD:
-            return "LAYER_K_HOLD";
+        case LAYER_SHIFT_MODES:
+            return "LAYER_SHIFT_MODES";
+        case LAYER_SYMBOLS_2:
+            return "LAYER_SYMBOLS_2";
+        case LAYER_VIM_TEXT:
+            return "LAYER_VIM_TEXT";
+        case LAYER_VIM_NAV:
+            return "LAYER_VIM_NAV";
         case LAYER_L_HOLD:
             return "LAYER_L_HOLD";
         case LAYER_H_HOLD:
             return "LAYER_H_HOLD";
-        case LAYER_SEARCH:
-            return "LAYER_SEARCH";
-        case LAYER_O_HOLD:
-            return "LAYER_O_HOLD";
         case LAYER_SYS:
             return "LAYER_SYS";
         case LAYER_NUM:

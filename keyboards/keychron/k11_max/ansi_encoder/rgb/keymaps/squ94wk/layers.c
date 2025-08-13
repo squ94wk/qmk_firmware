@@ -37,6 +37,15 @@ bool always_on_other_press(smart_key_t *key, keypos_t pos) {
     return true;
 }
 
+void clear(smart_key_t *key) {
+    clear_oneshot_mods();
+    caps_word_off();
+    set_mods(0);
+    for (int i=1; i<SMART_LAYER_COUNT; i++) {
+        deactivate_layer(i);
+    }
+}
+
 void tap_lock(smart_key_t *key) {
     switch (key->state.tap_count) {
         case 1:
@@ -145,32 +154,33 @@ void hold_mouse(smart_key_t *key) {
     return;
 }
 
+void vim_blackhole_register(smart_key_t *key) {
+    SEND_STRING("\"_");
+}
+
 smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_ALPHA_1] =
                     &(smart_layer_t){
                         .map = {
-                                [1] = {
-                                    [2] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SEARCH, },
-                                    [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_O_HOLD, },
-                                },
                                 [2] = {
                                         [2] = &(smart_key_t){ .defer_release     = true, .tap.keycode       = KC_TRANSPARENT, .hold.layer        = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, },
                                         [4] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SYMBOLS, },
-                                        [7] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_J_HOLD, },
-                                        [8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_K_HOLD, },
+
+                                        [7] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_VIM_TEXT, },
+                                        [8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_VIM_NAV, },
                                         [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_L_HOLD, },
                                         [10] = &(smart_key_t){ .defer_release = true, .tap.action = &magic_action, .hold.layer = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, },
                                     },
                                 [3] = {
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_LEFT_SHIFT, },
-                                        [5] = &(smart_key_t){ .tap.keycode = KC_D, .hold.layer  = LAYER_BRACKETS, },
+                                        [5] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SYMBOLS_2, },
                                         [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_H_HOLD, },
                                     },
                                 [4] = {
                                         [5] = &(smart_key_t){ .tap.keycode = KC_SPC, .hold.layer = LAYER_SYS, },
+//                                        [6] = &(smart_key_t){ .hold.layer = LAYER_SYMBOLS, },
                                         [7] = &(smart_key_t){ .max_tap = 2, .tap.action = &tap_num, .hold.action = &hold_num, .hold_on_key_press = &always_on_other_press, },
 #ifdef MOUSEKEY_ENABLE
-                                        [9] = &(smart_key_t){ .tap.layer_oneshot = LAYER_SYMBOLS, .hold.layer = LAYER_SYMBOLS, },
+                                        [9] = &(smart_key_t){ .tap.mask_oneshot = MOD_BIT_LSHIFT, .hold.layer = LAYER_NUM, .hold_on_key_press = &always_on_other_press, },
 #endif
                                     },
                             },
@@ -209,7 +219,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                         .on_layer_activate = &deactivate_on_other_layer,
                     },
 
-                [LAYER_BRACKETS] =
+                [LAYER_SYMBOLS_2] =
                     &(smart_layer_t){
                         .map = {
                             [1] = {
@@ -253,43 +263,54 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                         },
                     },
 
-                // Closing brackets
+//                // Closing brackets
                 [LAYER_H_HOLD] =
                     &(smart_layer_t){
                         .map = {
                                 [3][5] = &(smart_key_t){ .tap.keycode = KC_DOT, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                             },
                     },
-                [LAYER_J_HOLD] =
+
+                [LAYER_VIM_TEXT] =
                     &(smart_layer_t){
                         .map = {
-                                [3][5] = &(smart_key_t){ .tap.keycode = KC_0, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [1][2] = &(smart_key_t){ .tap.keycode = KC_P, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                [1][3] = &(smart_key_t){ .tap.keycode = KC_P, },
+                                [1][4] = &(smart_key_t){ .tap.keycode = KC_X, },
+
+                                [2][1] = &(smart_key_t){ .tap.action = &vim_blackhole_register, },
+                                [2][2] = &(smart_key_t){ .tap.keycode = KC_J, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                [2][3] = &(smart_key_t){ .tap.keycode = KC_V, },
+                                [2][4] = &(smart_key_t){ .tap.keycode = KC_Y, },
+
+                                [3][3] = &(smart_key_t){ .tap.keycode = KC_V, .tap.mask = MOD_BIT(KC_LEFT_CTRL), },
+                                [3][4] = &(smart_key_t){ .tap.keycode = KC_V, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                [3][5] = &(smart_key_t){ .tap.keycode = KC_0, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
                             },
                     },
-                [LAYER_K_HOLD] =
+
+                [LAYER_VIM_NAV] =
                     &(smart_layer_t){
                         .map = {
-                                [3][5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                [1][2] = &(smart_key_t){ .tap.keycode = KC_B, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                [1][3] = &(smart_key_t){ .tap.keycode = KC_E, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                [1][4] = &(smart_key_t){ .tap.keycode = KC_W, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+
+                                [2][1] = &(smart_key_t){ .tap.keycode = KC_8, },
+                                [2][2] = &(smart_key_t){ .tap.keycode = KC_6, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                [2][3] = &(smart_key_t){ .tap.keycode = KC_U, .tap.mask = MOD_BIT(KC_LEFT_CTRL), },
+                                [2][4] = &(smart_key_t){ .tap.keycode = KC_4, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+
+                                [3][3] = &(smart_key_t){ .tap.keycode = KC_Z, },
+                                [3][4] = &(smart_key_t){ .tap.keycode = KC_D, .tap.mask = MOD_BIT(KC_LEFT_CTRL), },
+                                [3][5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
                             },
                     },
+
                 [LAYER_L_HOLD] =
                     &(smart_layer_t){
                         .map = {
                                 [3][5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, },
-                            },
-                    },
-
-                [LAYER_SEARCH] =
-                    &(smart_layer_t){
-                        .map = {
-                                [1][9] = &(smart_key_t){ .tap.keycode = KC_4, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                            },
-                    },
-
-                [LAYER_O_HOLD] =
-                    &(smart_layer_t){
-                        .map = {
-                                [1][2] = &(smart_key_t){ .tap.keycode = KC_6, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
                             },
                     },
 
@@ -318,6 +339,8 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [3] = &(smart_key_t){ .hold.action = &jump_layer, },
                                 [4] = &(smart_key_t){ .tap.mask_oneshot = MOD_BIT_LCTRL | MOD_BIT_LALT | MOD_BIT_LGUI, },
                                 [5] = &(smart_key_t){ .tap.action = &activate_tmux, },
+
+                                [9] = &(smart_key_t){ .tap.action = &clear, },
                             },
                             [4] = {
                                 [9] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, },
