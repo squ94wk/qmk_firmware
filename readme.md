@@ -2,7 +2,7 @@
 
 This is keyboard firmware based on the [keychron qmk fork](https://github.com/keychron/qmk_firmware).
 
-It adds an entire separate event processing layer on top of basic QMK features.
+It adds an entirely separate event processing layer on top of basic QMK features.
 
 ## Intention
 
@@ -45,12 +45,34 @@ The layout has some fundamental concepts that I came up with very early (even be
 - Use home row combos as modifier keys
 
 Later, after reading a lot on different layouts, I made the radical decision to switch my alpha layout, too.
-I chose something close to Colemak except for mapping it on only 20 keys and a second alpha layer.
+I started with something close to Colemak-DH except for mapping it on only 20 keys and a second alpha layer.
 This alleviates any lateral finger movement, and the pinky never moves at all.
+
+Edit: I later refined the layout more and more and dropped some (pinky) but kept other constraints (no lateral).
 
 ## Layout
 
-It took a lot of trial and error to settle on my current layout:
+It took a lot of trial and error to settle on my current layout.
+
+I tested this layout against many other popular modern layouts synthetically (using my own [analyzer](https://github.com/squ94wk/keyboard-analyzer/tree/main) I vibe coded from scratch).
+I took the second alpha layer and thumb keys into account.
+
+While the extra layer switch obviously means more keys to press (5%), this layout achieves excellent stats and boasts high quality & comfortable typing (adjusted to the extra presses):
+
+- No (that is 0%) lateral movement
+- Very low SFBs (0.68%) with strong fingers
+- Very good redirects (2.7%)
+- Minimal scissors
+- Evenly balanced (52%/48%)
+- Prefers strong fingers (thumb -> pinky 22.6%, 26.8%, 26.5%, 13.7%, 10.4%)
+- Mid rolls (this I'm not sure, I calculated right).
+
+I tried two letters on thumbs for a while, and it's true, it sucks.
+I also tried using more keys, but lateral movement feels so much less zen, I take rolling sequences any day over that.
+I even removed letters from the vowel cluster side, because consonants, even rare ones, drive up SFBs drastically.
+
+So I have a few keys left over now that I am still unsure what to put on there.
+Maybe punctuation, but I like that on my second layer.
 
 #### Mod keys
 
@@ -78,48 +100,55 @@ And I go a step further:
 
     E.g. `SHIFT CTRL+(any thing here)` means SHIFT is held until CTRL is released even after shift itself is released.
 
-- Double tap shift enters CAPS word mode
 - Mod keys are OS "aware". I cannot use the integration to detect it and instead have a switch for it (`SPC+R_SPC`).
+
+I later added other keys as additional shift keys when held for more comfortable typing.
 
 #### Alpha
 
-My alpha layer is roughly copied from Colemak, although I disregard the motivation to limit key displacements when coming from QWERTY.
-I had to find additional candidates to remove from my primary alpha layer, and some other layouts would have made that difficult.
+~~My alpha layer is roughly copied from Colemak~~
+~~I had to find additional candidates to remove from my primary alpha layer, and some other layouts would have made that difficult.~~
 
-I wanted my alpha layer switch key to be on my left ring finger.
+My layout no longer closely resembles any well-known layout.
+The most outstanding feature even for sub-26 key layouts is that I map two home row keys as my alpha layer change keys.
+I just find that way more comfortable than a thumb key.
+But this bends a lot of the rules for layouts.
+
 When you add up the frequencies of the letters I must omit in my primary layer, it's roughly in line with that of letters that would deserve a spot on the ring finger home row.
 Also, it should roll well.
 
 ```
       ╭─────┬─────┬─────╮                   ╭─────┬─────┬─────╮ 
-      │  B  │  F  │  W  │                   │  L  │  I  │  G  │ 
+      │  B  │  L  │  W  │                   │  F  │  O  │  U  │ 
 ╭─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╮
-│  A  │ ESC │  S  │  T  │                   │  N  │  E  │  O  │MAGIC│
-╰─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
-      │  R  │  C  │  D  │                   │  H  │  U  │  M  │
-      ╰─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
-                │  SPACE  │ NUM │   │     │  SHIFT  │
+│  C  │ ESC │  S  │  T  │                   │  N  │  E  │MAGIC│  I  │
+│─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
+│  M  │  R  │  G  │  D  │                   │  H  │     │  /  │
+╰─────┴─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
+                │  SPACE  │ NUM │   │     │    A    │
                 ╰─────────┴─────╯   ╰─────┴─────────╯
 ```
 
 The second alpha layer may alternatively be activated with the right pinky.
 This additional option proves valuable when typing certain words.
-E.g., in the otherwise one-finger bigram "ck", the `k` can instead be an inward roll with the right hand.
+E.g., in the otherwise one-finger bigram "ry", the `y` can instead be an inward roll with the right hand.
 
 #### Alpha 2 (`ESC` or `MAGIC`)
 
 
 ```
       ╭─────┬─────┬─────╮                   ╭─────┬─────┬─────╮ 
-      │  @  │  !  │  ?  │                   │  ~  │  P  │  :  │ 
+      │  @  │  X  │  ?  │                   │  P  │  ~  │  Q  │ 
 ╭─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╮
-│     │ALPH2│  ,  │  .  │                   │  Y  │  K  │  J  │MAGC2│
-╰─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
-      │     │  X  │  V  │                   │  Z  │  Q  │  ;  │
-      ╰─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
-                │         │     │   │     │         │
+│     │ALPH2│  ,  │  .  │                   │  Y  │  K  │MAGC2│  J  │
+│─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
+│     │     │     │  V  │                   │  Z  │  :  │  ;  │
+╰─────┴─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
+                │  SMART  │     │   │     │         │
                 ╰─────────┴─────╯   ╰─────┴─────────╯
 ```
+
+- The SMART key enters [smart word mode](#smart-word).
 
 #### Symbols 1 (`T`)
 
@@ -128,9 +157,9 @@ E.g., in the otherwise one-finger bigram "ck", the `k` can instead be an inward 
       │     │     │     │                   │  !  │  /  │  &  │ 
 ╭─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╮
 │     │     │     │  T  │                   │  :  │  -  │  =  │  |  │
-╰─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
-      │     │     │     │                   │  _  │  *  │  \  │
-      ╰─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
+│─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
+│     │     │     │     │                   │  _  │  *  │  \  │
+╰─────┴─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
                 │         │     │   │     │         │
                 ╰─────────┴─────╯   ╰─────┴─────────╯
 ```
@@ -144,10 +173,10 @@ Sequences like `:=`, `!=` are comfortable rolls.
       ╭─────┬─────┬─────╮                   ╭─────┬─────┬─────╮ 
       │     │     │     │                   │  "  │  '  │  `  │ 
 ╭─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╮
-│     │     │     │     │                   │  (  │  {  │  [  │  #  │
-╰─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
-      │     │     │  D  │                   │  <  │  !  │  $  │
-      ╰─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
+│     │     │     │     │                   │  (  │  {  │  !  │  #  │
+│─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
+│     │     │     │  D  │                   │  <  │  [  │  $  │
+╰─────┴─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
                 │         │     │   │     │         │
                 ╰─────────┴─────╯   ╰─────┴─────────╯
 ```
@@ -162,12 +191,12 @@ Other ones like `{{`, `[[` or `<<` would be counter-productive because they appe
 
 ```
       ╭─────┬─────┬─────╮                   ╭─────┬─────┬─────╮ 
-      │  ^  │  %  │  $  │                   │  +  │  -  │  ⌫  │
+      │  ^  │  %  │  :  │                   │  ⌫  │  -  │  +  │
 ╭─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╮
 │  8  │  7  │  6  │  5  │                   │  1  │  2  │  3  │  4  │
-╰─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
-      │  ,  │  .  │  9  │                   │  0  │  *  │  /  │
-      ╰─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
+│─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
+│     │  ,  │  .  │  9  │                   │  0  │  *  │  /  │
+╰─────┴─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
                 │         │ NUM │   │     │         │
                 ╰─────────┴─────╯   ╰─────┴─────────╯
 ```
@@ -182,20 +211,19 @@ I rarely use them, so I don't mind the indirection.
 
 ```
       ╭─────┬─────┬─────╮                   ╭─────┬─────┬─────╮ 
-      │⇧TAB │     │  `  │                   │     │  ↑  │  ⌫  │ 
+      │⇧TAB │     │  `  │                   │  ⌫  │  ↑  │  ⌦  │ 
 ╭─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╮
 │     │ ESC │ ENT │ TAB │                   │  ←  │  ↓  │  →  │     │
-╰─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
-      │SYS 2│W-MNG│ TMX │                   │     │     │     │
-      ╰─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
-                │  SPACE  │     │   │     │switch OS│
+│─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
+│     │SYS 2│W-MNG│ TMX │                   │     │     │     │
+╰─────┴─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
+                │  SPACE  │     │   │     │         │
                 ╰─────────┴─────╯   ╰─────┴─────────╯
 ```
 
 - The `SYS 2` layer switch enables word/page wise navigation and backspace.
 - The `W-MNG` key is like the "MEH" key except it omits shift, which can be added to support additional combos. I use this key as my window manager.
 - The `TMX` key is programmed to `CTRL+B`, which is my tmux leader key. It activates yet another (oneshot) layer with key codes used for various tmux bindings.
-- The `switch OS` key may be tapped _n_ times to change to different OSes (1x for Linux, 2x for Mac, 3x for special "gaming" layer).
 
 #### Additional layers
 
@@ -203,6 +231,12 @@ There's additional not mentioned here for:
 
 - function keys
 - tmux layer
+- vim layers
+
+    I have one layer for vim navigation (shift versions of movements, line start/end, up/down screen)
+    and another for text operations (select normal/line/block, yank, delete, blackhole register).
+    They were really quick to get used to and because they don't require changing vim config, they work everywhere (remote editors, shell, tools, ...).
+
 - gaming layer
 
     The left side of the keyboard cannot really be used in games (even with remapping bindings), since a lot of the keys are tap-hold keys and don't produce output when held.
@@ -219,7 +253,7 @@ The original QMK firmware quickly fell short when I was trying to create the lay
 The main issues were:
 
 - Missing tap-hold functionality for layering
-- Limited layer count
+- Limited layer count (and fixed layer "ranks")
 - Awkward separation of "smart" keycodes and custom handling in `process_record_user`
 - Lacking control for tap-hold keys in roll scenarios
 
@@ -276,3 +310,14 @@ and the other may look back until it finds "something":
     Matching one removes it from the history stack.
     Thus, subsequent magic presses can close entire sequences typed previously, like `"[[ "$(` with `)"]]"`.
     In an IDE scenario with auto-closing brackets, this also makes for smooth typing over closing brackets without thinking about what bracket it is.
+
+## Smart word
+
+This mode is like caps word on steroids.
+The idea isn't new by any means.
+When entering the mode, the behavior depends on the next key pressed:
+
+- Alpha key: CAPS_WORD
+- Space: pascalCase
+- Delimiter (`/`, `-`, `_`): path/mode, kebap-case, snake_case
+- Number: keep number layer active (great for IPs etc.)
