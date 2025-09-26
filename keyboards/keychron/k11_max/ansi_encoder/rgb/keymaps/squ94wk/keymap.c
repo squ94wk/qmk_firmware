@@ -7,6 +7,7 @@
 #include "tostring.c"
 
 #include "combos.c"
+#include "history.c"
 #include "smart_case.c"
 #include "smart.c"
 #include "magic.c"

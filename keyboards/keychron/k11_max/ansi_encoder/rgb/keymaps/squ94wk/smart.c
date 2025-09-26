@@ -105,7 +105,7 @@ void tap_action(smart_key_t *key) {
         return;
     }
     if (key->tap.mask_oneshot) {
-        set_oneshot_mods(key->tap.mask_oneshot);
+        set_oneshot_mods(get_oneshot_mods() | key->tap.mask_oneshot);
         return;
     }
     uint16_t kc = key->tap.keycode;

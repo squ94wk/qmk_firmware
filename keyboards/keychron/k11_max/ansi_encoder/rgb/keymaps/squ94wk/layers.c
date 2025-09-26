@@ -49,7 +49,7 @@ void clear(smart_key_t *key) {
 }
 
 void tap_num(smart_key_t *key) {
-    toggle_layer(LAYER_NUM);
+    set_oneshot_mods(get_oneshot_mods() | MOD_BIT_LSHIFT);
 }
 
 void hold_num(smart_key_t *key) {
@@ -105,6 +105,7 @@ void jump_layer(smart_key_t *key) {
     return;
 }
 
+#ifdef MOUSEKEY_ENABLE
 void hold_mouse(smart_key_t *key) {
     switch (key->state.tap_count) {
     case 1:
@@ -118,6 +119,7 @@ void hold_mouse(smart_key_t *key) {
     }
     return;
 }
+#endif
 
 void vim_blackhole_register(smart_key_t *key) {
     SEND_STRING("\"_");

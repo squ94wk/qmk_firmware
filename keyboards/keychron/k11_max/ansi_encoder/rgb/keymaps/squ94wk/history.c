@@ -1,5 +1,6 @@
 #define KEY_HISTORY_MAX 32
 char history[KEY_HISTORY_MAX] = {};
+uint32_t latest_history_time;
 
 const char keycode_to_char[2][2<<8] = {
     [0] = { // Unshifted characters
@@ -168,6 +169,7 @@ void drop_keys_from_history(int i, int index_start) {
 void add_char_to_history(char c) {
     memmove(&history[1], &history[0], sizeof(history[0]) * (KEY_HISTORY_MAX - 1));
     history[0] = c;
+    latest_history_time = timer_read32();
 }
 
 void add_key_to_history(uint16_t keycode, bool shifted) {
@@ -180,4 +182,102 @@ void add_key_to_history(uint16_t keycode, bool shifted) {
     if (c) {
         add_char_to_history(c);
     }
+}
+
+bool match_pattern(char **pat, char **sub) {
+    char *start = *sub;
+    // uprintf("DEBUG: match pattern %s on %s\n", *pat, *sub);
+positive:
+    if (!**pat || **pat == ')') {
+        // uprintf("DEBUG: reached end of pattern, match\n");
+        return true;
+    }
+
+    if (**pat == '(') {
+        // uprintf("DEBUG: continue matching %s with subgroup %s\n", *sub, *pat);
+        (*pat)++;
+        if (!match_pattern(pat, sub)) {
+            (*pat)++;
+            goto negative;
+        }
+        (*pat)++;
+        goto positive;
+    }
+
+    if (**pat == '|') { // we're good so far, but the rest must match too
+        // uprintf("DEBUG: skip other alternatives\n");
+        for (int depth = 0; true; ) {
+            (*pat)++;
+            if (!**pat) {
+                return true;
+            }
+            if (**pat == '(') {
+                depth++;
+                continue;
+            }
+            if (**pat == ')') {
+                if (depth == 0) {
+                    return true;
+                }
+
+                depth--;
+                continue;
+            }
+        }
+        goto positive;
+    }
+
+    if (!**sub) {
+        // uprintf("DEBUG: subject exceeded unterminated pattern, rest: %s\n", *pat);
+        return false;
+    }
+
+    if (**pat == **sub) {
+        // uprintf("DEBUG: match %c on %c\n", **pat, **sub);
+        (*pat)++;
+        (*sub)++;
+        goto positive;
+    }
+
+    // uprintf("DEBUG: mismatch %c on %c\n", **pat, **sub);
+    (*pat)++;
+    goto negative;
+
+negative:
+    for (int depth = 0; true; (*pat)++) {
+        if (!**pat) {
+            // uprintf("DEBUG: reached end of pattern after negative match\n");
+            return false;
+        }
+
+        if (**pat == ')' && depth == 0) {
+            // uprintf("DEBUG: reached end of group after negative match\n");
+            return false;
+        }
+
+        if (**pat == '(') {
+            depth++;
+            continue;
+        }
+
+        if (depth > 0) {
+            if (**pat == ')') {
+                depth--;
+            }
+            continue; // skip anything in a group
+        }
+
+        if (**pat == '|') {
+            (*pat)++;
+            *sub = start;
+            // uprintf("DEBUG: try next alternative %s on %s\n", *pat, *sub);
+            goto positive;
+        }
+    }
+}
+
+bool history_matches_string(char *pat) {
+    char *p = pat;
+    char *h = history;
+    return match_pattern(&p, &h);
 }

@@ -2,6 +2,8 @@ int layer_activations[SMART_LAYER_COUNT];
 smart_layer_t *smart_layers[SMART_LAYER_COUNT];
 int active_layers[SMART_LAYER_COUNT];
 bool deactivate_layer(int);
+// forward declare
+uint32_t latest_history_time;
 
 void add_key_to_history(uint16_t keycode, bool shifted);
 
@@ -17,6 +19,12 @@ void register_with_mods(uint16_t *keycode, uint16_t mask, uint16_t *release_mask
         mask |= get_oneshot_mods();
         uprintf("DEBUG: apply oneshot mask: %d\n", get_oneshot_mods());
         clear_oneshot_mods();
+    }
+
+    uint32_t time = timer_read32();
+    uprintf("DEBUG: prev: [%ld] now: [%ld]\n", latest_history_time, time);
+    if (!mask && keycode && *keycode >= KC_A && *keycode <= KC_Z && time < latest_history_time+1000 && history_matches_string(" (.|!|?)(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z)")) {
+        mask |= MOD_MASK_SHIFT;
     }
 
     uprintf("DEBUG: register %s with mask %d\n", keycode_to_string(*keycode), mask);

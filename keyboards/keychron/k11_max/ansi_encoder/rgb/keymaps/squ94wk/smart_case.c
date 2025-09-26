@@ -99,6 +99,35 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
             return false;
         }
         return false;
+    case KC_9:
+    case KC_0:
+        if (!((int) mask & MOD_MASK_SHIFT)) {
+            break;
+        }
+        // fallthrough
+    case KC_LEFT_BRACKET:
+    case KC_RIGHT_BRACKET:
+        switch (smart_case_char) {
+        case 'a':
+            if (history_top() == '_') {
+                SEND_STRING("\b ");
+                drop_key_from_history(0);
+            }
+
+            smart_case_off();
+            return false;
+        default:
+            break;
+        }
+    case KC_MINUS:
+        if (!((int) mask & MOD_MASK_SHIFT)) {
+            break;
+        }
+        switch (smart_case_char) {
+        case 'a':
+            return false; // don't interrupt
+        }
+        break;
     case KC_SPACE:
         switch (smart_case_char) {
         case ' ':
@@ -129,7 +158,7 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
             return false;
         case 'a':
             if (history_top() == '_') {
-                SEND_STRING("\b");
+                SEND_STRING("\b ");
                 drop_key_from_history(0);
                 smart_case_off();
                 return true;
@@ -139,7 +168,7 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
             return false;
         case '_':
             if (history_top() == '_') {
-                SEND_STRING("\b");
+                SEND_STRING("\b ");
                 drop_key_from_history(0);
                 smart_case_off();
                 return true;
@@ -150,7 +179,7 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
         }
         // fallthrough
     default:
-        smart_case_off();
-        return false;
     }
+    smart_case_off();
+    return false;
 }
