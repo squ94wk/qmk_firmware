@@ -1,3 +1,13 @@
+#pragma once
+
+#include "quantum.h"
+#include "print.h"
+
+// Forward declarations for features
+#include "smart_case.h"
+#include "history.h"
+#include "magickey.h"
+
 enum layers {
     WIN_BASE,
     LAYER_COUNT,
@@ -38,7 +48,7 @@ enum continuation_type {
     HOLD,
     PRESS_THIRD,
     RELEASE_THIRD,
-    IDLE, // defer release
+    IDLE,
 };
 
 enum smart_layer {
@@ -62,7 +72,6 @@ enum smart_layer {
 #endif
     LAYER_JUMP_MAC,
     LAYER_JUMP_WIN,
-    // end
     SMART_LAYER_COUNT,
 };
 
@@ -73,11 +82,9 @@ enum smart_keys {
     SMART_KEY_SMART_GUI,
     SMART_KEY_SMART_CTRL_SHIFT,
     SMART_KEY_LOCK_KEY,
-    // end
     SMART_KEY_COUNT,
 };
 
-// allows self referencing
 typedef struct smart_key_t smart_key_t;
 
 struct smart_key_t {
@@ -122,7 +129,6 @@ struct smart_key_t {
     bool (*hold_on_key_press)(smart_key_t *key, keypos_t pos);
 };
 
-// allows self referencing
 typedef struct smart_layer_t smart_layer_t;
 
 struct smart_layer_t {
@@ -135,3 +141,51 @@ typedef struct pending_key_t pending_key_t;
 struct pending_key_t {
     smart_key_t *key;
 };
+
+// Global state
+extern int layer_activations[SMART_LAYER_COUNT];
+extern smart_layer_t *smart_layers[SMART_LAYER_COUNT];
+extern smart_key_t smart_keys[2][SMART_KEY_COUNT];
+extern int active_layers[SMART_LAYER_COUNT];
+extern uint32_t last_input;
+
+// Forward declaration for QMK keymap array
+extern const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS];
+
+#define PENDING_QUEUE_MAX 8
+extern pending_key_t pending_keys[PENDING_QUEUE_MAX];
+
+// Core engine functions
+bool process_smart_key(uint16_t keycode, keyrecord_t *record);
+smart_key_t *lookup_key(uint16_t keycode, keypos_t key);
+
+// Layer management
+bool is_layer_active(int layer);
+bool activate_layer(int layer);
+bool deactivate_layer(int layer);
+void toggle_layer(int layer);
+
+// Key actions
+void press_key(smart_key_t *key, keyevent_t event);
+void release_key(smart_key_t *key);
+void tap_action(smart_key_t *key);
+void hold_action(smart_key_t *key);
+void release_action(smart_key_t *key);
+
+// Pending key queue
+bool add_pending_key(smart_key_t *key);
+bool remove_pending_key(smart_key_t *key);
+
+// Utility functions
+bool is_same_pos(keypos_t a, keypos_t b);
+void register_with_mods(uint16_t *keycode, uint16_t mask, uint16_t *release_mask);
+
+// Debug helpers
+const char* keycode_to_string(uint16_t keycode);
+const char* layer_to_string(int layer);
+const char* key_type_to_string(enum smart_key_type type);
+const char* event_to_string(enum event_type type);
+const char* continuation_to_string(enum continuation_type type);
+
+#define PTR_TO(x) (&(uint16_t){ (x) })
+

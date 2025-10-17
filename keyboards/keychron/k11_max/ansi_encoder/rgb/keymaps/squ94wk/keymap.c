@@ -1,19 +1,9 @@
 #include QMK_KEYBOARD_H
 #include "keychron_common.h"
-
-#include "helper.c"
-#include "types.c"
-#include "extern.c"
-#include "tostring.c"
+#include "squ94wk.h"
 
 #include "combos.c"
-#include "history.c"
-#include "smart_case.c"
-#include "smart.c"
-#include "magic.c"
 #include "layers.c"
-
-#include "print.h"
 
 #ifdef CONSOLE_ENABLE
 void keyboard_post_init_user(void) {

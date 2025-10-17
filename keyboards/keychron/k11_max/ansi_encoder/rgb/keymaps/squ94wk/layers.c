@@ -156,7 +156,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
 
                                         /* N */ [7] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_VIM_TEXT, },
                                         /* E */ [8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_VIM_NAV, },
-                                        /* MAGIC */ [9] = &(smart_key_t){ .defer_release = true, .tap.action = &magic_action, .hold.layer = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, },
+                                        /* MAGIC */ [9] = &(smart_key_t){ .defer_release = true, .tap.action = &magickey_action, .hold.layer = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, },
                                         /* I */
                                     },
                                 [3] = {
@@ -197,7 +197,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [7] = &(smart_key_t){ .tap.keycode = KC_Y, },
                                 [8] = &(smart_key_t){ .tap.keycode = KC_K, },
                                 [10] = &(smart_key_t){ .tap.keycode = KC_J, },
-                                [9] = &(smart_key_t){ .tap.action = &magic_action2, },
+                                [9] = &(smart_key_t){ .tap.action = &magickey_action2, },
                             },
                             [3] = {
                                 [5] = &(smart_key_t){ .tap.keycode = KC_V, },
@@ -613,9 +613,6 @@ smart_key_t *lookup_key(uint16_t keycode, keypos_t pos) {
     }
     return smart_layers[LAYER_ALPHA_1]->map[pos.row][pos.col];
 }
-
-int  active_layers[SMART_LAYER_COUNT]  = {};
-bool oneshot_layers[SMART_LAYER_COUNT] = {};
 
 bool oneshot_on_key_press_default(smart_layer_t *l, uint16_t keycode, uint16_t mask) {
     switch (keycode) {

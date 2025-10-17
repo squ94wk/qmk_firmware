@@ -1,9 +1,6 @@
-int layer_activations[SMART_LAYER_COUNT];
-bool is_layer_active(int layer);
-bool activate_layer(int layer);
-bool deactivate_layer(int layer);
-char history_top(void);
-void drop_key_from_history(int index);
+#include "smart_case.h"
+#include "squ94wk.h"
+#include "history.h"
 
 bool smart_case_enabled;
 char smart_case_char;
@@ -41,14 +38,12 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
         return false;
     }
 
-    // other mods
     if (*mask & ~MOD_MASK_SHIFT) {
         smart_case_off();
         return false;
     }
 
     if (!smart_case_char) {
-        // set smart case char
         switch (*keycode) {
         case KC_SPACE:
             smart_case_char = ' ';
@@ -60,10 +55,10 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
                 smart_case_char = '-';
             }
             return true;
-        case KC_SLASH: // /
+        case KC_SLASH:
             smart_case_char = '/';
             return true;
-        case KC_1 ... KC_0: // numbers
+        case KC_1 ... KC_0:
             smart_case_off();
             if (*mask & MOD_MASK_SHIFT) {
                 return false;
@@ -71,7 +66,7 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
             activate_layer(LAYER_NUM);
             layer_activations[LAYER_NUM] = -2;
             return false;
-        case KC_A ... KC_Z: // CAPS word
+        case KC_A ... KC_Z:
             smart_case_char = 'a';
             break;
         default:
@@ -92,7 +87,7 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
         smart_case_off();
         return false;
 
-    case KC_A ... KC_Z: // CAPS word
+    case KC_A ... KC_Z:
         deactivate_layer(LAYER_NUM);
         if (smart_case_char == 'a') {
             *mask |= MOD_BIT(KC_LEFT_SHIFT);
@@ -125,7 +120,7 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
         }
         switch (smart_case_char) {
         case 'a':
-            return false; // don't interrupt
+            return false;
         }
         break;
     case KC_SPACE:
@@ -183,3 +178,4 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
     smart_case_off();
     return false;
 }
+
