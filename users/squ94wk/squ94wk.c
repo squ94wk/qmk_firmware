@@ -124,9 +124,7 @@ void register_with_mods(uint16_t *keycode, uint16_t mask, uint16_t *release_mask
     if (IS_MODIFIER_KEYCODE(*keycode)) {
         *release_mask = mask & ~current_mods;
     } else {
-        if (!(get_mods() & ~MOD_MASK_SHIFT)) {
-            add_key_to_history(*keycode, (get_mods() & MOD_MASK_SHIFT));
-        }
+        add_key_to_history(*keycode, get_mods());
         set_mods(current_mods);
     }
 

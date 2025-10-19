@@ -1,6 +1,6 @@
 #include "history.h"
 
-char history[KEY_HISTORY_MAX] = {};
+history_entry_t history[KEY_HISTORY_MAX] = {};
 uint32_t latest_history_time;
 
 const char keycode_to_char[2][2<<8] = {
@@ -150,7 +150,7 @@ const char keycode_to_char[2][2<<8] = {
     },
 };
 
-char history_top(void) {
+history_entry_t history_top(void) {
     return history[0];
 }
 
@@ -158,7 +158,7 @@ void drop_key_from_history(int index) {
     if (index < KEY_HISTORY_MAX - 1) {
         memmove(&history[index], &history[index+1], sizeof(history[index]) * (KEY_HISTORY_MAX - index - 1));
     }
-    history[KEY_HISTORY_MAX - 1] = '\0';
+    history[KEY_HISTORY_MAX - 1] = (history_entry_t){0};
 }
 
 void drop_keys_from_history(int i, int index_start) {
@@ -167,21 +167,23 @@ void drop_keys_from_history(int i, int index_start) {
     }
 }
 
-void add_char_to_history(char c) {
+void add_entry_to_history(char c, uint8_t mods) {
+    uint32_t time = timer_read32();
     memmove(&history[1], &history[0], sizeof(history[0]) * (KEY_HISTORY_MAX - 1));
-    history[0] = c;
-    latest_history_time = timer_read32();
+    history[0] = (history_entry_t){.c = c, .mods = mods, .time = time};
+    latest_history_time = time;
 }
 
-void add_key_to_history(uint16_t keycode, bool shifted) {
+void add_key_to_history(uint16_t keycode, uint8_t mods) {
     if (keycode == KC_BSPC) {
         drop_key_from_history(0);
         return;
     }
 
+    bool shifted = mods & MOD_MASK_SHIFT;
     char c = keycode_to_char[shifted ? 1 : 0][keycode];
     if (c) {
-        add_char_to_history(c);
+        add_entry_to_history(c, mods);
     }
 }
 
@@ -268,8 +270,33 @@ negative:
 }
 
 bool history_matches_string(char *pat) {
+    char text[KEY_HISTORY_MAX + 1];
+    int text_len = 0;
+    
+    for (int i = 0; i < KEY_HISTORY_MAX && history[i].c; i++) {
+        if (history[i].mods & ~MOD_MASK_SHIFT) {
+            continue;
+        }
+        text[text_len++] = history[i].c;
+    }
+    text[text_len] = '\0';
+    
     char *p = pat;
-    char *h = history;
+    char *h = text;
     return match_pattern(&p, &h);
+}
+
+uint16_t char_to_keycode(char c, bool *shifted) {
+    for (uint16_t kc = KC_A; kc <= KC_KP_EQUAL; kc++) {
+        if (keycode_to_char[0][kc] == c) {
+            *shifted = false;
+            return kc;
+        }
+        if (keycode_to_char[1][kc] == c) {
+            *shifted = true;
+            return kc;
+        }
+    }
+    return KC_NO;
 }
 

@@ -104,7 +104,7 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
     case KC_RIGHT_BRACKET:
         switch (smart_case_char) {
         case 'a':
-            if (history_top() == '_') {
+            if (history_top().c == '_') {
                 SEND_STRING("\b ");
                 drop_key_from_history(0);
             }
@@ -134,7 +134,7 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
             set_oneshot_mods(get_oneshot_mods() | MOD_BIT(KC_LEFT_SHIFT));
             return true;
         case '/':
-            if (history_top() == '/') {
+            if (history_top().c == '/') {
                 SEND_STRING("\b");
                 drop_key_from_history(0);
                 smart_case_off();
@@ -143,7 +143,7 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
             *keycode = KC_SLASH;
             return false;
         case '-':
-            if (history_top() == '-') {
+            if (history_top().c == '-') {
                 SEND_STRING("\b");
                 drop_key_from_history(0);
                 smart_case_off();
@@ -152,7 +152,7 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
             *keycode = KC_MINUS;
             return false;
         case 'a':
-            if (history_top() == '_') {
+            if (history_top().c == '_') {
                 SEND_STRING("\b ");
                 drop_key_from_history(0);
                 smart_case_off();
@@ -162,7 +162,7 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
             *mask |= MOD_BIT(KC_LEFT_SHIFT);
             return false;
         case '_':
-            if (history_top() == '_') {
+            if (history_top().c == '_') {
                 SEND_STRING("\b ");
                 drop_key_from_history(0);
                 smart_case_off();

@@ -7,8 +7,8 @@ void magickey_action(smart_key_t *key) {
     int brackets = 0;
     int braces = 0;
     int angle = 0;
-    for (int i=0; i < strlen(history); i++) {
-        switch (history[i]) {
+    for (int i=0; i < KEY_HISTORY_MAX && history[i].c; i++) {
+        switch (history[i].c) {
         case '"':
             SEND_STRING("\"");
             drop_key_from_history(i);
@@ -17,10 +17,8 @@ void magickey_action(smart_key_t *key) {
             SEND_STRING("'");
             drop_key_from_history(i);
             return;
-        case '`': {
-            char *p = "```";
-            char *h = &history[i];
-            if (match_pattern(&p, &h)) {
+        case '`':
+            if (i >= 2 && history[i-1].c == '`' && history[i-2].c == '`') {
                 SEND_STRING("```");
                 drop_keys_from_history(3, i);
                 return;
@@ -28,14 +26,13 @@ void magickey_action(smart_key_t *key) {
             SEND_STRING("`");
             drop_key_from_history(i);
             return;
-        }
         case ')':
             parens++;
             break;
         case '(':
             if (parens == 0) {
                 SEND_STRING(")");
-                add_char_to_history(')');
+                add_entry_to_history(')', 0);
                 return;
             }
             parens--;
@@ -46,7 +43,7 @@ void magickey_action(smart_key_t *key) {
         case '[':
             if (brackets == 0) {
                 SEND_STRING("]");
-                add_char_to_history(']');
+                add_entry_to_history(']', 0);
                 return;
             }
             brackets--;
@@ -57,7 +54,7 @@ void magickey_action(smart_key_t *key) {
         case '{':
             if (braces == 0) {
                 SEND_STRING("}");
-                add_char_to_history('}');
+                add_entry_to_history('}', 0);
                 return;
             }
             braces--;
@@ -68,7 +65,7 @@ void magickey_action(smart_key_t *key) {
         case '<':
             if (angle == 0) {
                 SEND_STRING(">");
-                add_char_to_history('>');
+                add_entry_to_history('>', 0);
                 return;
             }
             angle--;
@@ -184,7 +181,7 @@ bool magickey_abbreviation(void) {
         return true;
     } else if (history_matches_string("rre fi")) {
         SEND_STRING(" != nil {");
-        add_char_to_history('{');
+        add_entry_to_history('{', 0);
         return true;
     } else {
         return false;
