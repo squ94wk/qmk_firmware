@@ -565,6 +565,7 @@ smart_key_t smart_keys[2][SMART_KEY_COUNT] = {
             },
         [SMART_KEY_SMART_CTRL_SHIFT] = {
             .keycode = CKC_SMART_CTRL_SHIFT,
+            .tap.mask_oneshot = MOD_BIT_LCTRL | MOD_BIT_LSHIFT,
             .hold.keycode = KC_LEFT_CTRL,
             .hold.mask = MOD_BIT(KC_LEFT_SHIFT)
         },
@@ -592,6 +593,7 @@ smart_key_t smart_keys[2][SMART_KEY_COUNT] = {
             },
         [SMART_KEY_SMART_CTRL_SHIFT] = {
             .keycode = CKC_SMART_CTRL_SHIFT,
+            .tap.mask_oneshot = MOD_BIT_LGUI | MOD_BIT_LSHIFT,
             .hold.keycode = KC_LCMD,
             .hold.mask = MOD_BIT(KC_LEFT_SHIFT)
         },
