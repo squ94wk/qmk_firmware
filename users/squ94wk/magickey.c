@@ -95,22 +95,22 @@ bool magickey_umlaut(void) {
     uint16_t keycode;
     uint8_t mask = MOD_BIT(KC_RIGHT_ALT);
 
-    if (history_matches_string("ea")) {
+    if (history_matches_string(PATTERN("ae"))) {
         keycode = KC_Q;
-    } else if (history_matches_string("eo")) {
+    } else if (history_matches_string(PATTERN("oe"))) {
         keycode = KC_P;
-    } else if (history_matches_string("eu")) {
+    } else if (history_matches_string(PATTERN("ue"))) {
         keycode = KC_Y;
-    } else if (history_matches_string("eA")) {
+    } else if (history_matches_string(PATTERN("Ae"))) {
         keycode = KC_Q;
         mask |= MOD_BIT(KC_RIGHT_SHIFT);
-    } else if (history_matches_string("eO")) {
+    } else if (history_matches_string(PATTERN("Oe"))) {
         keycode = KC_P;
         mask |= MOD_BIT(KC_RIGHT_SHIFT);
-    } else if (history_matches_string("eU")) {
+    } else if (history_matches_string(PATTERN("Ue"))) {
         keycode = KC_Y;
         mask |= MOD_BIT(KC_RIGHT_SHIFT);
-    } else if (history_matches_string("ss")) {
+    } else if (history_matches_string(PATTERN("ss"))) {
         keycode = KC_S;
     } else {
         return false;
@@ -125,31 +125,31 @@ bool magickey_umlaut(void) {
 }
 
 bool magickey_apostrophe(void) {
-    if (history_matches_string("mI")) {
-        SEND_STRING("\b'm");
+    if (history_matches_string(PATTERN("(I|i)m"))) {
+        SEND_STRING("\b\bI'm");
         drop_keys_from_history(1, 0);
         return true;
-    } else if (history_matches_string("s(t(i|I)|(te(l|L))|e(h|H)|tah(t|T)|ereh(t|T)|tah(w|W)|neh(w|W)|ereh(w|W)|oh(w|W)|yh(w|W)|wo(h|H))")) {
+    } else if (history_matches_string(PATTERN("((h|H)ow|(w|W)hy|(w|W)ho|(w|W)here|(w|W)hen|(w|W)hat|(t|T)here|(h|H)ere|(t|T)hat|(h|H)e|(l|L)et|(i|I)t)s"))) {
         SEND_STRING("\b's");
         drop_keys_from_history(1, 0);
         return true;
-    } else if (history_matches_string("er(uo(y|Y)|e(w|W)|yeh(t|T)|tah(w|W))")) {
+    } else if (history_matches_string(PATTERN("((w|W)hat|(t|T)hey|(w|W)e|(y|Y)ou)re"))) {
         SEND_STRING("\b\b're");
         drop_keys_from_history(2, 0);
         return true;
-    } else if (history_matches_string("tn((od|oD)|(seo(d|D))|(ow|oW)|(ac|aC)|(dluo(hs|hS|c|C|w|W))|tsu(m|M)|(di(d|D))|((ev|d|s)a(h|H))|((ere|sa)(w|W)|er(a|A)|s(i|I)))")) {
+    } else if (history_matches_string(PATTERN("((d|D)o|(d|D)oes|(w|W)o|(c|C)a|((w|W)ould|(c|C)ould|(s|S)hould)|(m|M)ust|(d|D)id|(h|H)a(s|d|ve)|((i|I)s|(a|A)re|(w|W)(as|ere)))nt"))) {
         SEND_STRING("\b't");
         drop_keys_from_history(1, 0);
         return true;
-    } else if (history_matches_string("ll(I|uo(y|Y)|e(w|W)|yeh(t|T)|t(i|I))")) {
+    } else if (history_matches_string(PATTERN("((i|I)t|(t|T)hey|(w|W)e|(y|Y)ou|I)ll"))) {
         SEND_STRING("\b\b'll");
         drop_keys_from_history(2, 0);
         return true;
-    } else if (history_matches_string("d(I|uo(y|Y)|yeh(t|T)|e(w|W)|(e(h|H|hs|hS))|tah(w|W)|neh(w|W)|ereh(w|W)|oh(w|W)|yh(w|W)|wo(h|H)|t(i|I))")) {
+    } else if (history_matches_string(PATTERN("((i|I)t|(h|H)ow|(w|W)hy|(w|W)ho|(w|W)here|(w|W)hen|(w|W)hat|(h|H)e|(sh|sH)e|(w|W)e|(t|T)hey|(y|Y)ou|I)d"))) {
         SEND_STRING("\b'd");
         drop_keys_from_history(1, 0);
         return true;
-    } else if (history_matches_string("ev(I|uo(y|Y)|e(w|W)|yeh(t|T)|dluo(hs|hS|c|C|w|W)|thgi(m|M)|tsu(m|M))")) {
+    } else if (history_matches_string(PATTERN("((m|M)ust|(m|M)ight|((w|W)ould|(c|C)ould|(s|S)hould)|(t|T)hey|(w|W)e|(y|Y)ou|I)ve"))) {
         SEND_STRING("\b\b've");
         drop_keys_from_history(2, 0);
         return true;
@@ -159,29 +159,25 @@ bool magickey_apostrophe(void) {
 }
 
 bool magickey_abbreviation(void) {
-    if (history_matches_string("g(e|E)")) {
+    if (history_matches_string(PATTERN("(e|E)g"))) {
         SEND_STRING("\b.g.");
         drop_keys_from_history(1, 0);
         return true;
-    } else if (history_matches_string("e(i|I)")) {
+    } else if (history_matches_string(PATTERN("(i|I)e"))) {
         SEND_STRING("\b.e.");
         drop_keys_from_history(1, 0);
         return true;
-    } else if (history_matches_string("(b|B)(z|Z)")) {
+    } else if (history_matches_string(PATTERN("(z|Z)(b|B)"))) {
         SEND_STRING("\b.B.");
         drop_keys_from_history(1, 0);
         return true;
-    } else if (history_matches_string("h(d|D)")) {
+    } else if (history_matches_string(PATTERN("(d|D)h"))) {
         SEND_STRING("\b.h.");
         drop_keys_from_history(1, 0);
         return true;
-    } else if (history_matches_string("pi")) {
+    } else if (history_matches_string(PATTERN("ip"))) {
         SEND_STRING("\b\bIP");
         drop_keys_from_history(2, 0);
-        return true;
-    } else if (history_matches_string("rre fi")) {
-        SEND_STRING(" != nil {");
-        add_entry_to_history('{', 0);
         return true;
     } else {
         return false;

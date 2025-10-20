@@ -1,7 +1,6 @@
 #include "history.h"
 
 history_entry_t history[KEY_HISTORY_MAX] = {};
-uint32_t latest_history_time;
 
 const char keycode_to_char[2][2<<8] = {
     [0] = {
@@ -171,7 +170,6 @@ void add_entry_to_history(char c, uint8_t mods) {
     uint32_t time = timer_read32();
     memmove(&history[1], &history[0], sizeof(history[0]) * (KEY_HISTORY_MAX - 1));
     history[0] = (history_entry_t){.c = c, .mods = mods, .time = time};
-    latest_history_time = time;
 }
 
 void add_key_to_history(uint16_t keycode, uint8_t mods) {
@@ -273,6 +271,7 @@ bool history_matches_string(char *pat) {
     char text[KEY_HISTORY_MAX + 1];
     int text_len = 0;
     
+    // Build text from history (newest first)
     for (int i = 0; i < KEY_HISTORY_MAX && history[i].c; i++) {
         if (history[i].mods & ~MOD_MASK_SHIFT) {
             continue;
@@ -281,7 +280,24 @@ bool history_matches_string(char *pat) {
     }
     text[text_len] = '\0';
     
-    char *p = pat;
+    // Reverse the pattern and flip parentheses
+    // Use static buffer since pattern can contain parentheses/pipes (longer than KEY_HISTORY_MAX)
+    static char reversed_pat[PATTERN_BUFFER_SIZE];
+    int pat_len = strlen(pat);
+    
+    for (int i = 0; i < pat_len; i++) {
+        char c = pat[pat_len - 1 - i];
+        // Flip parentheses
+        if (c == '(') {
+            c = ')';
+        } else if (c == ')') {
+            c = '(';
+        }
+        reversed_pat[i] = c;
+    }
+    reversed_pat[pat_len] = '\0';
+    
+    char *p = reversed_pat;
     char *h = text;
     return match_pattern(&p, &h);
 }

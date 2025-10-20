@@ -3,6 +3,14 @@
 #include "quantum.h"
 
 #define KEY_HISTORY_MAX 64
+#define PATTERN_BUFFER_SIZE 512
+
+// Compile-time check for pattern string literals
+// Usage: history_matches_string(PATTERN("your pattern here"))
+#define PATTERN(str) ( \
+    (void)(sizeof(char[sizeof(str) <= PATTERN_BUFFER_SIZE ? 1 : -1])), \
+    (str) \
+)
 
 typedef struct {
     char c;
@@ -11,7 +19,6 @@ typedef struct {
 } history_entry_t;
 
 extern history_entry_t history[KEY_HISTORY_MAX];
-extern uint32_t latest_history_time;
 extern const char keycode_to_char[2][2<<8];
 
 void add_key_to_history(uint16_t keycode, uint8_t mods);

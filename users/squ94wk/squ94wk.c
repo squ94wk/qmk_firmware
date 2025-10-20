@@ -111,9 +111,20 @@ void register_with_mods(uint16_t *keycode, uint16_t mask, uint16_t *release_mask
     }
 
     uint32_t time = timer_read32();
-    uprintf("DEBUG: prev: [%ld] now: [%ld]\n", latest_history_time, time);
-    if (!mask && keycode && *keycode >= KC_A && *keycode <= KC_Z && time < latest_history_time+1000 && history_matches_string(" (.|!|?)(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z)")) {
-        mask |= MOD_MASK_SHIFT;
+    uint32_t last_key_time = history[0].time;
+    if (!mask && keycode && *keycode >= KC_A && *keycode <= KC_Z && last_key_time && time < last_key_time + 1000 && history_matches_string(PATTERN("(z|y|x|w|v|u|t|s|r|q|p|o|n|m|l|k|j|i|h|g|f|e|d|c|b|a)(?|!|.) "))) {
+        // Don't auto-shift for common abbreviations
+        if (history_matches_string(PATTERN("e.g. ")) ||
+            history_matches_string(PATTERN("i.e. ")) ||
+            history_matches_string(PATTERN("z.B. ")) ||
+            history_matches_string(PATTERN("etc. ")) ||
+            history_matches_string(PATTERN("usw. ")) ||
+            history_matches_string(PATTERN("vs. ")) ||
+            history_matches_string(PATTERN("sth. "))) {
+            // Skip auto-shift for abbreviations
+        } else {
+            mask |= MOD_MASK_SHIFT;
+        }
     }
 
     uprintf("DEBUG: register %s with mask %d\n", keycode_to_string(*keycode), mask);

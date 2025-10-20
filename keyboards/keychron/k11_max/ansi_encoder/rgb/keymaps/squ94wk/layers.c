@@ -134,13 +134,13 @@ void repeat_last_key(smart_key_t *key) {
     if (!last.c) {
         return;
     }
-    
+
     bool shifted = false;
     uint16_t kc = char_to_keycode(last.c, &shifted);
     if (kc == KC_NO) {
         return;
     }
-    
+
     uint8_t mods = last.mods;
     register_with_mods(&kc, mods, &key->state.release.mask);
     key->state.release.keycode = kc;
