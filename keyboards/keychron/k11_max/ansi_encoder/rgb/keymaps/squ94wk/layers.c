@@ -545,26 +545,31 @@ smart_key_t smart_keys[2][SMART_KEY_COUNT] = {
     [0] = {
         [SMART_KEY_SMART_SHIFT] = {
                 .keycode      = CKC_SMART_SHIFT,
+                .speculative_hold = true,
                 .tap.mask_oneshot = MOD_BIT_LSHIFT,
                 .hold.keycode = KC_LEFT_SHIFT,
             },
         [SMART_KEY_SMART_CTRL] = {
                 .keycode      = CKC_SMART_CTRL,
+                .speculative_hold = true,
                 .tap.mask_oneshot = MOD_BIT_LCTRL,
                 .hold.keycode = KC_LEFT_CTRL,
             },
         [SMART_KEY_SMART_ALT] = {
                 .keycode      = CKC_SMART_ALT,
+                .speculative_hold = true,
                 .tap.mask_oneshot = MOD_BIT_LALT,
                 .hold.keycode = KC_LEFT_ALT,
             },
         [SMART_KEY_SMART_GUI] = {
                 .keycode      = CKC_SMART_GUI,
+                .speculative_hold = true,
                 .tap.mask_oneshot = MOD_BIT_LGUI,
                 .hold.keycode = KC_LEFT_GUI,
             },
         [SMART_KEY_SMART_CTRL_SHIFT] = {
             .keycode = CKC_SMART_CTRL_SHIFT,
+            .speculative_hold = true,
             .tap.mask_oneshot = MOD_BIT_LCTRL | MOD_BIT_LSHIFT,
             .hold.keycode = KC_LEFT_CTRL,
             .hold.mask = MOD_BIT(KC_LEFT_SHIFT)
@@ -573,26 +578,31 @@ smart_key_t smart_keys[2][SMART_KEY_COUNT] = {
     [1] = {
         [SMART_KEY_SMART_SHIFT] = {
                 .keycode      = CKC_SMART_SHIFT,
+                .speculative_hold = true,
                 .tap.mask_oneshot = MOD_BIT_LSHIFT,
                 .hold.keycode = KC_LEFT_SHIFT,
             },
         [SMART_KEY_SMART_CTRL] = {
                 .keycode      = CKC_SMART_CTRL,
+                .speculative_hold = true,
                 .tap.mask_oneshot = MOD_BIT_LGUI,
                 .hold.keycode = KC_LCMD,
             },
         [SMART_KEY_SMART_ALT] = {
                 .keycode      = CKC_SMART_ALT,
+                .speculative_hold = true,
                 .tap.mask_oneshot = MOD_BIT_LCTRL,
                 .hold.keycode = KC_LEFT_CTRL,
             },
         [SMART_KEY_SMART_GUI] = {
                 .keycode      = CKC_SMART_GUI,
+                .speculative_hold = true,
                 .tap.mask_oneshot = MOD_BIT_LALT,
                 .hold.keycode = KC_LOPT,
             },
         [SMART_KEY_SMART_CTRL_SHIFT] = {
             .keycode = CKC_SMART_CTRL_SHIFT,
+            .speculative_hold = true,
             .tap.mask_oneshot = MOD_BIT_LGUI | MOD_BIT_LSHIFT,
             .hold.keycode = KC_LCMD,
             .hold.mask = MOD_BIT(KC_LEFT_SHIFT)

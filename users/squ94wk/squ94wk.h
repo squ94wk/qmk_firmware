@@ -93,12 +93,15 @@ struct smart_key_t {
 
     int  max_tap;
     bool defer_release;
+    bool speculative_hold;
 
     struct {
         uint16_t pressed_time;
         uint16_t tap_count;
         uint16_t tap_timeout;
         bool     fired;
+        bool     is_speculative_hold;
+        uint8_t  speculative_oneshot_mask;
 
         struct {
             uint16_t keycode;

@@ -33,6 +33,8 @@ static void reset_smart_key(smart_key_t *smart_key);
 static enum smart_key_type get_key_type(smart_key_t *key);
 static enum event_type get_event_type(smart_key_t *key, keyevent_t event);
 static enum continuation_type get_continuation_type(smart_key_t *key, keyevent_t deferred, keyevent_t cont);
+static void speculative_hold_to_tap(smart_key_t *key);
+static void speculative_hold_to_hold(smart_key_t *key);
 
 // ============================================================================
 // Utility functions (from helper.c)
@@ -257,6 +259,7 @@ void hold_action(smart_key_t *key) {
         activate_layer(key->hold.layer);
         key->state.release.layer = key->hold.layer;
 
+        // carry oneshot mods over to layers
         if (get_oneshot_mods()) {
             key->state.release.mask = get_oneshot_mods();
             for (uint16_t kc = KC_LEFT_CTRL; kc <= KC_RIGHT_GUI; kc++) {
@@ -272,7 +275,17 @@ void hold_action(smart_key_t *key) {
     }
 
     uint16_t kc = key->hold.keycode;
-    register_with_mods(&kc, key->hold.mask, &key->state.release.mask);
+    uint16_t release_mask;
+    uint8_t oneshot_mask = get_oneshot_mods();
+    register_with_mods(&kc, key->hold.mask, &release_mask);
+
+    if (key->speculative_hold) {
+        key->state.speculative_oneshot_mask = oneshot_mask;
+        key->state.release.mask = release_mask & ~oneshot_mask;
+    } else {
+        key->state.release.mask = release_mask;
+    }
+
     uprintf("DEBUG: remembered mask: %d\n", key->state.release.mask);
     key->state.release.keycode = kc;
     if (key->hold.tap_keycode) {
@@ -286,9 +299,20 @@ void release_action(smart_key_t *key) {
         return;
     }
 
-    if (!key->state.fired) {
+    if (!key->state.fired && !key->state.is_speculative_hold) {
         uprintf("DEBUG: releasing key that hasn't fired\n");
         return;
+    }
+
+    if (key->state.is_speculative_hold) {
+        if (key->state.fired) {
+            key->state.release.mask |= key->state.speculative_oneshot_mask;
+            uprintf("DEBUG: releasing after confirmed hold - added captured oneshot mask %d\n", key->state.speculative_oneshot_mask);
+        } else {
+            set_oneshot_mods(get_oneshot_mods() | key->state.speculative_oneshot_mask);
+            key->state.release.mask |= key->state.speculative_oneshot_mask;
+            uprintf("DEBUG: releasing and transition to tap - restored oneshot mask %d\n", key->state.speculative_oneshot_mask);
+        }
     }
 
     if (key->state.release.keycode) {
@@ -308,6 +332,22 @@ void release_action(smart_key_t *key) {
     }
 
     return;
+}
+
+// ============================================================================
+// Speculative hold transitions
+// ============================================================================
+
+static void speculative_hold_to_tap(smart_key_t *key) {
+    uprintf("DEBUG: speculative hold -> tap\n");
+    release_action(key);
+    key->state.is_speculative_hold = false;
+    tap_action(key);
+}
+
+static void speculative_hold_to_hold(smart_key_t *key) {
+    uprintf("DEBUG: speculative hold confirmed\n");
+    key->state.fired = true;
 }
 
 // ============================================================================
@@ -355,7 +395,9 @@ static bool process_continuation(smart_key_t *key, enum continuation_type cont) 
     case N_TAP_HOLD:
         switch (cont) {
         case ROLL:
-            if (!key->state.fired) {
+            if (key->state.is_speculative_hold) {
+                speculative_hold_to_tap(key);
+            } else if (!key->state.fired) {
                 tap_action(key);
             }
             return true;
@@ -363,14 +405,22 @@ static bool process_continuation(smart_key_t *key, enum continuation_type cont) 
         case TAP:
         case PRESS_THIRD:
         case HOLD:
-            hold_action(key);
+            if (key->state.is_speculative_hold) {
+                speculative_hold_to_hold(key);
+            } else {
+                hold_action(key);
+            }
             return true;
 
         case TAP_ORIGINAL:
             return false;
 
         case IDLE:
-            tap_action(key);
+            if (key->state.is_speculative_hold) {
+                speculative_hold_to_tap(key);
+            } else {
+                tap_action(key);
+            }
             return true;
 
         case RELEASE_THIRD:
@@ -447,6 +497,12 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
         switch (event_type) {
         case PRESS_SAME:
             press_key(key, event);
+            if (key->speculative_hold) {
+                hold_action(key);
+                key->state.fired = false;
+                key->state.is_speculative_hold = true;
+                uprintf("DEBUG: speculative hold activated for %s\n", keycode_to_string(key->keycode));
+            }
             return true;
         case PRESS_OTHER:
             if (key->state.fired) {
@@ -454,12 +510,20 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
             }
             if (key->tap_on_key_press && key->tap_on_key_press(key, event.key)) {
                 uprintf("DEBUG: immediately tap key %s\n", keycode_to_string(key->keycode));
-                tap_action(key);
+                if (key->state.is_speculative_hold) {
+                    speculative_hold_to_tap(key);
+                } else {
+                    tap_action(key);
+                }
                 return false;
             }
             if (key->hold_on_key_press && key->hold_on_key_press(key, event.key)) {
                 uprintf("DEBUG: immediately hold key %s\n", keycode_to_string(key->keycode));
-                hold_action(key);
+                if (key->state.is_speculative_hold) {
+                    speculative_hold_to_hold(key);
+                } else {
+                    hold_action(key);
+                }
                 return false;
             }
             uprintf("DEBUG: defer press of key %s\n", keycode_to_string(keycode));
@@ -469,6 +533,12 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
         case RELEASE_OTHER:
             return false;
         case RELEASE_SAME:
+            if (key->state.is_speculative_hold && !key->state.fired) {
+                speculative_hold_to_tap(key);
+                release_key(key);
+                return true;
+            }
+
             if (key->state.fired) {
                 release_key(key);
                 return true;
@@ -551,8 +621,20 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
                 return true;
             }
             key->state.tap_timeout = event.time + TAPPING_TERM;
+            if (key->speculative_hold && key->state.tap_count == key->max_tap) {
+                hold_action(key);
+                key->state.fired = false;
+                key->state.is_speculative_hold = true;
+                uprintf("DEBUG: speculative hold activated for %s (N_TAP_HOLD)\n", keycode_to_string(key->keycode));
+            }
             return true;
         case RELEASE_SAME:
+            if (key->state.is_speculative_hold && !key->state.fired) {
+                speculative_hold_to_tap(key);
+                release_key(key);
+                return true;
+            }
+
             release_key(key);
             if (key->state.fired) {
                 return true;
@@ -578,12 +660,20 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
             if (key->state.pressed_time) {
                 if (key->tap_on_key_press && key->tap_on_key_press(key, event.key)) {
                     uprintf("DEBUG: immediately tap key %s\n", keycode_to_string(key->keycode));
-                    tap_action(key);
+                    if (key->state.is_speculative_hold) {
+                        speculative_hold_to_tap(key);
+                    } else {
+                        tap_action(key);
+                    }
                     return false;
                 }
                 if (key->hold_on_key_press && key->hold_on_key_press(key, event.key)) {
                     uprintf("DEBUG: immediately hold key %s\n", keycode_to_string(key->keycode));
-                    hold_action(key);
+                    if (key->state.is_speculative_hold) {
+                        speculative_hold_to_hold(key);
+                    } else {
+                        hold_action(key);
+                    }
                     return false;
                 }
                 uprintf("DEBUG: defer press of key %s\n", keycode_to_string(keycode));
@@ -650,6 +740,11 @@ void matrix_scan_user(void) {
                 uint16_t code = deferred_keycode;
                 deferred_keycode = KC_NO;
                 process_event_with_key(key, code, deferred_event);
+                continue;
+            }
+
+            if (key->state.is_speculative_hold) {
+                speculative_hold_to_hold(key);
                 continue;
             }
 
