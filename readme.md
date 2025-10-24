@@ -118,16 +118,18 @@ When you add up the frequencies of the letters I must omit in my primary layer, 
 Also, it should roll well.
 
 ```
-      ╭─────┬─────┬─────╮                   ╭─────┬─────┬─────╮ 
-      │  B  │  L  │  W  │                   │  F  │  O  │  U  │ 
+      ╭─────┬─────┬─────╮                   ╭─────┬─────┬─────╮
+      │  B  │  L  │  W  │                   │  F  │  O  │  U  │
 ╭─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╮
 │  C  │ ESC │  S  │  T  │                   │  N  │  E  │MAGIC│  I  │
 │─────┼─────┼─────┼─────┤                   │─────┼─────┼─────┼─────╯
 │  M  │  R  │  G  │  D  │                   │  H  │     │  /  │
 ╰─────┴─────┴───┬─┴─────┴─┬─────╮   ╭─────┬─┴─────┴─┬───┴─────╯
-                │  SPACE  │ NUM │   │     │    A    │
+                │  SPACE  │ REP │   │     │    A    │
                 ╰─────────┴─────╯   ╰─────┴─────────╯
 ```
+
+Tapping `REP` repeats the last key. Holding it activates the number layer.
 
 The second alpha layer may alternatively be activated with the right pinky.
 This additional option proves valuable when typing certain words.
@@ -263,7 +265,9 @@ It supports:
 - layers (as matrix position to "smart key" mappings)
 - single and multi tap variants of any combination of _tap-only_, _hold-only_ & _tap-hold_ keys
 - roll and sequencing detection through an event deferring system, see [below](#deferring-system)
+- speculative hold for immediate modifier activation (zero latency on tap-hold modifiers)
 - implementation of [magic key(s)](#magic-keys) incl. history
+- repeat key
 - Tapping mod keys makes them sticky (oneshot)
 - Chaining one shot mod keys
 - Holding a layer with oneshot keys keeps the oneshot modifier held with the layer key
