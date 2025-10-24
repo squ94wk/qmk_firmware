@@ -70,3 +70,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     return true;
 }
+
+extern int os_index;
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    for (uint8_t i = led_min; i < led_max; i++) {
+        if (g_led_config.flags[i]) {
+            // Background lights (flag 0) - set color based on mode
+            if (is_layer_active(LAYER_DUMB)) {
+                rgb_matrix_set_color(i, 255, 100, 0);
+            } else if (os_index == 0) {
+                rgb_matrix_set_color(i, 0, 50, 255);
+            } else if (os_index == 1) {
+                rgb_matrix_set_color(i, 255, 255, 255);
+            }
+        } else {
+            // Turn off all other LEDs (flag 1 - the keys)
+            rgb_matrix_set_color(i, 0, 0, 0);
+        }
+    }
+    return false;
+}
