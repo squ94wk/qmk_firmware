@@ -172,6 +172,16 @@ void add_entry_to_history(char c, uint8_t mods) {
     history[0] = (history_entry_t){.c = c, .mods = mods, .time = time};
 }
 
+void add_string_to_history(const char *str) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] == '\b') {
+            drop_key_from_history(0);
+        } else {
+            add_entry_to_history(str[i], 0);
+        }
+    }
+}
+
 void add_key_to_history(uint16_t keycode, uint8_t mods) {
     if (keycode == KC_BSPC) {
         drop_key_from_history(0);

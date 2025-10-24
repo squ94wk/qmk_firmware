@@ -14,6 +14,7 @@ smart_layer_t *smart_layers[SMART_LAYER_COUNT];
 smart_key_t smart_keys[2][SMART_KEY_COUNT];
 int active_layers[SMART_LAYER_COUNT];
 uint32_t last_input;
+bool magic_complete_active = false;
 
 // Pending keys queue
 pending_key_t pending_keys[PENDING_QUEUE_MAX] = {};
@@ -101,6 +102,10 @@ bool remove_pending_key(smart_key_t *key) {
 
 void register_with_mods(uint16_t *keycode, uint16_t mask, uint16_t *release_mask) {
     uint16_t current_mods = get_mods();
+
+    if (handle_magic_complete(keycode, mask)) {
+        return;
+    }
 
     if (handle_smart_case(keycode, &mask, release_mask)) {
         return;

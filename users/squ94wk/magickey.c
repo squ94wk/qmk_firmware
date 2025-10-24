@@ -75,6 +75,11 @@ void magickey_action(smart_key_t *key) {
 }
 
 void magickey_action2(smart_key_t *key) {
+    if (magickey_complete_expansion()) {
+        uprintf("DEBUG: magickey done (complete_expansion): %d\n", timer_read());
+        return;
+    }
+
     if (magickey_umlaut()) {
         uprintf("DEBUG: magickey done (umlaut): %d\n", timer_read());
         return;
@@ -182,5 +187,98 @@ bool magickey_abbreviation(void) {
     } else {
         return false;
     }
+}
+
+void magickey_complete(smart_key_t *key) {
+    history_entry_t last = history_top();
+
+    if (last.c == ' ') {
+        if (magic_complete_active) {
+            magic_complete_active = false;
+            SEND_STRING("\b. ");
+            drop_keys_from_history(2, 0);
+            add_entry_to_history('.', 0);
+            add_entry_to_history(' ', 0);
+            return;
+        }
+
+        SEND_STRING("\b, ");
+        drop_key_from_history(0);
+        add_entry_to_history(',', 0);
+        add_entry_to_history(' ', 0);
+        return;
+    }
+
+    magic_complete_active = true;
+    uprintf("DEBUG: magickey_complete: activated magic complete\n");
+}
+
+bool magickey_complete_expansion(void) {
+    const char *expansion = NULL;
+
+    if (history_matches_string(PATTERN(" "))) {
+        expansion = "\b, ";
+    } else if (history_matches_string(PATTERN("  "))) {
+        expansion = "\b\b. ";
+    } else if (history_matches_string(PATTERN("( t|T)"))) {
+        expansion = "he ";
+    } else if (history_matches_string(PATTERN("(d|D)if"))) {
+        expansion = "\biffer";
+    } else if (history_matches_string(PATTERN("ret"))) {
+        expansion = "urn";
+    } else if (history_matches_string(PATTERN("pk"))) {
+        expansion = "\backage";
+    } else if (history_matches_string(PATTERN("(a|A)uto"))) {
+        expansion = "matic";
+    } else if (history_matches_string(PATTERN("(c|C)on"))) {
+        expansion = "nect";
+    } else if (history_matches_string(PATTERN("(d|D)isc"))) {
+        expansion = "onnect";
+    } else if (history_matches_string(PATTERN("(f|F)unc"))) {
+        expansion = "tion";
+    } else if (history_matches_string(PATTERN("(e|E)nv"))) {
+        expansion = "ironment";
+    } else if (history_matches_string(PATTERN("(k|K)ube"))) {
+        expansion = "rnetes";
+    } else if (history_matches_string(PATTERN("(c|C)fg"))) {
+        expansion = "\b\bonfig";
+    } else if (history_matches_string(PATTERN("(c|C)onf"))) {
+        expansion = "iguration";
+    } else if (history_matches_string(PATTERN("(i|I)mpl"))) {
+        expansion = "ementation";
+    }
+
+    if (expansion) {
+        SEND_STRING(expansion);
+        add_string_to_history(expansion);
+        return true;
+    }
+
+    return false;
+}
+
+bool handle_magic_complete(uint16_t *keycode, uint16_t mask) {
+    if (!magic_complete_active) {
+        return false;
+    }
+    if (!mask) {
+        magic_complete_active = false;
+        return false;
+    }
+
+    switch (*keycode) {
+    case KC_G:
+        SEND_STRING("ing");
+        add_string_to_history("ing");
+        break;
+    case KC_N:
+        SEND_STRING("ion");
+        add_string_to_history("ion");
+        break;
+    }
+
+    magic_complete_active = false;
+    uprintf("DEBUG: magic complete: deactivated\n");
+    return true;
 }
 

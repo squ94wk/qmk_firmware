@@ -151,6 +151,7 @@ extern smart_layer_t *smart_layers[SMART_LAYER_COUNT];
 extern smart_key_t smart_keys[2][SMART_KEY_COUNT];
 extern int active_layers[SMART_LAYER_COUNT];
 extern uint32_t last_input;
+extern bool magic_complete_active;
 
 // Forward declaration for QMK keymap array
 extern const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS];

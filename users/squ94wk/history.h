@@ -23,6 +23,7 @@ extern const char keycode_to_char[2][2<<8];
 
 void add_key_to_history(uint16_t keycode, uint8_t mods);
 void add_entry_to_history(char c, uint8_t mods);
+void add_string_to_history(const char *str);
 history_entry_t history_top(void);
 void drop_key_from_history(int index);
 void drop_keys_from_history(int count, int index);
