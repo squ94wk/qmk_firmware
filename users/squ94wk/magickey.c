@@ -74,118 +74,68 @@ void magickey_action(smart_key_t *key) {
     }
 }
 
+typedef struct {
+    char *pattern;
+    char *expansion;
+} magic_expansion_t;
+static magic_expansion_t magic_expansions[] = {
+    {"ae", "\b\b" SS_RALT("q")},
+    {"oe", "\b\b" SS_RALT("p")},
+    {"ue", "\b\b" SS_RALT("y")},
+    {"Ae", "\b\b" SS_RALT(SS_RSFT("q"))},
+    {"Oe", "\b\b" SS_RALT(SS_RSFT("p"))},
+    {"Ue", "\b\b" SS_RALT(SS_RSFT("y"))},
+    {"ss", "\b\b" SS_RALT("s")},
+
+    {" ", "\b, "},
+    {"  ", "\b\b. "},
+    {"( t|T)", "he "},
+    {"(d|D)if", "fer"},
+    {"ret", "urn"},
+    {"pk", "\backage"},
+    {"(a|A)uto", "matic"},
+    {"(c|C)on", "nect"},
+    {"(d|D)isc", "onnect"},
+    {"(f|F)unc", "tion"},
+    {"(e|E)nv", "ironment"},
+    {"(s|S)ys", "tem"},
+    {"(v|V)ar", "iable"},
+    {"int", "erface"},
+    {"(o|O)b", "ject"},
+    {"(k|K)ube", "rnetes"},
+    {"v(c|C)", "luster"},
+    {"(n|N)s", "\bamespace"},
+    {"sq", "u94wk"},
+    {"squ94wk", "@gmail.com"},
+    {"(c|C)ont", "ainer"},
+    {"(c|C)fg", "\b\bonfig"},
+    {"(c|C)onf", "igur"},
+    {"onfigur", "ation"},
+    {"(i|I)mpl", "ementat"},
+    {"mplement", "ation"},
+
+    {"(e|E)g", "\b.g."},
+    {"(i|I)e", "\b.e."},
+    {"(z|Z)(b|B)", "\b.B."},
+    {"(d|D)h", "\b.h."},
+    {"ip", "\b\bIP"},
+
+    {"(I|i)m", "\b\bI'm"},
+    {"((h|H)ow|(w|W)hy|(w|W)ho|(w|W)here|(w|W)hen|(w|W)hat|(t|T)here|(h|H)ere|(t|T)hat|(h|H)e|(l|L)et|(i|I)t)s", "\b's"},
+    {"((w|W)hat|(t|T)hey|(w|W)e|(y|Y)ou)re", "\b\b're"},
+    {"((d|D)o|(d|D)oes|(w|W)o|(c|C)a|((w|W)ould|(c|C)ould|(s|S)hould)|(m|M)ust|(d|D)id|(h|H)a(s|d|ve)|((i|I)s|(a|A)re|(w|W)(as|ere)))nt", "\b't"},
+    {"((i|I)t|(t|T)hey|(w|W)e|(y|Y)ou|I)ll", "\b\b'll"},
+    {"((i|I)t|(h|H)ow|(w|W)hy|(w|W)ho|(w|W)here|(w|W)hen|(w|W)hat|(h|H)e|(sh|sH)e|(w|W)e|(t|T)hey|(y|Y)ou|I)d", "\b'd"},
+    {"((m|M)ust|(m|M)ight|((w|W)ould|(c|C)ould|(s|S)hould)|(t|T)hey|(w|W)e|(y|Y)ou|I)ve", "\b\b've"},
+};
+
 void magickey_action2(smart_key_t *key) {
-    if (magickey_complete_expansion()) {
-        uprintf("DEBUG: magickey done (complete_expansion): %d\n", timer_read());
-        return;
-    }
-
-    if (magickey_umlaut()) {
-        uprintf("DEBUG: magickey done (umlaut): %d\n", timer_read());
-        return;
-    }
-
-    if (magickey_apostrophe()) {
-        uprintf("DEBUG: magickey done (apostrophe): %d\n", timer_read());
-        return;
-    }
-
-    if (magickey_abbreviation()) {
-        uprintf("DEBUG: magickey done (abbreviation): %d\n", timer_read());
-        return;
-    }
-}
-
-bool magickey_umlaut(void) {
-    uint16_t keycode;
-    uint8_t mask = MOD_BIT(KC_RIGHT_ALT);
-
-    if (history_matches_string(PATTERN("ae"))) {
-        keycode = KC_Q;
-    } else if (history_matches_string(PATTERN("oe"))) {
-        keycode = KC_P;
-    } else if (history_matches_string(PATTERN("ue"))) {
-        keycode = KC_Y;
-    } else if (history_matches_string(PATTERN("Ae"))) {
-        keycode = KC_Q;
-        mask |= MOD_BIT(KC_RIGHT_SHIFT);
-    } else if (history_matches_string(PATTERN("Oe"))) {
-        keycode = KC_P;
-        mask |= MOD_BIT(KC_RIGHT_SHIFT);
-    } else if (history_matches_string(PATTERN("Ue"))) {
-        keycode = KC_Y;
-        mask |= MOD_BIT(KC_RIGHT_SHIFT);
-    } else if (history_matches_string(PATTERN("ss"))) {
-        keycode = KC_S;
-    } else {
-        return false;
-    }
-
-    SEND_STRING("\b\b");
-    drop_keys_from_history(2, 0);
-    register_with_mods(&keycode, mask, 0);
-    unregister_code(keycode);
-
-    return true;
-}
-
-bool magickey_apostrophe(void) {
-    if (history_matches_string(PATTERN("(I|i)m"))) {
-        SEND_STRING("\b\bI'm");
-        drop_keys_from_history(1, 0);
-        return true;
-    } else if (history_matches_string(PATTERN("((h|H)ow|(w|W)hy|(w|W)ho|(w|W)here|(w|W)hen|(w|W)hat|(t|T)here|(h|H)ere|(t|T)hat|(h|H)e|(l|L)et|(i|I)t)s"))) {
-        SEND_STRING("\b's");
-        drop_keys_from_history(1, 0);
-        return true;
-    } else if (history_matches_string(PATTERN("((w|W)hat|(t|T)hey|(w|W)e|(y|Y)ou)re"))) {
-        SEND_STRING("\b\b're");
-        drop_keys_from_history(2, 0);
-        return true;
-    } else if (history_matches_string(PATTERN("((d|D)o|(d|D)oes|(w|W)o|(c|C)a|((w|W)ould|(c|C)ould|(s|S)hould)|(m|M)ust|(d|D)id|(h|H)a(s|d|ve)|((i|I)s|(a|A)re|(w|W)(as|ere)))nt"))) {
-        SEND_STRING("\b't");
-        drop_keys_from_history(1, 0);
-        return true;
-    } else if (history_matches_string(PATTERN("((i|I)t|(t|T)hey|(w|W)e|(y|Y)ou|I)ll"))) {
-        SEND_STRING("\b\b'll");
-        drop_keys_from_history(2, 0);
-        return true;
-    } else if (history_matches_string(PATTERN("((i|I)t|(h|H)ow|(w|W)hy|(w|W)ho|(w|W)here|(w|W)hen|(w|W)hat|(h|H)e|(sh|sH)e|(w|W)e|(t|T)hey|(y|Y)ou|I)d"))) {
-        SEND_STRING("\b'd");
-        drop_keys_from_history(1, 0);
-        return true;
-    } else if (history_matches_string(PATTERN("((m|M)ust|(m|M)ight|((w|W)ould|(c|C)ould|(s|S)hould)|(t|T)hey|(w|W)e|(y|Y)ou|I)ve"))) {
-        SEND_STRING("\b\b've");
-        drop_keys_from_history(2, 0);
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool magickey_abbreviation(void) {
-    if (history_matches_string(PATTERN("(e|E)g"))) {
-        SEND_STRING("\b.g.");
-        drop_keys_from_history(1, 0);
-        return true;
-    } else if (history_matches_string(PATTERN("(i|I)e"))) {
-        SEND_STRING("\b.e.");
-        drop_keys_from_history(1, 0);
-        return true;
-    } else if (history_matches_string(PATTERN("(z|Z)(b|B)"))) {
-        SEND_STRING("\b.B.");
-        drop_keys_from_history(1, 0);
-        return true;
-    } else if (history_matches_string(PATTERN("(d|D)h"))) {
-        SEND_STRING("\b.h.");
-        drop_keys_from_history(1, 0);
-        return true;
-    } else if (history_matches_string(PATTERN("ip"))) {
-        SEND_STRING("\b\bIP");
-        drop_keys_from_history(2, 0);
-        return true;
-    } else {
-        return false;
+    for (size_t i = 0; i < sizeof(magic_expansions) / sizeof(magic_expansions[0]); i++) {
+        if (history_matches_string(magic_expansions[i].pattern)) {
+            SEND_STRING(magic_expansions[i].expansion);
+            add_string_to_history(magic_expansions[i].expansion);
+            return;
+        }
     }
 }
 
@@ -213,71 +163,86 @@ void magickey_complete(smart_key_t *key) {
     uprintf("DEBUG: magickey_complete: activated magic complete\n");
 }
 
-bool magickey_complete_expansion(void) {
-    const char *expansion = NULL;
-
-    if (history_matches_string(PATTERN(" "))) {
-        expansion = "\b, ";
-    } else if (history_matches_string(PATTERN("  "))) {
-        expansion = "\b\b. ";
-    } else if (history_matches_string(PATTERN("( t|T)"))) {
-        expansion = "he ";
-    } else if (history_matches_string(PATTERN("(d|D)if"))) {
-        expansion = "\biffer";
-    } else if (history_matches_string(PATTERN("ret"))) {
-        expansion = "urn";
-    } else if (history_matches_string(PATTERN("pk"))) {
-        expansion = "\backage";
-    } else if (history_matches_string(PATTERN("(a|A)uto"))) {
-        expansion = "matic";
-    } else if (history_matches_string(PATTERN("(c|C)on"))) {
-        expansion = "nect";
-    } else if (history_matches_string(PATTERN("(d|D)isc"))) {
-        expansion = "onnect";
-    } else if (history_matches_string(PATTERN("(f|F)unc"))) {
-        expansion = "tion";
-    } else if (history_matches_string(PATTERN("(e|E)nv"))) {
-        expansion = "ironment";
-    } else if (history_matches_string(PATTERN("(k|K)ube"))) {
-        expansion = "rnetes";
-    } else if (history_matches_string(PATTERN("(c|C)fg"))) {
-        expansion = "\b\bonfig";
-    } else if (history_matches_string(PATTERN("(c|C)onf"))) {
-        expansion = "iguration";
-    } else if (history_matches_string(PATTERN("(i|I)mpl"))) {
-        expansion = "ementation";
-    }
-
-    if (expansion) {
-        SEND_STRING(expansion);
-        add_string_to_history(expansion);
-        return true;
-    }
-
-    return false;
-}
-
 bool handle_magic_complete(uint16_t *keycode, uint16_t mask) {
     if (!magic_complete_active) {
         return false;
     }
-    if (!mask) {
+    if (mask) {
         magic_complete_active = false;
         return false;
     }
 
+    char *expansion = NULL;
+
     switch (*keycode) {
+    case KC_A:
+        expansion = "ial";
+        break;
+    case KC_B:
+        expansion = "ble";
+        break;
+    case KC_C:
+        expansion = "ence";
+        break;
+    case KC_E:
+        expansion = "ere";
+        break;
+    case KC_F:
+        expansion = "ful";
+        break;
     case KC_G:
-        SEND_STRING("ing");
-        add_string_to_history("ing");
+        expansion = "ing";
+        break;
+    case KC_H:
+        expansion = "ght";
+        break;
+    case KC_I:
+        expansion = "ies";
+        break;
+    case KC_L:
+        expansion = "lly";
+        break;
+    case KC_M:
+        expansion = "ment";
         break;
     case KC_N:
-        SEND_STRING("ion");
-        add_string_to_history("ion");
+        expansion = "ion";
+        break;
+    case KC_O:
+        expansion = "ous";
+        break;
+    case KC_P:
+        expansion = "ple";
+        break;
+    case KC_S:
+        expansion = "ess";
+        break;
+    case KC_T:
+        expansion = "ent";
+        break;
+    case KC_U:
+        expansion = "ure";
+        break;
+    case KC_V:
+        expansion = "ive";
+        break;
+    case KC_Y:
+        expansion = "ity";
+        break;
+    case KC_Z:
+        expansion = "ize";
         break;
     }
 
     magic_complete_active = false;
+
+    if (expansion) {
+        SEND_STRING(expansion);
+        add_string_to_history(expansion);
+        uprintf("DEBUG: magic complete: sent '%s'\n", expansion);
+        return true;
+    }
+
     uprintf("DEBUG: magic complete: deactivated\n");
     return true;
 }

@@ -126,6 +126,7 @@ void register_with_mods(uint16_t *keycode, uint16_t mask, uint16_t *release_mask
             history_matches_string(PATTERN("z.B. ")) ||
             history_matches_string(PATTERN("etc. ")) ||
             history_matches_string(PATTERN("usw. ")) ||
+            history_matches_string(PATTERN("bzw. ")) ||
             history_matches_string(PATTERN("vs. ")) ||
             history_matches_string(PATTERN("sth. "))) {
             // Skip auto-shift for abbreviations
