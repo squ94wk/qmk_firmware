@@ -18,5 +18,6 @@
 # --------------------------------------------------------------------------------
 
 SRC += users/squ94wk/history.c
+SRC += users/squ94wk/history_pattern_match.c
 SRC += tests/history/test_history_mock.c
 

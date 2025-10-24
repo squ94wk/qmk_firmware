@@ -1,20 +1,25 @@
 // Pattern matching functions extracted for testing
-// This file contains only the pattern matching logic without QMK dependencies
 
+#include "history_pattern_match.h"
 #include <string.h>
-#include <stdbool.h>
+
+// When included from history.c (QMK build), history.h will already be included
+// and these types will be defined. When compiled standalone (tests), define minimal types.
+#ifndef MOD_MASK_SHIFT
+// Standalone test: define minimal needed types
 #include <stdint.h>
 
-// External declarations - these must be provided by the including context
-extern history_entry_t history[];
-#ifndef KEY_HISTORY_MAX
 #define KEY_HISTORY_MAX 64
-#endif
-#ifndef PATTERN_BUFFER_SIZE
 #define PATTERN_BUFFER_SIZE 512
-#endif
-#ifndef MOD_MASK_SHIFT
 #define MOD_MASK_SHIFT 0x02
+
+typedef struct {
+    char c;
+    uint8_t mods;
+    uint32_t time;
+} history_entry_t;
+
+extern history_entry_t history[];
 #endif
 
 bool match_pattern(char **pat, char **sub) {

@@ -16,10 +16,8 @@ typedef struct {
 
 // Include the actual pattern matching functions from the real source
 extern "C" {
+    #include "../../users/squ94wk/history_pattern_match.h"
     history_entry_t history[KEY_HISTORY_MAX] = {};
-    bool match_pattern(char **pat, char **sub);
-    bool history_matches_string(char *pat);
-    #include "../../users/squ94wk/history_pattern_match.c"
 }
 
 // Test helper - simulates typing the string from left to right
