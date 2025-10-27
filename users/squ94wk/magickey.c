@@ -87,10 +87,13 @@ static magic_expansion_t magic_expansions[] = {
     {"Ue", "\b\b" SS_RALT(SS_RSFT("y"))},
     {"ss", "\b\b" SS_RALT("s")},
 
+    {", ", "\b\b. "},
+    {". ", "\b\b! "},
     {" ", "\b, "},
-    {"  ", "\b\b. "},
     {"( t|T)", "he "},
     {"(d|D)if", "fer"},
+    {"iffer", "ent"},
+    {"ifferent", "ly"},
     {"ret", "urn"},
     {"pk", "\backage"},
     {"(a|A)uto", "matic"},
@@ -105,14 +108,19 @@ static magic_expansion_t magic_expansions[] = {
     {"(k|K)ube", "rnetes"},
     {"v(c|C)", "luster"},
     {"(n|N)s", "\bamespace"},
+    {"-o ", "yaml"},
     {"sq", "u94wk"},
     {"squ94wk", "@gmail.com"},
     {"(c|C)ont", "ainer"},
     {"(c|C)fg", "\b\bonfig"},
-    {"(c|C)onf", "igur"},
-    {"onfigur", "ation"},
-    {"(i|I)mpl", "ementat"},
+    {"(c|C)onf", "ig"},
+    {"onfig", "ure"},
+    {"onfigure", "\bation"},
+    {"(i|I)mpl", "ement"},
     {"mplement", "ation"},
+    {"~", "/"},
+    {"~/", "."},
+    {"if e", "rr != nil {\n"},
 
     {"(e|E)g", "\b.g."},
     {"(i|I)e", "\b.e."},
@@ -140,27 +148,7 @@ void magickey_action2(smart_key_t *key) {
 }
 
 void magickey_complete(smart_key_t *key) {
-    history_entry_t last = history_top();
-
-    if (last.c == ' ') {
-        if (magic_complete_active) {
-            magic_complete_active = false;
-            SEND_STRING("\b. ");
-            drop_keys_from_history(2, 0);
-            add_entry_to_history('.', 0);
-            add_entry_to_history(' ', 0);
-            return;
-        }
-
-        SEND_STRING("\b, ");
-        drop_key_from_history(0);
-        add_entry_to_history(',', 0);
-        add_entry_to_history(' ', 0);
-        return;
-    }
-
     magic_complete_active = true;
-    uprintf("DEBUG: magickey_complete: activated magic complete\n");
 }
 
 bool handle_magic_complete(uint16_t *keycode, uint16_t mask) {
