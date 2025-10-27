@@ -1,3 +1,5 @@
+#include "metrics.h"
+
 bool fire_for_all(smart_key_t *key, keypos_t pos) {
     return true;
 }
@@ -89,6 +91,10 @@ void toggle_os_index(smart_key_t *key) {
         activate_layer(LAYER_DUMB);
         break;
     }
+}
+
+void print_magic_stats(smart_key_t *key) {
+    metrics_print_histogram(&magic_timing_histogram, "magic_action2");
 }
 
 void jump_layer(smart_key_t *key) {
@@ -389,7 +395,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                     [11] = &(smart_key_t){ .tap.keycode = KC_SLASH, },
                                 },
                                 [4] = {
-                                    [6] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, },
+                                    [6] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, .hold.action = &print_magic_stats, },
                                 },
                             },
                     },
@@ -494,7 +500,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                         [5] = &(smart_key_t){ .tap.keycode = KC_9, },
                                     },
                                 [4] = {
-                                        [5] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, },
+                                        [5] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, .hold.action = &print_magic_stats, },
                                 },
                             },
                     },

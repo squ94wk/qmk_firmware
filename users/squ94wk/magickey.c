@@ -1,6 +1,7 @@
 #include "magickey.h"
 #include "squ94wk.h"
 #include "history.h"
+#include "metrics.h"
 
 void magickey_action(smart_key_t *key) {
     int parens = 0;
@@ -138,13 +139,19 @@ static magic_expansion_t magic_expansions[] = {
 };
 
 void magickey_action2(smart_key_t *key) {
+    uint16_t start_time = timer_read();
+
     for (size_t i = 0; i < sizeof(magic_expansions) / sizeof(magic_expansions[0]); i++) {
         if (history_matches_string(magic_expansions[i].pattern)) {
             SEND_STRING(magic_expansions[i].expansion);
             add_string_to_history(magic_expansions[i].expansion);
-            return;
+
+            break;
         }
     }
+
+    uint16_t elapsed = timer_elapsed(start_time);
+    metrics_observe(&magic_timing_histogram, elapsed);
 }
 
 void magickey_complete(smart_key_t *key) {
