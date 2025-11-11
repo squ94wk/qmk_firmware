@@ -492,9 +492,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                     [8] = &(smart_key_t){ .tap.keycode = KC_PAGE_UP, },
                                 },
                                 [2] = {
-                                    [7] = &(smart_key_t){ .tap.keycode = KC_LEFT, .tap.mask = MOD_BIT(KC_ROPT), .hold.keycode = KC_HOME, },
+                                    [7] = &(smart_key_t){ .tap.keycode = KC_LEFT, .tap.mask = MOD_BIT(KC_ROPT), .hold.keycode = KC_LEFT, .hold.mask = MOD_BIT(KC_LEFT_GUI), },
                                     [8] = &(smart_key_t){ .tap.keycode = KC_PAGE_DOWN, },
-                                    [9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, .tap.mask = MOD_BIT(KC_ROPT), .hold.keycode = KC_END, },
+                                    [9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, .tap.mask = MOD_BIT(KC_ROPT), .hold.keycode = KC_RIGHT, .hold.mask = MOD_BIT(KC_LEFT_GUI), },
                                 },
                             },
                     },
