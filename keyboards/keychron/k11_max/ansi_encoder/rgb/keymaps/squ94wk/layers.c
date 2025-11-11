@@ -111,6 +111,84 @@ void jump_layer(smart_key_t *key) {
     return;
 }
 
+void tap_ctrl_a(smart_key_t *key) {
+    switch (os_index) {
+    case 0:
+        register_with_mods(PTR_TO(KC_A), MOD_BIT(KC_LEFT_CTRL), NULL);
+        key->state.release.keycode = KC_A;
+        return;
+    case 1:
+        register_with_mods(PTR_TO(KC_A), MOD_BIT(KC_LCMD), NULL);
+        key->state.release.keycode = KC_A;
+        return;
+    }
+}
+
+void tap_ctrl_c(smart_key_t *key) {
+    switch (os_index) {
+    case 0:
+        register_with_mods(PTR_TO(KC_C), MOD_BIT(KC_LEFT_CTRL), NULL);
+        key->state.release.keycode = KC_C;
+        return;
+    case 1:
+        register_with_mods(PTR_TO(KC_C), MOD_BIT(KC_LCMD), NULL);
+        key->state.release.keycode = KC_C;
+        return;
+    }
+}
+
+void tap_ctrl_v(smart_key_t *key) {
+    switch (os_index) {
+    case 0:
+        register_with_mods(PTR_TO(KC_V), MOD_BIT(KC_LEFT_CTRL), NULL);
+        key->state.release.keycode = KC_V;
+        return;
+    case 1:
+        register_with_mods(PTR_TO(KC_V), MOD_BIT(KC_LCMD), NULL);
+        key->state.release.keycode = KC_V;
+        return;
+    }
+}
+
+void tap_ctrl_x(smart_key_t *key) {
+    switch (os_index) {
+    case 0:
+        register_with_mods(PTR_TO(KC_X), MOD_BIT(KC_LEFT_CTRL), NULL);
+        key->state.release.keycode = KC_X;
+        return;
+    case 1:
+        register_with_mods(PTR_TO(KC_X), MOD_BIT(KC_LCMD), NULL);
+        key->state.release.keycode = KC_X;
+        return;
+    }
+}
+
+void tap_ctrl_z(smart_key_t *key) {
+    switch (os_index) {
+    case 0:
+        register_with_mods(PTR_TO(KC_Z), MOD_BIT(KC_LEFT_CTRL), NULL);
+        key->state.release.keycode = KC_Z;
+        return;
+    case 1:
+        register_with_mods(PTR_TO(KC_Z), MOD_BIT(KC_LCMD), NULL);
+        key->state.release.keycode = KC_Z;
+        return;
+    }
+}
+
+void tap_ctrl_r(smart_key_t *key) {
+    switch (os_index) {
+    case 0:
+        register_with_mods(PTR_TO(KC_R), MOD_BIT(KC_LEFT_CTRL), NULL);
+        key->state.release.keycode = KC_R;
+        return;
+    case 1:
+        register_with_mods(PTR_TO(KC_R), MOD_BIT(KC_LCMD), NULL);
+        key->state.release.keycode = KC_R;
+        return;
+    }
+}
+
 #ifdef MOUSEKEY_ENABLE
 void hold_mouse(smart_key_t *key) {
     switch (key->state.tap_count) {
@@ -344,6 +422,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [9] = &(smart_key_t){ .tap.keycode = KC_DELETE, },
                             },
                             [2] = {
+                                [1] = &(smart_key_t){ .tap.action = &tap_ctrl_r, },
                                 [2] = &(smart_key_t){ .tap.keycode  = KC_ESC, },
                                 [3] = &(smart_key_t){ .tap.keycode = KC_ENT, },
                                 [4] = &(smart_key_t){ .tap.keycode = KC_TAB, },
@@ -351,14 +430,20 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 [7] = &(smart_key_t){ .tap.keycode = KC_LEFT, },
                                 [8] = &(smart_key_t){ .tap.keycode = KC_DOWN, },
                                 [9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, },
+                                [10] = &(smart_key_t){ .tap.action = &tap_ctrl_z, },
                             },
                             [3] = {
                                 [3] = &(smart_key_t){ .hold.action = &jump_layer, },
                                 [4] = &(smart_key_t){ .tap.mask_oneshot = MOD_BIT_LCTRL | MOD_BIT_LALT | MOD_BIT_LGUI, },
                                 [5] = &(smart_key_t){ .tap.action = &activate_tmux, },
+
+                                [9] = &(smart_key_t){ .tap.action = &tap_ctrl_c, },
+                                [10] = &(smart_key_t){ .tap.action = &tap_ctrl_x, },
+                                [11] = &(smart_key_t){ .tap.action = &tap_ctrl_v, },
                             },
                             [4] = {
-                                [9] = &(smart_key_t){ .tap.action = &clear, },
+                                [8] = &(smart_key_t){ .tap.action = &clear, },
+                                [9] = &(smart_key_t){ .tap.action = &tap_ctrl_a, },
                             },
                             },
                     },
