@@ -94,16 +94,18 @@ static magic_expansion_t magic_expansions[] = {
 
     {"ful", "ly"},
     {"ize", "ization"},
+    {"(ing|ive)", "ly"},
+    {"ence", "ment"},
+    {"ment", "ation"},
+    {"ion", "ization"},
 
-    {"( t|T)", "he "},
     {"(d|D)if", "fer"},
     {"iffer", "ent"},
     {"ifferent", "ly"},
-    {"dep", "end"},
-    {"depend", "ency"},
+    {"(d|D)ep", "end"},
+    {"epend", "ency"},
     {"ret", "urn"},
     {"pk", "\backage"},
-    {"(l|L)ib", "rary"},
     {"(l|L)ib", "rary"},
     {"(r|R)ef", "erence"},
     {"(n|N)et", "work"},
@@ -121,6 +123,7 @@ static magic_expansion_t magic_expansions[] = {
     {"pl", "atform"},
     {"(i|I)nit", "ialize"},
     {"(a|A)uto", "matic"},
+    {"utomatic", "ally"},
     {"(c|C)on", "nect"},
     {"onnect", "ion"},
     {"(d|D)isc", "onnect"},
@@ -206,10 +209,10 @@ bool handle_magic_complete(uint16_t *keycode, uint16_t mask) {
         expansion = "ght";
         break;
     case KC_I:
-        expansion = "ies";
+        expansion = "ity";
         break;
     case KC_L:
-        expansion = "lly";
+        expansion = "ly";
         break;
     case KC_M:
         expansion = "ment";
@@ -234,9 +237,6 @@ bool handle_magic_complete(uint16_t *keycode, uint16_t mask) {
         break;
     case KC_V:
         expansion = "ive";
-        break;
-    case KC_Y:
-        expansion = "ity";
         break;
     case KC_Z:
         expansion = "ize";
