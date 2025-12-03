@@ -765,9 +765,14 @@ void matrix_scan_user(void) {
         }
     }
 
+#ifdef RGB_MATRIX_ENABLE
+    #ifndef RGB_MATRIX_IDLE_TIMEOUT
+        #define RGB_MATRIX_IDLE_TIMEOUT 300000
+    #endif
     if (rgb_matrix_is_enabled() && timer_read32() > last_input + RGB_MATRIX_IDLE_TIMEOUT) {
         rgb_matrix_disable();
     }
+#endif
 }
 
 // ============================================================================

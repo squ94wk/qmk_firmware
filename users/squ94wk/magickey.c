@@ -93,15 +93,16 @@ static magic_expansion_t magic_expansions[] = {
     {" ", "\b, "},
 
     {"ful", "ly"},
-    {"ize", "ization"},
+    {"ize", "\bation"},
     {"(ing|ive)", "ly"},
     {"ence", "ment"},
     {"ment", "ation"},
-    {"ion", "ization"},
+    {"ure", "\bation"},
 
     {"(d|D)if", "fer"},
     {"iffer", "ent"},
     {"ifferent", "ly"},
+    {"(d|D)eps", "\bendencies"},
     {"(d|D)ep", "end"},
     {"epend", "ency"},
     {"ret", "urn"},
@@ -119,7 +120,6 @@ static magic_expansion_t magic_expansions[] = {
     {"onfig", "ure"},
     {"onfigure", "\bation"},
     {"(i|I)mpl", "ement"},
-    {"mplement", "ation"},
     {"pl", "atform"},
     {"(i|I)nit", "ialize"},
     {"(a|A)uto", "matic"},
@@ -137,6 +137,7 @@ static magic_expansion_t magic_expansions[] = {
     {"v(c|C)", "luster"},
     {"(n|N)s", "\bamespace"},
     {"-o", " yaml"},
+    {"-o yaml", "\b\b\b\bwide"},
     {"~", "/"},
     {"~/", "."},
 
@@ -195,6 +196,9 @@ bool handle_magic_complete(uint16_t *keycode, uint16_t mask) {
         break;
     case KC_C:
         expansion = "ence";
+        break;
+    case KC_D: // D is V on the alpha 2 layer
+        expansion = "ive";
         break;
     case KC_E:
         expansion = "ere";
