@@ -1,4 +1,5 @@
 #include "metrics.h"
+#include "layout_helpers.h"
 
 bool fire_for_all(smart_key_t *key, keypos_t pos) {
     return true;
@@ -250,66 +251,55 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_ALPHA_1] =
                     &(smart_layer_t){
                         .map = {
-                                [2] = {
-                                        /* ESC */ [2] = &(smart_key_t){ .max_tap = 2, .defer_release = true, .tap.keycode = KC_TRANSPARENT, .hold.action = &hold_alpha, .hold_on_key_press = &always_on_other_press, },
-                                        /* S */ [3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.keycode = KC_LEFT_SHIFT, },
-                                        /* T */ [4] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SYMBOLS, },
+                                L_HOME_RING = &(smart_key_t){ .max_tap = 2, .defer_release = true, .tap.keycode = KC_TRANSPARENT, .hold.action = &hold_alpha, .hold_on_key_press = &always_on_other_press, },
+                                L_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.keycode = KC_LEFT_SHIFT, },
+                                L_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SYMBOLS, },
 
-                                        /* N */ [7] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_VIM_TEXT, },
-                                        /* E */ [8] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_VIM_NAV, },
-                                        /* MAGIC */ [9] = &(smart_key_t){ .defer_release = true, .tap.action = &magickey_action, .hold.layer = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, },
-                                        /* I */
-                                    },
-                                [3] = {
-                                        /* R */ [3] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.keycode = KC_LEFT_SHIFT, },
-                                        /* G */
-                                        /* D */ [5] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SYMBOLS_2, },
+                                R_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_VIM_TEXT, },
+                                R_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_VIM_NAV, },
+                                R_HOME_RING = &(smart_key_t){ .defer_release = true, .tap.action = &magickey_action, .hold.layer = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, },
 
-                                        /* H */ [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_H_HOLD, },
-                                        /* . */ [10] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_L_HOLD, },
-                                        /* / */ [11] = &(smart_key_t){ .defer_release = true, .tap.keycode = KC_TRANSPARENT, .hold.keycode = KC_RIGHT_SHIFT, .hold_on_key_press = &always_on_other_press, },
-                                    },
-                                [4] = {
-                                        [5] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SYS, },
-                                        [6] = &(smart_key_t){ .max_tap = 2, .tap.action = &repeat_last_key, .hold.action = &hold_num, .hold_on_key_press = &always_on_other_press, },
+                                L_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.keycode = KC_LEFT_SHIFT, },
+                                L_BOT_IDX   = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SYMBOLS_2, },
 
-                                        [7] = &(smart_key_t){ .tap.action = &magickey_complete, },
-                                        [9] = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_NUM, },
-                                    },
+                                R_BOT_MID   = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_H_HOLD, },
+                                R_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_L_HOLD, },
+                                R_BOT_PINK  = &(smart_key_t){ .defer_release = true, .tap.keycode = KC_TRANSPARENT, .hold.keycode = KC_RIGHT_SHIFT, .hold_on_key_press = &always_on_other_press, },
+
+                                L_THUMB_IN  = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_SYS, },
+                                L_THUMB_OUT = &(smart_key_t){ .max_tap = 2, .tap.action = &repeat_last_key, .hold.action = &hold_num, .hold_on_key_press = &always_on_other_press, },
+
+                                R_THUMB_IN  = &(smart_key_t){ .tap.action = &magickey_complete, },
+                                R_THUMB_OUT = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer = LAYER_NUM, },
                             },
                     },
 
                 [LAYER_ALPHA_2] =
                     &(smart_layer_t){
                         .map = {
-                            [1] = {
-                                [2] = &(smart_key_t){ .tap.keycode = KC_2, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [3] = &(smart_key_t){ .tap.keycode = KC_X, },
-                                [4] = &(smart_key_t){ .tap.keycode = KC_SLASH, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                            L_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_2, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            L_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_X, },
+                            L_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_SLASH, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
 
-                                [7] = &(smart_key_t){ .tap.keycode = KC_P, },
-                                [8] = &(smart_key_t){ .tap.keycode = KC_GRV, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [9] = &(smart_key_t){ .tap.keycode = KC_Q, },
-                            },
-                            [2] = {
-                                [3] = &(smart_key_t){ .tap.keycode = KC_COMMA, },
-                                [4] = &(smart_key_t){ .tap.keycode = KC_DOT, },
+                            R_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_P, },
+                            R_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_GRV, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            R_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_Q, },
 
-                                [7] = &(smart_key_t){ .tap.keycode = KC_Y, },
-                                [8] = &(smart_key_t){ .tap.keycode = KC_K, },
-                                [10] = &(smart_key_t){ .tap.keycode = KC_J, },
-                                [9] = &(smart_key_t){ .tap.action = &magickey_action2, },
-                            },
-                            [3] = {
-                                [5] = &(smart_key_t){ .tap.keycode = KC_V, },
+                            L_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_COMMA, },
+                            L_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_DOT, },
 
-                                [9] = &(smart_key_t){ .tap.keycode = KC_Z, },
-                                [10] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [11] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, },
-                            },
-                            [4] = {
-                                [5] = &(smart_key_t){ .tap.action = &smart_case, },
-                            },
+                            R_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_Y, },
+                            R_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_K, },
+                            R_HOME_PINK = &(smart_key_t){ .tap.keycode = KC_J, },
+                            R_HOME_RING = &(smart_key_t){ .tap.action = &magickey_action2, },
+
+                            L_BOT_IDX   = &(smart_key_t){ .tap.keycode = KC_V, },
+
+                            R_BOT_MID   = &(smart_key_t){ .tap.keycode = KC_Z, },
+                            R_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            R_BOT_PINK  = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, },
+
+                            L_THUMB_IN  = &(smart_key_t){ .tap.action = &smart_case, },
                         },
                         .on_layer_activate = &deactivate_on_other_layer,
                     },
@@ -317,44 +307,36 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_SYMBOLS_2] =
                     &(smart_layer_t){
                         .map = {
-                            [1] = {
-                                [7] = &(smart_key_t){ .tap.keycode = KC_QUOTE, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [8] = &(smart_key_t){ .tap.keycode = KC_QUOTE, },
-                                [9] = &(smart_key_t){ .tap.keycode = KC_GRV, },
-                            },
-                            [2] = {
-                                [7] = &(smart_key_t){ .tap.keycode = KC_9, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), .max_tap     = 2, .tap.action  = &tap_multi_matching_brace, },
-                                [8] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [9] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [10] = &(smart_key_t){ .tap.keycode = KC_3, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                            },
-                            [3] = {
-                                [9] = &(smart_key_t){ .tap.keycode = KC_COMMA, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [10] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, },
-                                [11] = &(smart_key_t){ .tap.keycode = KC_4, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                            },
+                            R_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_QUOTE, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            R_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_QUOTE, },
+                            R_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_GRV, },
+
+                            R_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_9, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), .max_tap = 2, .tap.action = &tap_multi_matching_brace, },
+                            R_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            R_HOME_RING = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            R_HOME_PINK = &(smart_key_t){ .tap.keycode = KC_3, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+
+                            R_BOT_MID   = &(smart_key_t){ .tap.keycode = KC_COMMA, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            R_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, },
+                            R_BOT_PINK  = &(smart_key_t){ .tap.keycode = KC_4, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
                         },
                     },
 
                 [LAYER_SYMBOLS] =
                     &(smart_layer_t){
                         .map = {
-                            [1] = {
-                                [7] = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [8] = &(smart_key_t){ .tap.keycode = KC_SLASH, },
-                                [9] = &(smart_key_t){ .tap.keycode = KC_7, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                            },
-                            [2] = {
-                                [7] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [8] = &(smart_key_t){ .tap.keycode = KC_MINUS, },
-                                [9] = &(smart_key_t){ .tap.keycode = KC_EQUAL, },
-                                [10] = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-                            },
-                            [3] = {
-                                [9] = &(smart_key_t){ .tap.keycode = KC_MINUS, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [10] = &(smart_key_t){ .tap.keycode = KC_8, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [11] = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, },
-                            },
+                            R_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_1, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            R_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_SLASH, },
+                            R_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_7, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+
+                            R_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            R_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_MINUS, },
+                            R_HOME_RING = &(smart_key_t){ .tap.keycode = KC_EQUAL, },
+                            R_HOME_PINK = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+
+                            R_BOT_MID   = &(smart_key_t){ .tap.keycode = KC_MINUS, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            R_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_8, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            R_BOT_PINK  = &(smart_key_t){ .tap.keycode = KC_BACKSLASH, },
                         },
                     },
 
@@ -362,271 +344,231 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_H_HOLD] =
                     &(smart_layer_t){
                         .map = {
-                                [3][5] = &(smart_key_t){ .tap.keycode = KC_DOT, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
+                                L_BOT_IDX = &(smart_key_t){ .tap.keycode = KC_DOT, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
                             },
                     },
 
                 [LAYER_VIM_TEXT] =
                     &(smart_layer_t){
                         .map = {
-                                [1][2] = &(smart_key_t){ .tap.keycode = KC_P, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
-                                [1][3] = &(smart_key_t){ .tap.keycode = KC_P, },
-                                [1][4] = &(smart_key_t){ .tap.keycode = KC_X, },
+                                L_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_P, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                L_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_P, },
+                                L_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_X, },
 
-                                [2][1] = &(smart_key_t){ .tap.action = &vim_blackhole_register, },
-                                [2][2] = &(smart_key_t){ .tap.keycode = KC_J, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
-                                [2][3] = &(smart_key_t){ .tap.keycode = KC_V, },
-                                [2][4] = &(smart_key_t){ .tap.keycode = KC_Y, },
+                                L_HOME_PINK = &(smart_key_t){ .tap.action = &vim_blackhole_register, },
+                                L_HOME_RING = &(smart_key_t){ .tap.keycode = KC_J, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                L_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_V, },
+                                L_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_Y, },
 
-                                [3][3] = &(smart_key_t){ .tap.keycode = KC_V, .tap.mask = MOD_BIT(KC_LEFT_CTRL), },
-                                [3][4] = &(smart_key_t){ .tap.keycode = KC_V, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
-                                [3][5] = &(smart_key_t){ .tap.keycode = KC_0, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                                L_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_V, .tap.mask = MOD_BIT(KC_LEFT_CTRL), },
+                                L_BOT_MID   = &(smart_key_t){ .tap.keycode = KC_V, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                L_BOT_IDX   = &(smart_key_t){ .tap.keycode = KC_0, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
                             },
                     },
 
                 [LAYER_VIM_NAV] =
                     &(smart_layer_t){
                         .map = {
-                                [1][2] = &(smart_key_t){ .tap.keycode = KC_B, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
-                                [1][3] = &(smart_key_t){ .tap.keycode = KC_H, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
-                                [1][4] = &(smart_key_t){ .tap.keycode = KC_W, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                L_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_B, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                L_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_H, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                L_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_W, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
 
-                                [2][1] = &(smart_key_t){ .tap.keycode = KC_6, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
-                                [2][2] = &(smart_key_t){ .tap.keycode = KC_U, .tap.mask = MOD_BIT(KC_LEFT_CTRL), },
-                                [2][3] = &(smart_key_t){ .tap.keycode = KC_M, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
-                                [2][4] = &(smart_key_t){ .tap.keycode = KC_4, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                L_HOME_PINK = &(smart_key_t){ .tap.keycode = KC_6, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                L_HOME_RING = &(smart_key_t){ .tap.keycode = KC_U, .tap.mask = MOD_BIT(KC_LEFT_CTRL), },
+                                L_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_M, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                L_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_4, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
 
-                                [3][3] = &(smart_key_t){ .tap.keycode = KC_D, .tap.mask = MOD_BIT(KC_LEFT_CTRL), },
-                                [3][4] = &(smart_key_t){ .tap.keycode = KC_L, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
-                                [3][5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                                L_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_D, .tap.mask = MOD_BIT(KC_LEFT_CTRL), },
+                                L_BOT_MID   = &(smart_key_t){ .tap.keycode = KC_L, .tap.mask = MOD_BIT(KC_LEFT_SHIFT), },
+                                L_BOT_IDX   = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
                             },
                     },
 
                 [LAYER_L_HOLD] =
                     &(smart_layer_t){
                         .map = {
-                                [3][5] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, },
+                                L_BOT_IDX = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, },
                             },
                     },
 
                 [LAYER_SYS] =
                     &(smart_layer_t){
                         .map = {
-                            [1] = {
-                                [2] = &(smart_key_t){ .tap.keycode = KC_TAB, .tap.mask    = MOD_BIT(KC_RIGHT_SHIFT), },
-                                [3] = &(smart_key_t){ .tap.keycode = KC_INSERT, },
-                                [4] = &(smart_key_t){ .tap.keycode = KC_GRV, },
+                            L_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_TAB, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                            L_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_INSERT, },
+                            L_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_GRV, },
 
-                                [7] = &(smart_key_t){ .tap.keycode = KC_BACKSPACE, },
-                                [8] = &(smart_key_t){ .tap.keycode = KC_UP, },
-                                [9] = &(smart_key_t){ .tap.keycode = KC_DELETE, },
-                            },
-                            [2] = {
-                                [1] = &(smart_key_t){ .tap.action = &tap_ctrl_r, },
-                                [2] = &(smart_key_t){ .tap.keycode  = KC_ESC, },
-                                [3] = &(smart_key_t){ .tap.keycode = KC_ENT, },
-                                [4] = &(smart_key_t){ .tap.keycode = KC_TAB, },
+                            R_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_BACKSPACE, },
+                            R_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_UP, },
+                            R_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_DELETE, },
 
-                                [7] = &(smart_key_t){ .tap.keycode = KC_LEFT, },
-                                [8] = &(smart_key_t){ .tap.keycode = KC_DOWN, },
-                                [9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, },
-                                [10] = &(smart_key_t){ .tap.action = &tap_ctrl_z, },
-                            },
-                            [3] = {
-                                [3] = &(smart_key_t){ .hold.action = &jump_layer, },
-                                [4] = &(smart_key_t){ .tap.mask_oneshot = MOD_BIT_LCTRL | MOD_BIT_LALT | MOD_BIT_LGUI, },
-                                [5] = &(smart_key_t){ .tap.action = &activate_tmux, },
+                            L_HOME_PINK = &(smart_key_t){ .tap.action = &tap_ctrl_r, },
+                            L_HOME_RING = &(smart_key_t){ .tap.keycode = KC_ESC, },
+                            L_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_ENT, },
+                            L_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_TAB, },
 
-                                [9] = &(smart_key_t){ .tap.action = &tap_ctrl_c, },
-                                [10] = &(smart_key_t){ .tap.action = &tap_ctrl_x, },
-                                [11] = &(smart_key_t){ .tap.action = &tap_ctrl_v, },
-                            },
-                            [4] = {
-                                [8] = &(smart_key_t){ .tap.action = &clear, },
-                                [9] = &(smart_key_t){ .tap.action = &tap_ctrl_a, },
-                            },
+                            R_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_LEFT, },
+                            R_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_DOWN, },
+                            R_HOME_RING = &(smart_key_t){ .tap.keycode = KC_RIGHT, },
+                            R_HOME_PINK = &(smart_key_t){ .tap.action = &tap_ctrl_z, },
+
+                            L_BOT_RING  = &(smart_key_t){ .hold.action = &jump_layer, },
+                            L_BOT_MID   = &(smart_key_t){ .tap.mask_oneshot = MOD_BIT_LCTRL | MOD_BIT_LALT | MOD_BIT_LGUI, },
+                            L_BOT_IDX   = &(smart_key_t){ .tap.action = &activate_tmux, },
+
+                            R_BOT_MID   = &(smart_key_t){ .tap.action = &tap_ctrl_c, },
+                            R_BOT_RING  = &(smart_key_t){ .tap.action = &tap_ctrl_x, },
+                            R_BOT_PINK  = &(smart_key_t){ .tap.action = &tap_ctrl_v, },
+
+                            R_THUMB_IN  = &(smart_key_t){ .tap.action = &clear, },
+                            R_THUMB_OUT = &(smart_key_t){ .tap.action = &tap_ctrl_a, },
                             },
                     },
 
                 [LAYER_NUM] = &(smart_layer_t){
                         .map = {
-                                [1] = {
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_6, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_5, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                                L_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_6, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                                L_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_5, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                                L_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_SEMICOLON, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
 
-                                        [7] = &(smart_key_t){ .tap.keycode = KC_BACKSPACE, },
-                                        [8] = &(smart_key_t){ .tap.keycode = KC_MINUS, },
-                                        [9] = &(smart_key_t){ .tap.keycode = KC_EQUAL, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-                                },
-                                [2] = {
-                                        [1] = &(smart_key_t){ .tap.keycode = KC_8, },
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_7, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_6, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_5, },
+                                R_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_BACKSPACE, },
+                                R_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_MINUS, },
+                                R_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_EQUAL, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
 
-                                        [7] = &(smart_key_t){ .tap.keycode = KC_1, },
-                                        [8] = &(smart_key_t){ .tap.keycode = KC_2, },
-                                        [9] = &(smart_key_t){ .tap.keycode = KC_3, },
-                                        [10] = &(smart_key_t){ .tap.keycode = KC_4, },
-                                    },
-                                [3] = {
-                                    [3] = &(smart_key_t){ .tap.keycode = KC_COMMA, },
-                                    [4] = &(smart_key_t){ .tap.keycode = KC_DOT, },
-                                    [5] = &(smart_key_t){ .tap.keycode = KC_9, },
+                                L_HOME_PINK = &(smart_key_t){ .tap.keycode = KC_8, },
+                                L_HOME_RING = &(smart_key_t){ .tap.keycode = KC_7, },
+                                L_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_6, },
+                                L_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_5, },
 
-                                    [9] = &(smart_key_t){ .tap.keycode = KC_0, },
-                                    [10] = &(smart_key_t){ .tap.keycode = KC_8, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-                                    [11] = &(smart_key_t){ .tap.keycode = KC_SLASH, },
-                                },
-                                [4] = {
-                                    [6] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, .hold.action = &print_magic_stats, },
-                                },
+                                R_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_1, },
+                                R_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_2, },
+                                R_HOME_RING = &(smart_key_t){ .tap.keycode = KC_3, },
+                                R_HOME_PINK = &(smart_key_t){ .tap.keycode = KC_4, },
+
+                                L_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_COMMA, },
+                                L_BOT_MID   = &(smart_key_t){ .tap.keycode = KC_DOT, },
+                                L_BOT_IDX   = &(smart_key_t){ .tap.keycode = KC_9, },
+
+                                R_BOT_MID   = &(smart_key_t){ .tap.keycode = KC_0, },
+                                R_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_8, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                                R_BOT_PINK  = &(smart_key_t){ .tap.keycode = KC_SLASH, },
+
+                                L_THUMB_OUT = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, .hold.action = &print_magic_stats, },
                             },
                     },
 
                 [LAYER_JUMP_MAC] = &(smart_layer_t){
                         .map = {
-                                [1] = {
-                                    [7] = &(smart_key_t){ .tap.keycode = KC_BACKSPACE, .tap.mask = MOD_BIT(KC_ROPT), },
-                                    [8] = &(smart_key_t){ .tap.keycode = KC_PAGE_UP, },
-                                },
-                                [2] = {
-                                    [7] = &(smart_key_t){ .tap.keycode = KC_LEFT, .tap.mask = MOD_BIT(KC_ROPT), .hold.keycode = KC_LEFT, .hold.mask = MOD_BIT(KC_LEFT_GUI), },
-                                    [8] = &(smart_key_t){ .tap.keycode = KC_PAGE_DOWN, },
-                                    [9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, .tap.mask = MOD_BIT(KC_ROPT), .hold.keycode = KC_RIGHT, .hold.mask = MOD_BIT(KC_LEFT_GUI), },
-                                },
+                                R_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_BACKSPACE, .tap.mask = MOD_BIT(KC_ROPT), },
+                                R_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_PAGE_UP, },
+
+                                R_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_LEFT, .tap.mask = MOD_BIT(KC_ROPT), .hold.keycode = KC_LEFT, .hold.mask = MOD_BIT(KC_LEFT_GUI), },
+                                R_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_PAGE_DOWN, },
+                                R_HOME_RING = &(smart_key_t){ .tap.keycode = KC_RIGHT, .tap.mask = MOD_BIT(KC_ROPT), .hold.keycode = KC_RIGHT, .hold.mask = MOD_BIT(KC_LEFT_GUI), },
                             },
                     },
 
                 [LAYER_JUMP_WIN] = &(smart_layer_t){
                         .map = {
-                                [1] = {
-                                    [7] = &(smart_key_t){ .tap.keycode = KC_BACKSPACE, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), },
-                                    [8] = &(smart_key_t){ .tap.keycode = KC_PAGE_UP, },
-                                    [9] = &(smart_key_t){ .tap.keycode = KC_DELETE, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), },
-                                },
-                                [2] = {
-                                    [7] = &(smart_key_t){ .tap.keycode = KC_LEFT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_HOME, },
-                                    [8] = &(smart_key_t){ .tap.keycode = KC_PAGE_DOWN, },
-                                    [9] = &(smart_key_t){ .tap.keycode = KC_RIGHT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_END, },
-                                },
+                                R_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_BACKSPACE, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), },
+                                R_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_PAGE_UP, },
+                                R_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_DELETE, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), },
+
+                                R_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_LEFT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_HOME, },
+                                R_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_PAGE_DOWN, },
+                                R_HOME_RING = &(smart_key_t){ .tap.keycode = KC_RIGHT, .tap.mask = MOD_BIT(KC_RIGHT_CTRL), .hold.keycode = KC_END, },
                             },
                     },
 
                 [LAYER_FUNCTION_KEYS] = &(smart_layer_t){
                         .map = {
-                                [1] = {
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_F12, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_F11, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_F10, },
+                                L_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_F12, },
+                                L_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_F11, },
+                                L_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_F10, },
 
-                                        [7] = &(smart_key_t){ .tap.keycode = KC_F7, },
-                                        [8] = &(smart_key_t){ .tap.keycode = KC_F8, },
-                                        [9] = &(smart_key_t){ .tap.keycode = KC_F9, }, },
-                                [2] = {
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_F6, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_F5, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_F4, },
+                                R_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_F7, },
+                                R_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_F8, },
+                                R_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_F9, },
 
-                                        [7] = &(smart_key_t){ .tap.keycode = KC_F1, },
-                                        [8] = &(smart_key_t){ .tap.keycode = KC_F2, },
-                                        [9] = &(smart_key_t){ .tap.keycode = KC_F3, },
-                                    },
-                                [3] = {
-                                    // media controls
-                                },
+                                L_HOME_RING = &(smart_key_t){ .tap.keycode = KC_F6, },
+                                L_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_F5, },
+                                L_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_F4, },
+
+                                R_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_F1, },
+                                R_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_F2, },
+                                R_HOME_RING = &(smart_key_t){ .tap.keycode = KC_F3, },
                             },
                     },
 
                 [LAYER_DUMB] = &(smart_layer_t){
                         .map = {
-                                [1] = {
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_B, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_L, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_W, },
-                                    },
-                                [2] = {
-                                        [1] = &(smart_key_t){ .tap.keycode = KC_LEFT_SHIFT, },
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_A, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_S, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_T, },
-                                    },
-                                [3] = {
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_LEFT_CTRL, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_M, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_G, },
-                                        [5] = &(smart_key_t){ .tap.keycode = KC_D, },
-                                    },
-                                [4] = {
-                                        [5] = &(smart_key_t){ .tap.keycode = KC_SPC, },
-                                        [6] = &(smart_key_t){ .hold.layer = LAYER_DUMB_2, },
-                                },
+                                L_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_B, },
+                                L_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_L, },
+                                L_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_W, },
+
+                                L_HOME_PINK = &(smart_key_t){ .tap.keycode = KC_LEFT_SHIFT, },
+                                L_HOME_RING = &(smart_key_t){ .tap.keycode = KC_A, },
+                                L_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_S, },
+                                L_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_T, },
+
+                                L_BOT_PINK  = &(smart_key_t){ .tap.keycode = KC_LEFT_CTRL, },
+                                L_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_M, },
+                                L_BOT_MID   = &(smart_key_t){ .tap.keycode = KC_G, },
+                                L_BOT_IDX   = &(smart_key_t){ .tap.keycode = KC_D, },
+
+                                L_THUMB_IN  = &(smart_key_t){ .tap.keycode = KC_SPC, },
+                                L_THUMB_OUT = &(smart_key_t){ .hold.layer = LAYER_DUMB_2, },
                             },
                     },
 
                 [LAYER_DUMB_2] = &(smart_layer_t){
                         .map = {
-                                [1] = {
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_3, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_2, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_1, },
-                                    },
-                                [2] = {
-                                        // [1] = &(smart_key_t){ .tap.keycode = , },
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_ESC, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_ENTER, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_TAB, },
-                                    },
-                                [3] = {
-                                        // [2] = &(smart_key_t){ .tap.keycode = KC_LEFT_CTRL, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_7, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_8, },
-                                        [5] = &(smart_key_t){ .tap.keycode = KC_9, },
-                                    },
-                                [4] = {
-                                        [5] = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, .hold.action = &print_magic_stats, },
-                                },
+                                L_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_3, },
+                                L_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_2, },
+                                L_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_1, },
+
+                                L_HOME_RING = &(smart_key_t){ .tap.keycode = KC_ESC, },
+                                L_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_ENTER, },
+                                L_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_TAB, },
+
+                                L_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_7, },
+                                L_BOT_MID   = &(smart_key_t){ .tap.keycode = KC_8, },
+                                L_BOT_IDX   = &(smart_key_t){ .tap.keycode = KC_9, },
+
+                                L_THUMB_IN  = &(smart_key_t){ .max_tap = 3, .tap.action = &toggle_os_index, .hold.action = &print_magic_stats, },
                             },
                     },
 
                 [LAYER_TMUX] = &(smart_layer_t){
                         .map = {
-                                [1] = {
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_P, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_5, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, },
-                                    },
-                                [2] = {
-                                        [1] = &(smart_key_t){ .tap.keycode = KC_Z, },
-                                        [2] = &(smart_key_t){ .tap.layer_toggle = LAYER_TMUX, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_QUOTE, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_N, },
-                                    },
-                                [3] = {
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_C, },
-                                        [5] = &(smart_key_t){ .tap.action = &activate_tmux, },
-                                    },
+                                L_TOP_RING  = &(smart_key_t){ .tap.keycode = KC_P, },
+                                L_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_5, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                                L_TOP_IDX   = &(smart_key_t){ .tap.keycode = KC_RIGHT_BRACKET, },
+
+                                L_HOME_PINK = &(smart_key_t){ .tap.keycode = KC_Z, },
+                                L_HOME_RING = &(smart_key_t){ .tap.layer_toggle = LAYER_TMUX, },
+                                L_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_QUOTE, .tap.mask = MOD_BIT(KC_RIGHT_SHIFT), },
+                                L_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_N, },
+
+                                L_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_LEFT_BRACKET, },
+                                L_BOT_MID   = &(smart_key_t){ .tap.keycode = KC_C, },
+                                L_BOT_IDX   = &(smart_key_t){ .tap.action = &activate_tmux, },
                             },
                     },
 
 #ifdef MOUSEKEY_ENABLE
                 [LAYER_MOUSE] = &(smart_layer_t){
                         .map = {
-                                [1] = {
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_MS_UP, },
-                                        [8] = &(smart_key_t){ .tap.keycode = KC_MS_WH_UP, },
-                                    },
-                                [2] = {
-                                        [2] = &(smart_key_t){ .tap.keycode = KC_MS_LEFT, },
-                                        [3] = &(smart_key_t){ .tap.keycode = KC_MS_DOWN, },
-                                        [4] = &(smart_key_t){ .tap.keycode = KC_MS_RIGHT, },
+                                L_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_MS_UP, },
+                                R_TOP_MID   = &(smart_key_t){ .tap.keycode = KC_MS_WH_UP, },
 
-                                        [7] = &(smart_key_t){ .tap.keycode = KC_MS_BTN1, },
-                                        [8] = &(smart_key_t){ .tap.keycode = KC_MS_WH_DOWN, },
-                                        [9] = &(smart_key_t){ .tap.keycode = KC_MS_BTN2, },
-                                    },
+                                L_HOME_RING = &(smart_key_t){ .tap.keycode = KC_MS_LEFT, },
+                                L_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_MS_DOWN, },
+                                L_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_MS_RIGHT, },
+
+                                R_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_MS_BTN1, },
+                                R_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_MS_WH_DOWN, },
+                                R_HOME_RING = &(smart_key_t){ .tap.keycode = KC_MS_BTN2, },
                             },
                     },
 #endif
