@@ -45,6 +45,10 @@ bool always_on_other_press(smart_key_t *key, keypos_t pos) {
     return true;
 }
 
+bool defer_release_except_space(smart_key_t *key, uint16_t keycode) {
+    return keycode != KC_SPACE;
+}
+
 void clear(smart_key_t *key) {
     clear_oneshot_mods();
     smart_case_off();
@@ -260,7 +264,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
 
                                 R_HOME_IDX  = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_VIM_TEXT, },
                                 R_HOME_MID  = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_VIM_NAV, },
-                                R_HOME_RING = &(smart_key_t){ .defer_release = true, .tap.action = &magickey_action, .hold.layer = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, },
+                                R_HOME_RING = &(smart_key_t){ .defer_release = true, .tap.action = &magickey_action, .hold.layer = LAYER_ALPHA_2, .hold_on_key_press = &always_on_other_press, .defer_release_on_key = &defer_release_except_space, },
 
                                 L_BOT_RING  = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.keycode = KC_LEFT_SHIFT, },
                                 L_BOT_IDX   = &(smart_key_t){ .tap.keycode = KC_TRANSPARENT, .hold.layer  = LAYER_SYMBOLS_2, },

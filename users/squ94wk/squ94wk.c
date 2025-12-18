@@ -556,7 +556,7 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
                 return true;
             }
 
-            if (key->defer_release) {
+            if (key->defer_release && (!key->defer_release_on_key || key->defer_release_on_key(key, deferred_keycode))) {
                 uprintf("DEBUG: defer release of key %s\n", keycode_to_string(keycode));
                 deferred_event = event;
                 deferred_keycode = keycode;
@@ -651,7 +651,7 @@ static bool process_event_with_key(smart_key_t *key, uint16_t keycode, keyevent_
                 return true;
             }
 
-            if (key->defer_release) {
+            if (key->defer_release && (!key->defer_release_on_key || key->defer_release_on_key(key, deferred_keycode))) {
                 uprintf("DEBUG: defer release of key %s\n", keycode_to_string(keycode));
                 deferred_event = event;
                 deferred_keycode = keycode;

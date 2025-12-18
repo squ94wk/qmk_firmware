@@ -130,6 +130,7 @@ struct smart_key_t {
     void (*release_action)(smart_key_t *key);
     bool (*tap_on_key_press)(smart_key_t *key, keypos_t pos);
     bool (*hold_on_key_press)(smart_key_t *key, keypos_t pos);
+    bool (*defer_release_on_key)(smart_key_t *key, uint16_t keycode);
 };
 
 typedef struct smart_layer_t smart_layer_t;
