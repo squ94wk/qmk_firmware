@@ -283,8 +283,8 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 R_BOT_PINK  = &(smart_key_t){},
                                 L_THUMB_IN  = &(smart_key_t){},
                                 L_THUMB_OUT = &(smart_key_t){},
-                                R_THUMB_IN  = &(smart_key_t){},
-                                R_THUMB_OUT = &(smart_key_t){},
+                                R_THUMB_OUT  = &(smart_key_t){},
+                                R_THUMB_IN = &(smart_key_t){},
                             },
                     },
 
@@ -413,8 +413,8 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 R_BOT_MID   = &(smart_key_t){},
                                 R_BOT_RING  = &(smart_key_t){},
                                 R_BOT_PINK  = &(smart_key_t){},
-                                R_THUMB_IN  = &(smart_key_t){},
-                                R_THUMB_OUT = &(smart_key_t){},
+                                R_THUMB_OUT  = &(smart_key_t){},
+                                R_THUMB_IN = &(smart_key_t){},
                             },
                     },
 
@@ -740,12 +740,16 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_ALPHA_1]->map L_THUMB_OUT->hold.action = &hold_num;
     smart_layers[LAYER_ALPHA_1]->map L_THUMB_OUT->hold_on_key_press = &always_on_other_press;
 
-    // R_THUMB_IN - Tap: Magic key complete
-    smart_layers[LAYER_ALPHA_1]->map R_THUMB_IN->tap.action = &magickey_complete;
+    // R_THUMB_OUT - Tap: Magic key complete
+#ifdef MOUSEKEY_ENABLE
+    smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->max_tap = 2;
+    smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->tap.action = &hold_mouse;
+#endif
+    smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->tap.action = &magickey_complete;
 
-    // R_THUMB_OUT - Tap: A (from base), Hold: NUM layer
-    smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->tap.keycode = KC_TRANSPARENT;
-    smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->hold.layer = LAYER_NUM;
+    // R_THUMB_IN - Tap: A (from base), Hold: NUM layer
+    smart_layers[LAYER_ALPHA_1]->map R_THUMB_IN->tap.keycode = KC_TRANSPARENT;
+    smart_layers[LAYER_ALPHA_1]->map R_THUMB_IN->hold.layer = LAYER_NUM;
 
     // ========================================================================
     // LAYER_ALPHA_2 - Secondary alpha layer with additional symbols
@@ -927,11 +931,11 @@ static void lazy_init_layers(void) {
     // R_BOT_PINK - Tap: Ctrl+V (or Cmd+V on Mac) - Paste
     smart_layers[LAYER_SYS]->map R_BOT_PINK->tap.action = &tap_ctrl_v;
 
-    // R_THUMB_IN - Tap: Clear all modifiers and layers
-    smart_layers[LAYER_SYS]->map R_THUMB_IN->tap.action = &clear;
+    // R_THUMB_OUT - Tap: Clear all modifiers and layers
+    smart_layers[LAYER_SYS]->map R_THUMB_OUT->tap.action = &clear;
 
-    // R_THUMB_OUT - Tap: Ctrl+A (or Cmd+A on Mac) - Select all
-    smart_layers[LAYER_SYS]->map R_THUMB_OUT->tap.action = &tap_ctrl_a;
+    // R_THUMB_IN - Tap: Ctrl+A (or Cmd+A on Mac) - Select all
+    smart_layers[LAYER_SYS]->map R_THUMB_IN->tap.action = &tap_ctrl_a;
 
     // ========================================================================
     // LAYER_NUM - Number layer with numpad layout

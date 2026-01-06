@@ -57,8 +57,8 @@
 #define R_BOT_PINK   [6][3]
 
 // Right hand - Thumb row
-#define R_THUMB_IN   [7][0]
-#define R_THUMB_OUT  [7][1]
+#define R_THUMB_OUT  [7][0]
+#define R_THUMB_IN   [7][1]
 
 // Example usage:
 // smart_layer.map L_HOME_RING = &some_smart_key;
