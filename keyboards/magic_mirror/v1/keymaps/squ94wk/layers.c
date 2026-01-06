@@ -197,13 +197,20 @@ void tap_ctrl_r(smart_key_t *key) {
     }
 }
 
-#ifdef MOUSEKEY_ENABLE
 void hold_mouse(smart_key_t *key) {
-    activate_layer(LAYER_MOUSE);
-    key->state.release.layer = LAYER_MOUSE;
+    switch (key->state.tap_count) {
+    case 1:
+#ifdef MOUSEKEY_ENABLE
+        activate_layer(LAYER_MOUSE);
+        key->state.release.layer = LAYER_MOUSE;
+#endif
+        return;
+    case 2:
+        activate_layer(LAYER_MEDIA);
+        key->state.release.layer = LAYER_MEDIA;
+    }
     return;
 }
-#endif
 
 void vim_blackhole_register(smart_key_t *key) {
     SEND_STRING("\"_");
@@ -474,6 +481,14 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                             },
                     },
 
+                [LAYER_MEDIA] = &(smart_layer_t){
+                        .map = {
+                                R_TOP_IDX   = &(smart_key_t){},
+                                R_TOP_MID   = &(smart_key_t){},
+                                R_TOP_RING  = &(smart_key_t){},
+                            },
+                    },
+
                 [LAYER_DUMB] = &(smart_layer_t){
                         .map = {
                                 L_TOP_RING  = &(smart_key_t){},
@@ -733,10 +748,9 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_ALPHA_1]->map L_THUMB_OUT->hold_on_key_press = &always_on_other_press;
 
     // R_THUMB_OUT - Tap: Magic key complete
-#ifdef MOUSEKEY_ENABLE
+    smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->max_tap = 2;
     smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->hold.action = &hold_mouse;
     smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->hold_on_key_press = &always_on_other_press;
-#endif
     smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->tap.action = &magickey_complete;
 
     // R_THUMB_IN - Tap: A (from base), Hold: NUM layer
@@ -1014,6 +1028,14 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_FUNCTION_KEYS]->map R_HOME_IDX->tap.keycode = KC_F1;
     smart_layers[LAYER_FUNCTION_KEYS]->map R_HOME_MID->tap.keycode = KC_F2;
     smart_layers[LAYER_FUNCTION_KEYS]->map R_HOME_RING->tap.keycode = KC_F3;
+
+    // ========================================================================
+    // LAYER_MEDIA
+    // ========================================================================
+
+    smart_layers[LAYER_MEDIA]->map R_TOP_IDX->tap.keycode = KC_AUDIO_VOL_DOWN;
+    smart_layers[LAYER_MEDIA]->map R_TOP_MID->tap.keycode = KC_AUDIO_MUTE;
+    smart_layers[LAYER_MEDIA]->map R_TOP_RING->tap.keycode = KC_AUDIO_VOL_UP;
 
     // ========================================================================
     // LAYER_DUMB

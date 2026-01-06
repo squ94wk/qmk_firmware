@@ -981,6 +981,7 @@ const char* layer_to_string(int layer) {
 #ifdef MOUSEKEY_ENABLE
         case LAYER_MOUSE: return "LAYER_MOUSE";
 #endif
+        case LAYER_MEDIA: return "LAYER_MEDIA";
         default: return "UNKNOWN";
     }
 }

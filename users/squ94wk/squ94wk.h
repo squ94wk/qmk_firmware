@@ -70,6 +70,7 @@ enum smart_layer {
 #ifdef MOUSEKEY_ENABLE
     LAYER_MOUSE,
 #endif
+    LAYER_MEDIA,
     LAYER_JUMP_MAC,
     LAYER_JUMP_WIN,
     SMART_LAYER_COUNT,
