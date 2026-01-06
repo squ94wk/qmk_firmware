@@ -199,16 +199,8 @@ void tap_ctrl_r(smart_key_t *key) {
 
 #ifdef MOUSEKEY_ENABLE
 void hold_mouse(smart_key_t *key) {
-    switch (key->state.tap_count) {
-    case 1:
-        register_with_mods(PTR_TO(KC_RIGHT_SHIFT), 0, NULL);
-        key->state.release.keycode = KC_RIGHT_SHIFT;
-        return;
-    case 2:
-        activate_layer(LAYER_MOUSE);
-        key->state.release.layer = LAYER_MOUSE;
-        return;
-    }
+    activate_layer(LAYER_MOUSE);
+    key->state.release.layer = LAYER_MOUSE;
     return;
 }
 #endif
@@ -742,8 +734,8 @@ static void lazy_init_layers(void) {
 
     // R_THUMB_OUT - Tap: Magic key complete
 #ifdef MOUSEKEY_ENABLE
-    smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->max_tap = 2;
-    smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->tap.action = &hold_mouse;
+    smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->hold.action = &hold_mouse;
+    smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->hold_on_key_press = &always_on_other_press;
 #endif
     smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->tap.action = &magickey_complete;
 
@@ -1084,14 +1076,14 @@ static void lazy_init_layers(void) {
     // LAYER_MOUSE
     // ========================================================================
 
-    smart_layers[LAYER_MOUSE]->map L_TOP_MID->tap.keycode = KC_MS_UP;
-    smart_layers[LAYER_MOUSE]->map R_TOP_MID->tap.keycode = KC_MS_WH_UP;
-    smart_layers[LAYER_MOUSE]->map L_HOME_RING->tap.keycode = KC_MS_LEFT;
-    smart_layers[LAYER_MOUSE]->map L_HOME_MID->tap.keycode = KC_MS_DOWN;
-    smart_layers[LAYER_MOUSE]->map L_HOME_IDX->tap.keycode = KC_MS_RIGHT;
-    smart_layers[LAYER_MOUSE]->map R_HOME_IDX->tap.keycode = KC_MS_BTN1;
-    smart_layers[LAYER_MOUSE]->map R_HOME_MID->tap.keycode = KC_MS_WH_DOWN;
-    smart_layers[LAYER_MOUSE]->map R_HOME_RING->tap.keycode = KC_MS_BTN2;
+    smart_layers[LAYER_MOUSE]->map L_TOP_MID->tap.keycode = MS_UP;
+    smart_layers[LAYER_MOUSE]->map R_TOP_MID->tap.keycode = MS_WHLU;
+    smart_layers[LAYER_MOUSE]->map L_HOME_RING->tap.keycode = MS_LEFT;
+    smart_layers[LAYER_MOUSE]->map L_HOME_MID->tap.keycode = MS_DOWN;
+    smart_layers[LAYER_MOUSE]->map L_HOME_IDX->tap.keycode = MS_RGHT;
+    smart_layers[LAYER_MOUSE]->map R_HOME_IDX->tap.keycode = MS_BTN1;
+    smart_layers[LAYER_MOUSE]->map R_HOME_MID->tap.keycode = MS_WHLD;
+    smart_layers[LAYER_MOUSE]->map R_HOME_RING->tap.keycode = MS_BTN2;
 #endif
 
     // Step 1: Initialize keycodes from base layer and copy positions

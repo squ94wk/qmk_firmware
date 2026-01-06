@@ -1,9 +1,8 @@
-CONSOLE_ENABLE = yes
+MOUSEKEY_ENABLE = yes
 COMBO_ENABLE = yes
-OS_DETECTION_ENABLE = yes
-USER_NAME := squ94wk
 
-# Add user includes and source files manually
+# Enable user code compilation
+USER_NAME := squ94wk
 VPATH += users/squ94wk
 SRC += users/squ94wk/squ94wk.c \
        users/squ94wk/smart_case.c \
