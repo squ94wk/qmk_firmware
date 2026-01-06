@@ -123,7 +123,7 @@ static magic_expansion_t magic_expansions[] = {
     {"(c|C)onf", "ig"},
     {"onfig", "ure"},
     {"onfigure", "\bation"},
-    {"(i|I)mpl", "ement"},
+    {"(i|I)mp", "lement"},
     {"pl", "atform"},
     {"(i|I)nit", "ialize"},
     {"(a|A)uto", "matic"},
