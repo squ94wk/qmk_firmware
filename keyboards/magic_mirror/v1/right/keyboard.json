@@ -32,7 +32,7 @@
         "direct": [
           ["GP27", "GP26", "GP15", null],
           ["GP12", "GP13", "GP14", "GP11"],
-          ["GP8", "GP9", "GP10", null],
+          [null, "GP8", "GP9", "GP10"],
           ["GP6", "GP7", null, null]
         ]
       }
