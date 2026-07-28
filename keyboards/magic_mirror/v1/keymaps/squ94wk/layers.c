@@ -65,8 +65,10 @@ void tap_num(smart_key_t *key) {
 void hold_num(smart_key_t *key) {
     switch (key->state.tap_count) {
     case 1:
-        activate_layer(LAYER_NUM);
-        key->state.release.layer = LAYER_NUM;
+        register_with_mods(PTR_TO(KC_LEFT_SHIFT), 0, NULL);
+        key->state.release.keycode = KC_LEFT_SHIFT;
+        // activate_layer(LAYER_NUM);
+        // key->state.release.layer = LAYER_NUM;
         return;
     case 2:
         activate_layer(LAYER_FUNCTION_KEYS);
@@ -715,9 +717,8 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_ALPHA_1]->map R_HOME_RING->hold_on_key_press = &always_on_other_press;
     smart_layers[LAYER_ALPHA_1]->map R_HOME_RING->defer_release_on_key = &defer_release_except_space;
 
-    // L_BOT_RING - Tap: R (from base), Hold: Left Shift
+    // L_BOT_RING - Tap: R (from base)
     smart_layers[LAYER_ALPHA_1]->map L_BOT_RING->tap.keycode = KC_TRANSPARENT;
-    smart_layers[LAYER_ALPHA_1]->map L_BOT_RING->hold.keycode = KC_LEFT_SHIFT;
 
     // L_BOT_IDX - Tap: D (from base), Hold: SYMBOLS_2 layer
     smart_layers[LAYER_ALPHA_1]->map L_BOT_IDX->tap.keycode = KC_TRANSPARENT;
@@ -731,11 +732,8 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_ALPHA_1]->map R_BOT_MID->tap.keycode = KC_TRANSPARENT;
     smart_layers[LAYER_ALPHA_1]->map R_BOT_MID->hold.layer = LAYER_L_HOLD;
 
-    // R_BOT_RING - Tap: (from base), Hold: Right Shift
-    smart_layers[LAYER_ALPHA_1]->map R_BOT_RING->defer_release = true;
+    // R_BOT_RING - Tap: / (from base)
     smart_layers[LAYER_ALPHA_1]->map R_BOT_RING->tap.keycode = KC_TRANSPARENT;
-    smart_layers[LAYER_ALPHA_1]->map R_BOT_RING->hold.keycode = KC_RIGHT_SHIFT;
-    smart_layers[LAYER_ALPHA_1]->map R_BOT_RING->hold_on_key_press = &always_on_other_press;
 
     // L_THUMB_IN - Tap: SPC (from base), Hold: SYS layer
     smart_layers[LAYER_ALPHA_1]->map L_THUMB_IN->tap.keycode = KC_TRANSPARENT;
