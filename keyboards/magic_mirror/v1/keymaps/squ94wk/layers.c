@@ -202,16 +202,15 @@ void tap_ctrl_r(smart_key_t *key) {
 void hold_mouse(smart_key_t *key) {
     switch (key->state.tap_count) {
     case 1:
+        magickey_complete(key);
+        return;
+    case 2:
 #ifdef MOUSEKEY_ENABLE
         activate_layer(LAYER_MOUSE);
         key->state.release.layer = LAYER_MOUSE;
 #endif
         return;
-    case 2:
-        activate_layer(LAYER_MEDIA);
-        key->state.release.layer = LAYER_MEDIA;
     }
-    return;
 }
 
 void vim_blackhole_register(smart_key_t *key) {
@@ -543,13 +542,18 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                 [LAYER_MOUSE] = &(smart_layer_t){
                         .map = {
                                 L_TOP_MID   = &(smart_key_t){},
+                                R_TOP_IDX   = &(smart_key_t){},
                                 R_TOP_MID   = &(smart_key_t){},
+                                R_TOP_RING  = &(smart_key_t){},
                                 L_HOME_RING = &(smart_key_t){},
                                 L_HOME_MID  = &(smart_key_t){},
                                 L_HOME_IDX  = &(smart_key_t){},
                                 R_HOME_IDX  = &(smart_key_t){},
                                 R_HOME_MID  = &(smart_key_t){},
                                 R_HOME_RING = &(smart_key_t){},
+                                R_BOT_IDX   = &(smart_key_t){},
+                                R_BOT_MID  = &(smart_key_t){},
+                                R_BOT_RING  = &(smart_key_t){},
                             },
                     },
 #endif
@@ -745,8 +749,9 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_ALPHA_1]->map L_THUMB_OUT->hold.action = &hold_num;
     smart_layers[LAYER_ALPHA_1]->map L_THUMB_OUT->hold_on_key_press = &always_on_other_press;
 
-    // R_THUMB_OUT - Tap: Magic key complete
+    // R_THUMB_OUT - Tap/Hold(1): Magic key complete, Hold(2): Mouse layer
     smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->max_tap = 2;
+    smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->defer_release = true;
     smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->hold.action = &hold_mouse;
     smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->hold_on_key_press = &always_on_other_press;
     smart_layers[LAYER_ALPHA_1]->map R_THUMB_OUT->tap.action = &magickey_complete;
@@ -1097,13 +1102,18 @@ static void lazy_init_layers(void) {
     // ========================================================================
 
     smart_layers[LAYER_MOUSE]->map L_TOP_MID->tap.keycode = MS_UP;
+    smart_layers[LAYER_MOUSE]->map R_TOP_IDX->tap.keycode = MS_WHLL;
     smart_layers[LAYER_MOUSE]->map R_TOP_MID->tap.keycode = MS_WHLU;
+    smart_layers[LAYER_MOUSE]->map R_TOP_RING->tap.keycode = MS_WHLR;
     smart_layers[LAYER_MOUSE]->map L_HOME_RING->tap.keycode = MS_LEFT;
     smart_layers[LAYER_MOUSE]->map L_HOME_MID->tap.keycode = MS_DOWN;
     smart_layers[LAYER_MOUSE]->map L_HOME_IDX->tap.keycode = MS_RGHT;
     smart_layers[LAYER_MOUSE]->map R_HOME_IDX->tap.keycode = MS_BTN1;
     smart_layers[LAYER_MOUSE]->map R_HOME_MID->tap.keycode = MS_WHLD;
     smart_layers[LAYER_MOUSE]->map R_HOME_RING->tap.keycode = MS_BTN2;
+    smart_layers[LAYER_MOUSE]->map R_BOT_IDX->tap.keycode = KC_AUDIO_VOL_DOWN;
+    smart_layers[LAYER_MOUSE]->map R_BOT_MID->tap.keycode = KC_AUDIO_MUTE;
+    smart_layers[LAYER_MOUSE]->map R_BOT_RING->tap.keycode = KC_AUDIO_VOL_UP;
 #endif
 
     // Step 1: Initialize keycodes from base layer and copy positions
