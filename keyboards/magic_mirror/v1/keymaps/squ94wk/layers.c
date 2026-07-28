@@ -297,12 +297,15 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 R_TOP_IDX   = &(smart_key_t){},
                                 R_TOP_MID   = &(smart_key_t){},
                                 R_TOP_RING  = &(smart_key_t){},
+                                L_HOME_RING  = &(smart_key_t){},
                                 L_HOME_MID  = &(smart_key_t){},
                                 L_HOME_IDX  = &(smart_key_t){},
                                 R_HOME_IDX  = &(smart_key_t){},
                                 R_HOME_MID  = &(smart_key_t){},
                                 R_HOME_PINK = &(smart_key_t){},
                                 R_HOME_RING = &(smart_key_t){},
+                                L_BOT_RING  = &(smart_key_t){},
+                                L_BOT_MID   = &(smart_key_t){},
                                 L_BOT_IDX   = &(smart_key_t){},
                                 R_BOT_IDX   = &(smart_key_t){},
                                 R_BOT_MID  = &(smart_key_t){},
@@ -380,6 +383,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 L_BOT_RING  = &(smart_key_t){},
                                 L_BOT_MID   = &(smart_key_t){},
                                 L_BOT_IDX   = &(smart_key_t){},
+                                L_BOT_PINK  = &(smart_key_t){},
                             },
                     },
 
@@ -773,11 +777,13 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_ALPHA_2]->map R_TOP_MID->tap.keycode = KC_GRV;
     smart_layers[LAYER_ALPHA_2]->map R_TOP_MID->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
     smart_layers[LAYER_ALPHA_2]->map R_TOP_RING->tap.keycode = KC_Q;
-    smart_layers[LAYER_ALPHA_2]->map L_HOME_MID->tap.keycode = KC_COMMA;
+    smart_layers[LAYER_ALPHA_2]->map L_HOME_MID->tap.keycode = KC_MINUS;
     smart_layers[LAYER_ALPHA_2]->map L_HOME_IDX->tap.keycode = KC_DOT;
     smart_layers[LAYER_ALPHA_2]->map R_HOME_IDX->tap.keycode = KC_Y;
     smart_layers[LAYER_ALPHA_2]->map R_HOME_MID->tap.keycode = KC_K;
     smart_layers[LAYER_ALPHA_2]->map R_HOME_PINK->tap.keycode = KC_J;
+    smart_layers[LAYER_ALPHA_2]->map L_BOT_RING->tap.keycode = KC_SLASH;
+    smart_layers[LAYER_ALPHA_2]->map L_BOT_MID->tap.keycode = KC_COMMA;
     smart_layers[LAYER_ALPHA_2]->map L_BOT_IDX->tap.keycode = KC_V;
     smart_layers[LAYER_ALPHA_2]->map R_BOT_IDX->tap.keycode = KC_Z;
     smart_layers[LAYER_ALPHA_2]->map R_BOT_MID->tap.keycode = KC_SEMICOLON;
@@ -785,6 +791,7 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_ALPHA_2]->map R_BOT_RING->tap.keycode = KC_SEMICOLON;
 
     // R_HOME_RING - Tap: Magic key action 2
+    smart_layers[LAYER_ALPHA_2]->map L_HOME_RING->tap.action = &magickey_action2;
     smart_layers[LAYER_ALPHA_2]->map R_HOME_RING->tap.action = &magickey_action2;
 
     // L_THUMB_IN - Tap: Enable smart case
@@ -877,7 +884,7 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_VIM_NAV]->map L_TOP_RING->tap.mask = MOD_BIT(KC_LEFT_SHIFT);
     smart_layers[LAYER_VIM_NAV]->map L_TOP_MID->tap.keycode = KC_H;
     smart_layers[LAYER_VIM_NAV]->map L_TOP_MID->tap.mask = MOD_BIT(KC_LEFT_SHIFT);
-    smart_layers[LAYER_VIM_NAV]->map L_TOP_IDX->tap.keycode = KC_W;
+    smart_layers[LAYER_VIM_NAV]->map L_TOP_IDX->tap.keycode = KC_E;
     smart_layers[LAYER_VIM_NAV]->map L_TOP_IDX->tap.mask = MOD_BIT(KC_LEFT_SHIFT);
     smart_layers[LAYER_VIM_NAV]->map L_HOME_PINK->tap.keycode = KC_6;
     smart_layers[LAYER_VIM_NAV]->map L_HOME_PINK->tap.mask = MOD_BIT(KC_LEFT_SHIFT);
@@ -893,6 +900,8 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_VIM_NAV]->map L_BOT_MID->tap.mask = MOD_BIT(KC_LEFT_SHIFT);
     smart_layers[LAYER_VIM_NAV]->map L_BOT_IDX->tap.keycode = KC_RIGHT_BRACKET;
     smart_layers[LAYER_VIM_NAV]->map L_BOT_IDX->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
+    smart_layers[LAYER_VIM_NAV]->map L_BOT_PINK->tap.keycode = KC_4;
+    smart_layers[LAYER_VIM_NAV]->map L_BOT_PINK->tap.mask = MOD_BIT(KC_LEFT_SHIFT);
 
     // ========================================================================
     // LAYER_L_HOLD
@@ -924,6 +933,10 @@ static void lazy_init_layers(void) {
 
     // R_HOME_PINK - Tap: Ctrl+Z (or Cmd+Z on Mac) - Undo
     smart_layers[LAYER_SYS]->map R_HOME_PINK->tap.action = &tap_ctrl_z;
+
+    // R_BOT_RING - Tap: Shift+Enter
+    smart_layers[LAYER_SYS]->map R_BOT_RING->tap.keycode = KC_ENTER;
+    smart_layers[LAYER_SYS]->map R_BOT_RING->tap.mask = MOD_BIT(KC_LEFT_SHIFT);
 
     // L_BOT_RING - Hold: Jump layer (word navigation, OS-aware)
     smart_layers[LAYER_SYS]->map L_BOT_RING->hold.action = &jump_layer;
