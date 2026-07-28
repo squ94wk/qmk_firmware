@@ -13,10 +13,6 @@ void smart_case_on(void) {
     smart_case_enabled = true;
 }
 
-void set_smart_case_char(char c) {
-    smart_case_char = c;
-}
-
 void smart_case_off(void) {
     smart_case_enabled = false;
     smart_case_char = 0;
@@ -43,29 +39,9 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
         return false;
     }
 
+    // The lock only makes sense starting on a letter; anything else aborts it.
     if (!smart_case_char) {
         switch (*keycode) {
-        case KC_SPACE:
-            smart_case_char = ' ';
-            return true;
-        case KC_MINUS:
-            if (*mask & MOD_MASK_SHIFT) {
-                smart_case_char = '_';
-            } else {
-                smart_case_char = '-';
-            }
-            return true;
-        case KC_SLASH:
-            smart_case_char = '/';
-            return true;
-        case KC_1 ... KC_0:
-            smart_case_off();
-            if (*mask & MOD_MASK_SHIFT) {
-                return false;
-            }
-            activate_layer(LAYER_NUM);
-            layer_activations[LAYER_NUM] = -2;
-            return false;
         case KC_A ... KC_Z:
             smart_case_char = 'a';
             break;
@@ -89,90 +65,42 @@ bool handle_smart_case(uint16_t *keycode, uint16_t *mask, uint16_t *release_mask
 
     case KC_A ... KC_Z:
         deactivate_layer(LAYER_NUM);
-        if (smart_case_char == 'a') {
-            *mask |= MOD_BIT(KC_LEFT_SHIFT);
-            return false;
-        }
+        *mask |= MOD_BIT(KC_LEFT_SHIFT);
         return false;
+
     case KC_9:
     case KC_0:
-        if (!((int) mask & MOD_MASK_SHIFT)) {
+        if (!(*mask & MOD_MASK_SHIFT)) {
             break;
         }
-        // fallthrough
+        // fallthrough: shifted 9/0 are ( ) — closing the word ends the lock
     case KC_LEFT_BRACKET:
     case KC_RIGHT_BRACKET:
-        switch (smart_case_char) {
-        case 'a':
-            if (history_top().c == '_') {
-                SEND_STRING("\b ");
-                drop_key_from_history(0);
-            }
+        if (history_top().c == '_') {
+            SEND_STRING("\b ");
+            drop_key_from_history(0);
+        }
+        smart_case_off();
+        return false;
 
-            smart_case_off();
-            return false;
-        default:
-            break;
-        }
     case KC_MINUS:
-        if (!((int) mask & MOD_MASK_SHIFT)) {
+        if (!(*mask & MOD_MASK_SHIFT)) {
             break;
         }
-        switch (smart_case_char) {
-        case 'a':
-            return false;
-        }
-        break;
+        // shifted minus is '_', a valid separator inside the locked word
+        return false;
+
     case KC_SPACE:
-        switch (smart_case_char) {
-        case ' ':
-            if (get_oneshot_mods() & MOD_MASK_SHIFT) {
-                set_oneshot_mods(get_oneshot_mods() & ~MOD_MASK_SHIFT);
-                smart_case_off();
-                return true;
-            }
-            set_oneshot_mods(get_oneshot_mods() | MOD_BIT(KC_LEFT_SHIFT));
+        if (history_top().c == '_') {
+            SEND_STRING("\b ");
+            drop_key_from_history(0);
+            smart_case_off();
             return true;
-        case '/':
-            if (history_top().c == '/') {
-                SEND_STRING("\b");
-                drop_key_from_history(0);
-                smart_case_off();
-                return true;
-            }
-            *keycode = KC_SLASH;
-            return false;
-        case '-':
-            if (history_top().c == '-') {
-                SEND_STRING("\b");
-                drop_key_from_history(0);
-                smart_case_off();
-                return true;
-            }
-            *keycode = KC_MINUS;
-            return false;
-        case 'a':
-            if (history_top().c == '_') {
-                SEND_STRING("\b ");
-                drop_key_from_history(0);
-                smart_case_off();
-                return true;
-            }
-            *keycode = KC_MINUS;
-            *mask |= MOD_BIT(KC_LEFT_SHIFT);
-            return false;
-        case '_':
-            if (history_top().c == '_') {
-                SEND_STRING("\b ");
-                drop_key_from_history(0);
-                smart_case_off();
-                return true;
-            }
-            *keycode = KC_MINUS;
-            *mask |= MOD_BIT(KC_LEFT_SHIFT);
-            return false;
         }
-        // fallthrough
+        *keycode = KC_MINUS;
+        *mask |= MOD_BIT(KC_LEFT_SHIFT);
+        return false;
+
     default:
     }
     smart_case_off();
