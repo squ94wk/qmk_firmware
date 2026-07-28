@@ -16,7 +16,7 @@
 // Right side (rows 4-7):
 //   Row 4: [4,0] [4,1] [4,2]           (top row: index, middle, ring)
 //   Row 5: [5,0] [5,1] [5,2] [5,3]     (home row: index, middle, ring, pinky)
-//   Row 6: [6,1] [6,2] [6,3]           (bottom row: middle, ring, pinky)
+//   Row 6: [6,1] [6,2] [6,3]           (bottom row: index, middle, ring)
 //   Row 7: [7,0] [7,1]                 (thumb row: inner, outer)
 
 // Left hand - Top row (no pinky)
@@ -52,9 +52,9 @@
 #define R_HOME_PINK  [5][3]
 
 // Right hand - Bottom row (no pinky)
-#define R_BOT_MID    [6][1]
-#define R_BOT_RING   [6][2]
-#define R_BOT_PINK   [6][3]
+#define R_BOT_IDX    [6][1]
+#define R_BOT_MID    [6][2]
+#define R_BOT_RING   [6][3]
 
 // Right hand - Thumb row
 #define R_THUMB_OUT  [7][0]

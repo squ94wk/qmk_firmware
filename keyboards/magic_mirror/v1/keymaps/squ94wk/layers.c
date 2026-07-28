@@ -277,9 +277,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 R_HOME_RING = &(smart_key_t){},
                                 L_BOT_RING  = &(smart_key_t){},
                                 L_BOT_IDX   = &(smart_key_t){},
-                                R_BOT_MID   = &(smart_key_t){},
+                                R_BOT_IDX   = &(smart_key_t){},
+                                R_BOT_MID  = &(smart_key_t){},
                                 R_BOT_RING  = &(smart_key_t){},
-                                R_BOT_PINK  = &(smart_key_t){},
                                 L_THUMB_IN  = &(smart_key_t){},
                                 L_THUMB_OUT = &(smart_key_t){},
                                 R_THUMB_OUT  = &(smart_key_t){},
@@ -303,9 +303,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 R_HOME_PINK = &(smart_key_t){},
                                 R_HOME_RING = &(smart_key_t){},
                                 L_BOT_IDX   = &(smart_key_t){},
-                                R_BOT_MID   = &(smart_key_t){},
+                                R_BOT_IDX   = &(smart_key_t){},
+                                R_BOT_MID  = &(smart_key_t){},
                                 R_BOT_RING  = &(smart_key_t){},
-                                R_BOT_PINK  = &(smart_key_t){},
                                 L_THUMB_IN  = &(smart_key_t){},
                             },
                     },
@@ -320,9 +320,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 R_HOME_MID  = &(smart_key_t){},
                                 R_HOME_RING = &(smart_key_t){},
                                 R_HOME_PINK = &(smart_key_t){},
-                                R_BOT_MID   = &(smart_key_t){},
+                                R_BOT_IDX   = &(smart_key_t){},
+                                R_BOT_MID  = &(smart_key_t){},
                                 R_BOT_RING  = &(smart_key_t){},
-                                R_BOT_PINK  = &(smart_key_t){},
                             },
                     },
 
@@ -336,9 +336,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 R_HOME_MID  = &(smart_key_t){},
                                 R_HOME_RING = &(smart_key_t){},
                                 R_HOME_PINK = &(smart_key_t){},
-                                R_BOT_MID   = &(smart_key_t){},
+                                R_BOT_IDX   = &(smart_key_t){},
+                                R_BOT_MID  = &(smart_key_t){},
                                 R_BOT_RING  = &(smart_key_t){},
-                                R_BOT_PINK  = &(smart_key_t){},
                             },
                     },
 
@@ -409,9 +409,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 L_BOT_RING  = &(smart_key_t){},
                                 L_BOT_MID   = &(smart_key_t){},
                                 L_BOT_IDX   = &(smart_key_t){},
-                                R_BOT_MID   = &(smart_key_t){},
+                                R_BOT_IDX   = &(smart_key_t){},
+                                R_BOT_MID  = &(smart_key_t){},
                                 R_BOT_RING  = &(smart_key_t){},
-                                R_BOT_PINK  = &(smart_key_t){},
                                 R_THUMB_OUT  = &(smart_key_t){},
                                 R_THUMB_IN = &(smart_key_t){},
                             },
@@ -436,9 +436,9 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 L_BOT_RING  = &(smart_key_t){},
                                 L_BOT_MID   = &(smart_key_t){},
                                 L_BOT_IDX   = &(smart_key_t){},
-                                R_BOT_MID   = &(smart_key_t){},
+                                R_BOT_IDX   = &(smart_key_t){},
+                                R_BOT_MID  = &(smart_key_t){},
                                 R_BOT_RING  = &(smart_key_t){},
-                                R_BOT_PINK  = &(smart_key_t){},
                                 L_THUMB_OUT = &(smart_key_t){},
                             },
                     },
@@ -723,19 +723,19 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_ALPHA_1]->map L_BOT_IDX->tap.keycode = KC_TRANSPARENT;
     smart_layers[LAYER_ALPHA_1]->map L_BOT_IDX->hold.layer = LAYER_SYMBOLS_2;
 
-    // R_BOT_MID - Tap: . (from base), Hold: H_HOLD layer (closing brackets)
+    // R_BOT_IDX - Tap: H (from base), Hold: H_HOLD layer (closing brackets)
+    smart_layers[LAYER_ALPHA_1]->map R_BOT_IDX->tap.keycode = KC_TRANSPARENT;
+    smart_layers[LAYER_ALPHA_1]->map R_BOT_IDX->hold.layer = LAYER_H_HOLD;
+
+    // R_BOT_MID - Tap: . (from base), Hold: L_HOLD layer
     smart_layers[LAYER_ALPHA_1]->map R_BOT_MID->tap.keycode = KC_TRANSPARENT;
-    smart_layers[LAYER_ALPHA_1]->map R_BOT_MID->hold.layer = LAYER_H_HOLD;
+    smart_layers[LAYER_ALPHA_1]->map R_BOT_MID->hold.layer = LAYER_L_HOLD;
 
-    // R_BOT_RING - Tap: / (from base), Hold: L_HOLD layer
+    // R_BOT_RING - Tap: (from base), Hold: Right Shift
+    smart_layers[LAYER_ALPHA_1]->map R_BOT_RING->defer_release = true;
     smart_layers[LAYER_ALPHA_1]->map R_BOT_RING->tap.keycode = KC_TRANSPARENT;
-    smart_layers[LAYER_ALPHA_1]->map R_BOT_RING->hold.layer = LAYER_L_HOLD;
-
-    // R_BOT_PINK - Tap: (from base), Hold: Right Shift
-    smart_layers[LAYER_ALPHA_1]->map R_BOT_PINK->defer_release = true;
-    smart_layers[LAYER_ALPHA_1]->map R_BOT_PINK->tap.keycode = KC_TRANSPARENT;
-    smart_layers[LAYER_ALPHA_1]->map R_BOT_PINK->hold.keycode = KC_RIGHT_SHIFT;
-    smart_layers[LAYER_ALPHA_1]->map R_BOT_PINK->hold_on_key_press = &always_on_other_press;
+    smart_layers[LAYER_ALPHA_1]->map R_BOT_RING->hold.keycode = KC_RIGHT_SHIFT;
+    smart_layers[LAYER_ALPHA_1]->map R_BOT_RING->hold_on_key_press = &always_on_other_press;
 
     // L_THUMB_IN - Tap: SPC (from base), Hold: SYS layer
     smart_layers[LAYER_ALPHA_1]->map L_THUMB_IN->tap.keycode = KC_TRANSPARENT;
@@ -776,10 +776,10 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_ALPHA_2]->map R_HOME_MID->tap.keycode = KC_K;
     smart_layers[LAYER_ALPHA_2]->map R_HOME_PINK->tap.keycode = KC_J;
     smart_layers[LAYER_ALPHA_2]->map L_BOT_IDX->tap.keycode = KC_V;
-    smart_layers[LAYER_ALPHA_2]->map R_BOT_MID->tap.keycode = KC_Z;
+    smart_layers[LAYER_ALPHA_2]->map R_BOT_IDX->tap.keycode = KC_Z;
+    smart_layers[LAYER_ALPHA_2]->map R_BOT_MID->tap.keycode = KC_SEMICOLON;
+    smart_layers[LAYER_ALPHA_2]->map R_BOT_MID->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
     smart_layers[LAYER_ALPHA_2]->map R_BOT_RING->tap.keycode = KC_SEMICOLON;
-    smart_layers[LAYER_ALPHA_2]->map R_BOT_RING->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
-    smart_layers[LAYER_ALPHA_2]->map R_BOT_PINK->tap.keycode = KC_SEMICOLON;
 
     // R_HOME_RING - Tap: Magic key action 2
     smart_layers[LAYER_ALPHA_2]->map R_HOME_RING->tap.action = &magickey_action2;
@@ -807,11 +807,11 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_SYMBOLS_2]->map R_HOME_RING->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
     smart_layers[LAYER_SYMBOLS_2]->map R_HOME_PINK->tap.keycode = KC_3;
     smart_layers[LAYER_SYMBOLS_2]->map R_HOME_PINK->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
-    smart_layers[LAYER_SYMBOLS_2]->map R_BOT_MID->tap.keycode = KC_COMMA;
-    smart_layers[LAYER_SYMBOLS_2]->map R_BOT_MID->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
-    smart_layers[LAYER_SYMBOLS_2]->map R_BOT_RING->tap.keycode = KC_LEFT_BRACKET;
-    smart_layers[LAYER_SYMBOLS_2]->map R_BOT_PINK->tap.keycode = KC_4;
-    smart_layers[LAYER_SYMBOLS_2]->map R_BOT_PINK->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
+    smart_layers[LAYER_SYMBOLS_2]->map R_BOT_IDX->tap.keycode = KC_COMMA;
+    smart_layers[LAYER_SYMBOLS_2]->map R_BOT_IDX->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
+    smart_layers[LAYER_SYMBOLS_2]->map R_BOT_MID->tap.keycode = KC_LEFT_BRACKET;
+    smart_layers[LAYER_SYMBOLS_2]->map R_BOT_RING->tap.keycode = KC_4;
+    smart_layers[LAYER_SYMBOLS_2]->map R_BOT_RING->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
 
     // R_HOME_IDX - Tap: Matching braces (tap once for opening, twice for both)
     smart_layers[LAYER_SYMBOLS_2]->map R_HOME_IDX->tap.action = &tap_multi_matching_brace;
@@ -831,11 +831,11 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_SYMBOLS]->map R_HOME_RING->tap.keycode = KC_EQUAL;
     smart_layers[LAYER_SYMBOLS]->map R_HOME_PINK->tap.keycode = KC_BACKSLASH;
     smart_layers[LAYER_SYMBOLS]->map R_HOME_PINK->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
-    smart_layers[LAYER_SYMBOLS]->map R_BOT_MID->tap.keycode = KC_MINUS;
+    smart_layers[LAYER_SYMBOLS]->map R_BOT_IDX->tap.keycode = KC_MINUS;
+    smart_layers[LAYER_SYMBOLS]->map R_BOT_IDX->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
+    smart_layers[LAYER_SYMBOLS]->map R_BOT_MID->tap.keycode = KC_8;
     smart_layers[LAYER_SYMBOLS]->map R_BOT_MID->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
-    smart_layers[LAYER_SYMBOLS]->map R_BOT_RING->tap.keycode = KC_8;
-    smart_layers[LAYER_SYMBOLS]->map R_BOT_RING->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
-    smart_layers[LAYER_SYMBOLS]->map R_BOT_PINK->tap.keycode = KC_BACKSLASH;
+    smart_layers[LAYER_SYMBOLS]->map R_BOT_RING->tap.keycode = KC_BACKSLASH;
 
     // ========================================================================
     // LAYER_H_HOLD - Closing brackets
@@ -928,14 +928,14 @@ static void lazy_init_layers(void) {
     // L_BOT_IDX - Tap: Activate tmux mode
     smart_layers[LAYER_SYS]->map L_BOT_IDX->tap.action = &activate_tmux;
 
-    // R_BOT_MID - Tap: Ctrl+C (or Cmd+C on Mac) - Copy
-    smart_layers[LAYER_SYS]->map R_BOT_MID->tap.action = &tap_ctrl_c;
+    // R_BOT_IDX - Tap: Ctrl+C (or Cmd+C on Mac) - Copy
+    smart_layers[LAYER_SYS]->map R_BOT_IDX->tap.action = &tap_ctrl_c;
 
-    // R_BOT_RING - Tap: Ctrl+X (or Cmd+X on Mac) - Cut
-    smart_layers[LAYER_SYS]->map R_BOT_RING->tap.action = &tap_ctrl_x;
+    // R_BOT_MID - Tap: Ctrl+X (or Cmd+X on Mac) - Cut
+    smart_layers[LAYER_SYS]->map R_BOT_MID->tap.action = &tap_ctrl_x;
 
-    // R_BOT_PINK - Tap: Ctrl+V (or Cmd+V on Mac) - Paste
-    smart_layers[LAYER_SYS]->map R_BOT_PINK->tap.action = &tap_ctrl_v;
+    // R_BOT_RING - Tap: Ctrl+V (or Cmd+V on Mac) - Paste
+    smart_layers[LAYER_SYS]->map R_BOT_RING->tap.action = &tap_ctrl_v;
 
     // R_THUMB_OUT - Tap: Clear all modifiers and layers
     smart_layers[LAYER_SYS]->map R_THUMB_OUT->tap.action = &clear;
@@ -968,10 +968,10 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_NUM]->map L_BOT_RING->tap.keycode = KC_COMMA;
     smart_layers[LAYER_NUM]->map L_BOT_MID->tap.keycode = KC_DOT;
     smart_layers[LAYER_NUM]->map L_BOT_IDX->tap.keycode = KC_9;
-    smart_layers[LAYER_NUM]->map R_BOT_MID->tap.keycode = KC_0;
-    smart_layers[LAYER_NUM]->map R_BOT_RING->tap.keycode = KC_8;
-    smart_layers[LAYER_NUM]->map R_BOT_RING->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
-    smart_layers[LAYER_NUM]->map R_BOT_PINK->tap.keycode = KC_SLASH;
+    smart_layers[LAYER_NUM]->map R_BOT_IDX->tap.keycode = KC_0;
+    smart_layers[LAYER_NUM]->map R_BOT_MID->tap.keycode = KC_8;
+    smart_layers[LAYER_NUM]->map R_BOT_MID->tap.mask = MOD_BIT(KC_RIGHT_SHIFT);
+    smart_layers[LAYER_NUM]->map R_BOT_RING->tap.keycode = KC_SLASH;
     smart_layers[LAYER_NUM]->map L_THUMB_OUT->max_tap = 3;
 
     // L_THUMB_OUT - Tap: Toggle OS index, Hold: Print magic stats
