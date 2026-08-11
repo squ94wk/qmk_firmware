@@ -18,7 +18,7 @@
 //
 // Row 3 (bottom row):
 //   [3,2] [3,3] [3,4] [3,5]     (bottom row: pinky, ring, middle, index - left)
-//   [3,9] [3,10] [3,11]         (bottom row: middle, ring, pinky - right)
+//   [3,9] [3,10] [3,11]         (bottom row: index, middle, ring - right)
 //
 // Row 4 (thumb row):
 //   [4,5] [4,6]                 (thumb row: inner, outer - left)
@@ -56,10 +56,10 @@
 #define R_HOME_RING  [2][9]
 #define R_HOME_PINK  [2][10]
 
-// Right hand - Bottom row
-#define R_BOT_MID    [3][9]
-#define R_BOT_RING   [3][10]
-#define R_BOT_PINK   [3][11]
+// Right hand - Bottom row (no pinky)
+#define R_BOT_IDX    [3][9]
+#define R_BOT_MID    [3][10]
+#define R_BOT_RING   [3][11]
 
 // Right hand - Thumb row
 #define R_THUMB_IN   [4][7]
