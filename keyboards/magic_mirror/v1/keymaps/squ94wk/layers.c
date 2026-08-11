@@ -539,6 +539,7 @@ smart_layer_t * smart_layers[SMART_LAYER_COUNT] = {
                                 L_BOT_RING  = &(smart_key_t){},
                                 L_BOT_MID   = &(smart_key_t){},
                                 L_BOT_IDX   = &(smart_key_t){},
+                                R_HOME_PINK = &(smart_key_t){},
                             },
                     },
 
@@ -1105,6 +1106,7 @@ static void lazy_init_layers(void) {
     smart_layers[LAYER_TMUX]->map L_BOT_PINK->tap.keycode = KC_W;
     smart_layers[LAYER_TMUX]->map L_BOT_RING->tap.keycode = KC_LEFT_BRACKET;
     smart_layers[LAYER_TMUX]->map L_BOT_MID->tap.keycode = KC_C;
+    smart_layers[LAYER_TMUX]->map R_HOME_PINK->tap.keycode = KC_S;
 
     // L_BOT_IDX - Tap: Activate tmux mode
     smart_layers[LAYER_TMUX]->map L_BOT_IDX->tap.action = &activate_tmux;
