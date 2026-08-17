@@ -61,9 +61,9 @@
 #define R_BOT_MID    [3][10]
 #define R_BOT_RING   [3][11]
 
-// Right hand - Thumb row
-#define R_THUMB_IN   [4][7]
-#define R_THUMB_OUT  [4][9]
+// Right hand - Thumb row ([4][9] is the inner thumb key, [4][7] the outer)
+#define R_THUMB_IN   [4][9]
+#define R_THUMB_OUT  [4][7]
 
 // Example usage:
 // smart_layer.map L_HOME_RING = &some_smart_key;
